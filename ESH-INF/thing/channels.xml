@@ -146,8 +146,8 @@
 	<channel-type id="windspeed">
 		<item-type>Number</item-type>
 		<label>Wind Speed</label>
-		<description>Average wind speed in meters per second</description>
-		<state pattern="%d m/s" readOnly="true"></state>
+		<description>Wind speed in km per hour</description>
+		<state pattern="%d km/h" readOnly="true"></state>
 	</channel-type>
 
 	<channel-type id="winddirection">
