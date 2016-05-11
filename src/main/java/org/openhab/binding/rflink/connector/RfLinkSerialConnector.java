@@ -1,0 +1,164 @@
+package org.openhab.binding.rflink.connector;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+
+import org.openhab.binding.rflink.exceptions.RfLinkException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import gnu.io.CommPortIdentifier;
+import gnu.io.SerialPort;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener;
+
+public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPortEventListener {
+
+    private static final Logger logger = LoggerFactory.getLogger(RfLinkSerialConnector.class);
+
+    private static List<RfLinkEventListener> _listeners = new ArrayList<RfLinkEventListener>();
+
+    SerialPort serialPort;
+
+    /**
+     * A BufferedReader which will be fed by a InputStreamReader
+     * converting the bytes into characters
+     * making the displayed results codepage independent
+     */
+    private BufferedReader input;
+    /** The output stream to the port */
+    private OutputStream output;
+    /** Milliseconds to block while waiting for port open */
+    private static final int TIME_OUT = 2000;
+
+    public RfLinkSerialConnector() {
+
+        logger.debug("RfLinkRxTxConnector()");
+    }
+
+    @Override
+    public void connect(String comPort, int baudRate) throws Exception {
+
+        logger.debug("connect(" + comPort + ")");
+
+        // the next line is for Raspberry Pi and
+        // gets us into the while loop and was suggested here was suggested
+        // http://www.raspberrypi.org/phpBB3/viewtopic.php?f=81&t=32186
+        // System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM0");
+
+        CommPortIdentifier portId = null;
+        Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
+
+        // First, Find an instance of serial port as set in PORT_NAMES.
+        while (portEnum.hasMoreElements()) {
+            CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
+            logger.debug("Found port : " + currPortId.getName());
+
+            if (currPortId.getName().equals(comPort)) {
+                portId = currPortId;
+                break;
+            }
+
+        }
+        if (portId == null) {
+            logger.error("Could not find COM port " + comPort);
+            sendErrorToListeners("Could not find COM port " + comPort);
+            throw new RfLinkException("Could not find COM port " + comPort);
+        }
+
+        try {
+            // open serial port, and use class name for the appName.
+            serialPort = portId.open(this.getClass().getName(), TIME_OUT);
+
+            // set port parameters
+            serialPort.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
+                    SerialPort.PARITY_NONE);
+
+            // open the streams
+            input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+            output = serialPort.getOutputStream();
+
+            // add event listeners
+            serialPort.addEventListener(this);
+            serialPort.notifyOnDataAvailable(true);
+        } catch (Exception e) {
+            logger.error(e.toString(), e);
+            sendErrorToListeners("Unhandled exception " + e.toString());
+        }
+
+    }
+
+    @Override
+    public void disconnect() {
+        if (serialPort != null) {
+            serialPort.removeEventListener();
+            serialPort.close();
+        }
+
+    }
+
+    @Override
+    public void sendMessage(byte[] data) throws IOException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void addEventListener(RfLinkEventListener listener) {
+        if (!_listeners.contains(listener)) {
+            _listeners.add(listener);
+        }
+    }
+
+    @Override
+    public void removeEventListener(RfLinkEventListener listener) {
+        _listeners.remove(listener);
+    }
+
+    private void sendMsgToListeners(byte[] msg) {
+        try {
+            Iterator<RfLinkEventListener> iterator = _listeners.iterator();
+
+            while (iterator.hasNext()) {
+                iterator.next().packetReceived(msg);
+            }
+
+        } catch (Exception e) {
+            logger.error("Event listener invoking error", e);
+        }
+    }
+
+    private void sendErrorToListeners(String error) {
+        try {
+            Iterator<RfLinkEventListener> iterator = _listeners.iterator();
+
+            while (iterator.hasNext()) {
+                iterator.next().errorOccured(error);
+            }
+
+        } catch (Exception e) {
+            logger.error("Event listener invoking error", e);
+        }
+    }
+
+    @Override
+    public void serialEvent(SerialPortEvent oEvent) {
+        if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
+            try {
+                String inputLine = input.readLine();
+                logger.debug("<<< " + inputLine);
+                sendMsgToListeners(inputLine.getBytes());
+            } catch (Exception e) {
+                logger.error(e.toString());
+            }
+        }
+
+    }
+
+}
