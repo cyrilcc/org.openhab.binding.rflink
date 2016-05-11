@@ -38,12 +38,12 @@ public class RfLinkWindMessage extends RfLinkBaseMessage {
 
     }
 
-    public RfLinkWindMessage(byte[] data) {
+    public RfLinkWindMessage(String data) {
         encodeMessage(data);
     }
 
     @Override
-    public void encodeMessage(byte[] data) {
+    public void encodeMessage(String data) {
 
         super.encodeMessage(data);
 

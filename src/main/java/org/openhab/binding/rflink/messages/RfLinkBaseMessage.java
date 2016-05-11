@@ -29,7 +29,7 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
 
     private final static int MINIMAL_SIZE_MESSAGE = 5;
 
-    public byte[] rawMessage;
+    public String rawMessage;
 
     public byte seqNbr = 0;
 
@@ -43,16 +43,16 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
 
     }
 
-    public RfLinkBaseMessage(byte[] data) {
+    public RfLinkBaseMessage(String data) {
         encodeMessage(data);
     }
 
     @Override
-    public void encodeMessage(byte[] data) {
+    public void encodeMessage(String data) {
 
         rawMessage = data;
 
-        final String[] elements = new String(data).split(FIELDS_DELIMITER);
+        final String[] elements = rawMessage.split(FIELDS_DELIMITER);
         final int size = elements.length;
 
         // Every message should have at least 5 parts

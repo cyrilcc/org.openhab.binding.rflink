@@ -206,7 +206,7 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
     private class MessageListener implements RfLinkEventListener {
 
         @Override
-        public void packetReceived(byte[] packet) {
+        public void packetReceived(String packet) {
             try {
                 RfLinkMessage message = RfLinkMessageFactory.createMessage(packet);
                 logger.debug("Message received: {}", message);

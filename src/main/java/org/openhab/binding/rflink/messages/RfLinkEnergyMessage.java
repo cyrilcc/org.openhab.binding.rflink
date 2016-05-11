@@ -39,7 +39,7 @@ public class RfLinkEnergyMessage extends RfLinkBaseMessage {
 
     }
 
-    public RfLinkEnergyMessage(byte[] data) {
+    public RfLinkEnergyMessage(String data) {
         encodeMessage(data);
     }
 
@@ -57,7 +57,7 @@ public class RfLinkEnergyMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public void encodeMessage(byte[] data) {
+    public void encodeMessage(String data) {
 
         super.encodeMessage(data);
 

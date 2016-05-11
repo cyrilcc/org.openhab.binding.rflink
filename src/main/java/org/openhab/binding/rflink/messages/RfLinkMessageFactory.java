@@ -36,7 +36,7 @@ public class RfLinkMessageFactory {
 
     }
 
-    public static RfLinkMessage createMessage(byte[] packet) throws RfLinkException, RfLinkNotImpException {
+    public static RfLinkMessage createMessage(String packet) throws RfLinkException, RfLinkNotImpException {
 
         final RfLinkBaseMessage message = new RfLinkBaseMessage(packet) {
         };
@@ -46,7 +46,7 @@ public class RfLinkMessageFactory {
                 try {
 
                     Class<?> cl = mapping.get(key);
-                    Constructor<?> c = cl.getConstructor(byte[].class);
+                    Constructor<?> c = cl.getConstructor(String.class);
                     return (RfLinkMessage) c.newInstance(packet);
 
                 } catch (Exception e) {

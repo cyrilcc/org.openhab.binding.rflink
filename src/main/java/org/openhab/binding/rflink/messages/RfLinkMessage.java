@@ -35,7 +35,7 @@ public interface RfLinkMessage {
      * @param data
      *            Raw data.
      */
-    void encodeMessage(byte[] data);
+    void encodeMessage(String data);
 
     /**
      * Procedure for converting RFXCOM value to Openhab state.
@@ -68,7 +68,7 @@ public interface RfLinkMessage {
 
     /**
      * Get all the values in form of smarthome states
-     * 
+     *
      * @return
      */
     HashMap<String, State> getStates();

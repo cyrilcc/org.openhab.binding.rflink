@@ -121,7 +121,7 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
         _listeners.remove(listener);
     }
 
-    private void sendMsgToListeners(byte[] msg) {
+    private void sendMsgToListeners(String msg) {
         try {
             Iterator<RfLinkEventListener> iterator = _listeners.iterator();
 
@@ -153,7 +153,7 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
             try {
                 String inputLine = input.readLine();
                 logger.debug("<<< " + inputLine);
-                sendMsgToListeners(inputLine.getBytes());
+                sendMsgToListeners(inputLine);
             } catch (Exception e) {
                 logger.error(e.toString());
             }
