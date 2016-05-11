@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class RfLinkMessageFactory {
 
+    @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(RfLinkMessageFactory.class);
 
     private static HashMap<String, Class> mapping = new HashMap<>();
@@ -17,6 +18,7 @@ public class RfLinkMessageFactory {
     static {
 
         addMappingOfClass(RfLinkEnergyMessage.class);
+        addMappingOfClass(RfLinkWindMessage.class);
         // TODO: add other messages
 
     }

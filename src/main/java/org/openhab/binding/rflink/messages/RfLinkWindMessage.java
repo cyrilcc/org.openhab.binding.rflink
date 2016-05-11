@@ -9,7 +9,12 @@
 package org.openhab.binding.rflink.messages;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
+import org.eclipse.smarthome.core.library.types.DecimalType;
+import org.eclipse.smarthome.core.types.State;
+import org.openhab.binding.rflink.RfLinkBindingConstants;
 
 /**
  * RfLink data class for wind message.
@@ -76,6 +81,21 @@ public class RfLinkWindMessage extends RfLinkBaseMessage {
     @Override
     public List<String> keys() {
         return keys;
+    }
+
+    @Override
+    public HashMap<String, State> getStates() {
+
+        HashMap<String, State> map = new HashMap<>();
+
+        map.put(RfLinkBindingConstants.CHANNEL_WIND_SPEED, new DecimalType(windSpeed));
+        map.put(RfLinkBindingConstants.CHANNEL_WIND_DIRECTION, new DecimalType(windDirection));
+        map.put(RfLinkBindingConstants.CHANNEL_AVERAGE_WIND_SPEED, new DecimalType(averageWindSpeed));
+        map.put(RfLinkBindingConstants.CHANNEL_GUST, new DecimalType(windGust));
+        map.put(RfLinkBindingConstants.CHANNEL_WIND_CHILL, new DecimalType(windChill));
+
+        return map;
+
     }
 
     @Override
