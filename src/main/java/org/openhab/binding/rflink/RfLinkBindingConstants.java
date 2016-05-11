@@ -50,6 +50,8 @@ public class RfLinkBindingConstants {
     public final static String CHANNEL_RAIN_TOTAL = "raintotal";
     public final static String CHANNEL_WIND_DIRECTION = "windDirection";
     public final static String CHANNEL_WIND_SPEED = "windSpeed";
+    public final static String CHANNEL_WIND_CHILL = "windChill";
+    public final static String CHANNEL_AVERAGE_WIND_SPEED = "averageWindSpeed";
     public final static String CHANNEL_GUST = "gust";
     public final static String CHANNEL_CHILL_FACTOR = "chillFactor";
     public final static String CHANNEL_INSTANT_POWER = "instantPower";
