@@ -7,7 +7,8 @@
  */
 package org.openhab.binding.rflink.handler;
 
-import org.eclipse.smarthome.core.library.types.DecimalType;
+import java.util.HashMap;
+
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -17,11 +18,10 @@ import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
-import org.openhab.binding.rflink.RfLinkBindingConstants;
+import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.openhab.binding.rflink.internal.DeviceMessageListener;
-import org.openhab.binding.rflink.messages.RfLinkEnergyMessage;
 import org.openhab.binding.rflink.messages.RfLinkMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,13 +116,12 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
 
                 updateStatus(ThingStatus.ONLINE);
 
-                if (message instanceof RfLinkEnergyMessage) {
-                    logger.debug("Message is RfLinkEnergyMessage");
-                    updateState(new ChannelUID(getThing().getUID(), RfLinkBindingConstants.CHANNEL_INSTANT_POWER),
-                            new DecimalType(((RfLinkEnergyMessage) message).instantPower));
-                    updateState(new ChannelUID(getThing().getUID(), RfLinkBindingConstants.CHANNEL_TOTAL_USAGE),
-                            new DecimalType(((RfLinkEnergyMessage) message).totalUsage));
+                HashMap<String, State> map = message.getStates();
+
+                for (String channel : map.keySet()) {
+                    updateState(new ChannelUID(getThing().getUID(), channel), map.get(channel));
                 }
+
             }
 
         } catch (RfLinkException e) {
