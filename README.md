@@ -43,6 +43,31 @@ Number myInstantPower           "Instant Power [%d]"  <chart>   (GroupA) {channe
 Number myTotalPower             "Total Power [%d]"  <chart>   (GroupA) {channel="rflink:energy:usb0:myEnergy:totalUsage"}
 ```
 
+## Supported Channels
+
+### Energy
+
+
+| Channel ID | Item Type    | Description  |
+|------------|--------------|--------------|
+| instantPower | Number | Instant power consumption in Watts. |
+| totalUsage | Number | Used energy in Watt hours. |
+| instantAmp | Number | Instant current in Amperes. |
+| totalAmpHours | Number | Used "energy" in ampere-hours. |
+
+
+### Wind
+
+
+| Channel ID | Item Type    | Description  |
+|------------|--------------|--------------|
+| windSpeed | Number | Wind speed in km per hour. |
+| windDirection | Number | Wind direction in degrees. |
+| averageWindSpeed | Number | Average wind speed in km per hour. |
+| windGust | Number | Wind gust speed in km per hour. |
+| windChill | Number | Wind temperature in celcius degrees. |
+
+
 ## Dependencies
 
 This binding depends on the following plugins
