@@ -19,7 +19,7 @@ public class RfLinkMessageFactory {
 
         addMappingOfClass(RfLinkEnergyMessage.class);
         addMappingOfClass(RfLinkWindMessage.class);
-        // TODO: add other messages
+        addMappingOfClass(RfLinkRainMessage.class);
 
     }
 

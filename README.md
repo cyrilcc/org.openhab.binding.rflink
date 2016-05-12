@@ -19,6 +19,7 @@ RFLink binding currently supports following types of devices:
 
 * Energy
 * Wind (_to be tested_)
+* Rain (_to be tested_)
 
 As the project is at its very beginning, the binding does not support yet commands.
 
@@ -28,7 +29,7 @@ As the project is at its very beginning, the binding does not support yet discov
 
 ## Configuration
 
-Both bridges and sensor/actuators are easy to configure from the Paper UI. However, a manual configuration looks (thing file) e.g. like
+A manual configuration looks like
 
 _.things file_
 ```
@@ -39,8 +40,8 @@ Bridge rflink:bridge:usb0 [ serialPort="COM19", baudRate=57600 ] {
 
 _.items file_
 ```
-Number myInstantPower           "Instant Power [%d]"  <chart>   (GroupA) {channel="rflink:energy:usb0:myEnergy:instantPower"}
-Number myTotalPower             "Total Power [%d]"  <chart>   (GroupA) {channel="rflink:energy:usb0:myEnergy:totalUsage"}
+Number myInstantPower "Instant Power [%d]"  <chart> (GroupA) {channel="rflink:energy:usb0:myEnergy:instantPower"}
+Number myTotalPower   "Total Power [%d]"    <chart> (GroupA) {channel="rflink:energy:usb0:myEnergy:totalUsage"}
 ```
 
 ## Supported Channels
@@ -68,9 +69,67 @@ Number myTotalPower             "Total Power [%d]"  <chart>   (GroupA) {channel=
 | windChill | Number | Wind temperature in celcius degrees. |
 
 
+### Rain
+
+
+| Channel ID | Item Type    | Description  |
+|------------|--------------|--------------|
+| rainTotal  | Number       | Total rain in millimeters. |
+| rainRate   | Number       | Rain fall rate in millimeters per hour. |
+
+
 ## Dependencies
 
 This binding depends on the following plugins
 * org.openhab.io.transport.serial
 
+
+## How to implement a new Thing
+
+RFLink message are very simple ';' separated strings.
+
+### Packet structure - Received data from RF
+
+```
+20;ID=9999;Name;LABEL=data;
+```
+
+* 20          => Node number 20 means from the RFLink Gateway to the master, 10 means from the master to the RFLink Gateway
+* ;           => field separator
+* NAME        => Device name (can be used to display in applications etc.)
+* LABEL=data  => contains the field type and data for that field, can be present multiple times per device
+
+### Examples
+
+```
+20;6A;UPM/Esic;ID=1002;WINSP=0041;WINDIR=5A;BAT=OK;
+20;47;Cresta;ID=8001;WINDIR=0002;WINSP=0060;WINGS=0088;WINCHL=b0;
+
+```
+
+The full protocol reference is available in this [archive](https://drive.google.com/open?id=0BwEYW5Q6bg_ZTDhKQXphN0ZxdEU) 
+
+### How to get sample messages of your Thing
+
+To get sample messages of your Thing, you can enable the DEBUG mode for this binding. 
+Add this line is your logback_debug.xml file.
+ ```
+ <logger name="org.openhab.binding.rflink" level="DEBUG" />
+ ```
+
+Or you can use the Serial Monitor of your arduino IDE.
+
+Or you can use the RFLinkLoader application. [See how](http://www.nemcon.nl/blog2/2015/07/cc).
+
+### Add your code
+
+* Add you thing description XML file in the ESH-INF/thing/ directory
+* Implement your message in the org.openhab.binding.rflink.messages package
+* Add the mapping of your new message in the static part of the RfLinkMessageFactory class
+* To test your thing, don't forget to add you thing in the .things and .items files. See configuration part of this document.
+* Update this README.md document with the new thing and channels you implemented
+
+### How to package your binding
+
+That's a good question at this point ^^
 
