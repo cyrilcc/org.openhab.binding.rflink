@@ -133,14 +133,14 @@ Or you can use the RFLinkLoader application. [See how](http://www.nemcon.nl/blog
 
 ### Add your code
 
-* Add you thing description XML file in the ESH-INF/thing/ directory
-* Implement your message in the org.openhab.binding.rflink.messages package
-* Add the mapping of your new message in the static part of the RfLinkMessageFactory class
-* Add your new channels names in the RfLinkBindingConstants class
-* Add a ThingTypeUID constant (same class)
-* Add this new constant in the SUPPORTED_DEVICE_THING_TYPES_UIDS list (same class)
-* To test your thing, don't forget to add you thing in the .things and .items files. See configuration part of this document.
-* Update this README.md document with the new thing and channels you implemented
+1. Add you thing description XML file in the ESH-INF/thing/ directory
+2. Implement your message in the org.openhab.binding.rflink.messages package
+3. Add the mapping of your new message in the static part of the RfLinkMessageFactory class
+4. Add your new channels names in the RfLinkBindingConstants class
+5. Add a ThingTypeUID constant (same class)
+6. Add this new constant in the SUPPORTED\_DEVICE\_THING\_TYPES\_UIDS list (same class)
+7. To test your thing, don't forget to add you thing in the .things and .items files. See configuration part of this document.
+8. Update this README.md document with the new thing and channels you implemented
 
 ### How to package your binding
 
