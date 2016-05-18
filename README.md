@@ -83,6 +83,16 @@ Number myTotalPower   "Total Power [%d]"    <chart> (GroupA) {channel="rflink:en
 This binding depends on the following plugins
 * org.openhab.io.transport.serial
 
+From the openHAB shell, just type 
+```
+feature:install openhab-transport-serial
+```
+
+Or if you are developing your plugin with Eclipse IDE, select Run / Run Configurations... then select openHAB_Runtime click on the plug-ins tab, and check org.openhab.io.transport.serial in the target platform section.
+
+
+The error message "Unresolved requirement: Import-Package: gnu.io" is a good indicator to know if you miss this dependency.
+
 
 ## How to implement a new Thing
 
@@ -134,5 +144,5 @@ Or you can use the RFLinkLoader application. [See how](http://www.nemcon.nl/blog
 
 ### How to package your binding
 
-That's a good question at this point ^^
+In Eclipse IDE, right click on the pom.xml file, then "Run As", and "Maven Install" 
 
