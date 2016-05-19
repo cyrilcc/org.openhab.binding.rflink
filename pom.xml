@@ -13,6 +13,21 @@
     <bundle.symbolicName>org.openhab.binding.rflink</bundle.symbolicName>
     <bundle.namespace>org.openhab.binding.rflink</bundle.namespace>
   </properties>
+  
+  <repositories>
+      <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+      <id>eclipse-snapshots</id>
+      <name>Eclipse Snapshot Repository</name>
+      <url>https://repo.eclipse.org/content/repositories/snapshots/</url>
+    </repository>
+  </repositories>
 
   <groupId>org.openhab.binding</groupId>
   <artifactId>org.openhab.binding.rflink</artifactId>
