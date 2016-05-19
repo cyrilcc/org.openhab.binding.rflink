@@ -1,5 +1,7 @@
 # RFLink binding for OpenHAB 2.0
 
+[![Build Status](https://travis-ci.org/cyrilcc/org.openhab.binding.rflink.svg?branch=master)](https://travis-ci.org/cyrilcc/org.openhab.binding.rflink)
+
 This repository contains a binding for [OpenHAB 2.0](https://github.com/openhab/openhab-distro) that deals with [RFLink Gateway](http://www.nemcon.nl/blog2/).
 
 This binding is inspired by the [Rfxcom binding](https://github.com/openhab/openhab2-addons/tree/master/addons/binding/org.openhab.binding.rfxcom)
@@ -34,6 +36,13 @@ A manual configuration looks like
 _.things file_
 ```
 Bridge rflink:bridge:usb0 [ serialPort="COM19", baudRate=57600 ] {
+    energy myEnergy [ deviceId="Oregon CM119-0004" ]
+}
+```
+
+most of the time on a raspberry
+```
+Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyACM0", baudRate=57600 ] {
     energy myEnergy [ deviceId="Oregon CM119-0004" ]
 }
 ```
