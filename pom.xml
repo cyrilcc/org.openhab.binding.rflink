@@ -14,8 +14,8 @@
     <bundle.namespace>org.openhab.binding.rflink</bundle.namespace>
   </properties>
   
-  <repositories>
-      <repository>
+    <repositories>
+    <repository>
       <releases>
         <enabled>false</enabled>
       </releases>
@@ -26,6 +26,89 @@
       <id>eclipse-snapshots</id>
       <name>Eclipse Snapshot Repository</name>
       <url>https://repo.eclipse.org/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>eclipse-releases</id>
+      <name>Eclipse Release Repository</name>
+      <url>https://repo.eclipse.org/content/repositories/releases/</url>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>jcenter</id>
+      <name>JCenter Repository</name>
+      <url>https://jcenter.bintray.com/</url>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>openhab-bintray</id>
+      <name>Bintray Repository for openHAB</name>
+      <url>https://dl.bintray.com/openhab/mvn/</url>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+      <id>jfrog</id>
+      <name>JFrog OSS Repository</name>
+      <url>http://oss.jfrog.org/libs-snapshot/</url>
+    </repository>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>maggu2810-bintray</id>
+      <name>Bintray Repository of maggu2810</name>
+      <url>https://dl.bintray.com/maggu2810/maven</url>
+    </repository>
+    <repository>
+      <id>p2-smarthome</id>
+      <url>http://download.eclipse.org/smarthome/updates-stable</url>
+      <layout>p2</layout>
+    </repository>
+    <repository>
+      <id>p2-openhab-core</id>
+      <url>https://dl.bintray.com/openhab/p2/openhab-core/2.0.0.x</url>
+      <layout>p2</layout>
+    </repository>
+    <repository>
+      <id>p2-openhab-deps-repo</id>
+      <url>https://dl.bintray.com/openhab/p2/openhab-deps-repo/1.0.3</url>
+      <layout>p2</layout>
+    </repository>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>central</id>
+      <name>Central Repository</name>
+      <url>https://repo.maven.apache.org/maven2</url>
     </repository>
   </repositories>
 
