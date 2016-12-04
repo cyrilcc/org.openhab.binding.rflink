@@ -64,7 +64,7 @@ public class RfLinkLightingMessage extends RfLinkBaseMessage {
         }
     }
 
-    public String switchCode = 0;
+    public String switchCode = "";
     public Commands command = Commands.OFF;
 
     public RfLinkLightingMessage() {
