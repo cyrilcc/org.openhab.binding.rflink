@@ -65,6 +65,7 @@ public class RfLinkBindingConstants {
     public final static String CHANNEL_SET_POINT = "setpoint";
 
     // List of all Thing Type UIDs
+    public final static ThingTypeUID THING_TYPE_LIGHTNING = new ThingTypeUID(BINDING_ID, "lighting");
     public final static ThingTypeUID THING_TYPE_ENERGY = new ThingTypeUID(BINDING_ID, "energy");
     public final static ThingTypeUID THING_TYPE_WIND = new ThingTypeUID(BINDING_ID, "wind");
 
@@ -72,6 +73,6 @@ public class RfLinkBindingConstants {
      * Presents all supported Thing types by RFLink binding.
      */
     public final static Set<ThingTypeUID> SUPPORTED_DEVICE_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_ENERGY,
-            THING_TYPE_WIND);
+            THING_TYPE_WIND, THING_TYPE_LIGHTNING);
 
 }

@@ -60,4 +60,22 @@ public class RfLinkHandlerFactory extends BaseThingHandlerFactory {
 
         return null;
     }
+
+    // @Override
+    // protected void removeHandler(ThingHandler thingHandler) {
+    // if (this.discoveryServiceRegs != null) {
+    // ServiceRegistration<?> serviceReg = this.discoveryServiceRegs.get(thingHandler.getThing().getUID());
+    // if (serviceReg != null) {
+    // serviceReg.unregister();
+    // discoveryServiceRegs.remove(thingHandler.getThing().getUID());
+    // }
+    // }
+    // }
+    //
+    // private void registerDeviceDiscoveryService(RFXComBridgeHandler handler) {
+    // RFXComDeviceDiscoveryService discoveryService = new RFXComDeviceDiscoveryService(handler);
+    // discoveryService.activate();
+    // this.discoveryServiceRegs.put(handler.getThing().getUID(), bundleContext
+    // .registerService(DiscoveryService.class.getName(), discoveryService, new Hashtable<String, Object>()));
+    // }
 }

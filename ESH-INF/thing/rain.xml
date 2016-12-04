@@ -5,6 +5,10 @@
 
 	<thing-type id="rain">
 		
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="bridge" />
+        </supported-bridge-type-refs>
+        
 		<label>RFLink Rain Sensor</label>
 		<description>A Rain device.</description>
 
