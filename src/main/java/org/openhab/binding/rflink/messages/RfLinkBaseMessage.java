@@ -11,6 +11,7 @@ package org.openhab.binding.rflink.messages;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.types.State;
 
 /**
@@ -23,7 +24,7 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
     protected final static String FIELDS_DELIMITER = ";";
     protected final static char VALUE_DELIMITER = '=';
     protected final static String STR_VALUE_DELIMITER = "=";
-    private final static String ID_DELIMITER = "-";
+    public final static String ID_DELIMITER = "-";
 
     private final static String NODE_NUMBER_FROM_GATEWAY = "20";
 
@@ -45,6 +46,11 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
 
     public RfLinkBaseMessage(String data) {
         encodeMessage(data);
+    }
+
+    @Override
+    public ThingTypeUID getThingType() {
+        return null;
     }
 
     @Override
@@ -99,6 +105,11 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
     @Override
     public String getDeviceId() {
         return deviceName + ID_DELIMITER + deviceId;
+    }
+
+    @Override
+    public String getDeviceName() {
+        return deviceName;
     }
 
     @Override
