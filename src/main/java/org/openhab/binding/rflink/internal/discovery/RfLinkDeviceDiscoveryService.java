@@ -25,8 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link RfLinkDeviceDiscoveryService} class is used to discover RFXCOM
- * devices that send messages to RFXCOM bridge.
+ * The {@link RfLinkDeviceDiscoveryService} class is used to discover RfLink
+ * devices that send messages to RfLink bridge.
  *
  * @author Pauli Anttila - Initial contribution
  * @author Daan Sieben - Modified for RfLink

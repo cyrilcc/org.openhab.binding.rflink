@@ -39,21 +39,6 @@ public interface RfLinkMessage {
     void encodeMessage(String data);
 
     /**
-     * Procedure for converting RFXCOM value to Openhab state.
-     *
-     * @param valueSelector
-     *
-     * @return Openhab state.
-     */
-    // State convertToState(RFXComValueSelector valueSelector) throws RFXComException;
-
-    /**
-     * Procedure for converting Openhab state to RFXCOM object.
-     *
-     */
-    // void convertFromState(RFXComValueSelector valueSelector, Type type) throws RFXComException;
-
-    /**
      * Procedure to get device id.
      *
      * @return device Id.
