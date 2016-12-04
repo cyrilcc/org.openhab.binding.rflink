@@ -64,7 +64,7 @@ public class RfLinkLightingMessage extends RfLinkBaseMessage {
         }
     }
 
-    public int unitCode = 0;
+    public String switchCode = 0;
     public Commands command = Commands.OFF;
 
     public RfLinkLightingMessage() {
@@ -82,7 +82,7 @@ public class RfLinkLightingMessage extends RfLinkBaseMessage {
 
     @Override
     public String getDeviceId() {
-        return super.getDeviceId() + ID_DELIMITER + unitCode;
+        return super.getDeviceId() + ID_DELIMITER + switchCode;
     }
 
     @Override
@@ -112,7 +112,7 @@ public class RfLinkLightingMessage extends RfLinkBaseMessage {
         }
 
         if (values.containsKey(KEY_SWITCH)) {
-            unitCode = Integer.parseInt(values.get(KEY_SWITCH), 16);
+            switchCode = values.get(KEY_SWITCH);
         }
 
     }
