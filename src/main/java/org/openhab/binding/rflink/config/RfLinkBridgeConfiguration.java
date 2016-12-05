@@ -14,10 +14,12 @@ package org.openhab.binding.rflink.config;
  */
 public class RfLinkBridgeConfiguration {
 
+    // Configuration for discovered bridge devices
+    public String bridgeId;
+
     // Serial port for manual configuration
     public String serialPort;
 
     // Serial port baud rate
     public int baudRate;
-
 }

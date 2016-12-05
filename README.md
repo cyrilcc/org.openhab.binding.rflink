@@ -20,6 +20,7 @@ The official supported devices list is available here : [http://www.nemcon.nl/bl
 RFLink binding currently supports following types of devices:
 
 * Energy
+* Lighting switch
 * Wind (_to be tested_)
 * Rain (_to be tested_)
 
@@ -27,7 +28,11 @@ As the project is at its very beginning, the binding does not support yet comman
 
 ## Discovery
 
-As the project is at its very beginning, the binding does not support yet discovery.
+A first version of discovery is supported, currently depending on the type of device a triggered brand/channel/button will appear in the inbox
+
+## Sending messages
+
+Sending of triggers from openhab -> rflink -> device does not work yet.
 
 ## Configuration
 

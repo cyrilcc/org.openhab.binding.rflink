@@ -9,15 +9,15 @@
 package org.openhab.binding.rflink.connector;
 
 /**
- * This interface defines interface to receive data from RFXCOM controller.
+ * This interface defines interface to receive data from RfLink controller.
  *
  * @author Pauli Anttila - Initial contribution
  */
 public interface RfLinkEventListener {
 
     /**
-     * Procedure for receive raw data from RFXCOM controller.
-     * 
+     * Procedure for receive raw data from RfLink controller.
+     *
      * @param data
      *            Received raw data.
      */
@@ -25,7 +25,7 @@ public interface RfLinkEventListener {
 
     /**
      * Procedure for receiving information fatal error.
-     * 
+     *
      * @param error
      *            Error occured.
      */

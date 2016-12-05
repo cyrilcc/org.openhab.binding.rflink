@@ -6,6 +6,10 @@
 
 	<thing-type id="energy">
 		
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="bridge" />
+        </supported-bridge-type-refs>
+        
 		<label>RFLink Energy Sensor</label>
 		<description>An Energy device.</description>
 		

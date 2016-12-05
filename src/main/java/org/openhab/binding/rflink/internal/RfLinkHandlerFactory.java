@@ -7,16 +7,23 @@
  */
 package org.openhab.binding.rflink.internal;
 
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.smarthome.config.discovery.DiscoveryService;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
+import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.openhab.binding.rflink.RfLinkBindingConstants;
 import org.openhab.binding.rflink.handler.RfLinkBridgeHandler;
 import org.openhab.binding.rflink.handler.RfLinkHandler;
+import org.openhab.binding.rflink.internal.discovery.RfLinkDeviceDiscoveryService;
+import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +39,11 @@ public class RfLinkHandlerFactory extends BaseThingHandlerFactory {
 
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(RfLinkHandlerFactory.class);
+
+    /**
+     * Service registration map
+     */
+    private Map<ThingUID, ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
 
     public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES = Sets.union(
             RfLinkBindingConstants.SUPPORTED_DEVICE_THING_TYPES_UIDS,
@@ -50,7 +62,7 @@ public class RfLinkHandlerFactory extends BaseThingHandlerFactory {
 
         if (RfLinkBindingConstants.SUPPORTED_BRIDGE_THING_TYPES_UIDS.contains(thingTypeUID)) {
             RfLinkBridgeHandler handler = new RfLinkBridgeHandler((Bridge) thing);
-            // registerDeviceDiscoveryService(handler);
+            registerDeviceDiscoveryService(handler);
             return handler;
         } else if (supportsThingType(thingTypeUID)) {
             return new RfLinkHandler(thing);
@@ -59,5 +71,23 @@ public class RfLinkHandlerFactory extends BaseThingHandlerFactory {
         }
 
         return null;
+    }
+
+    @Override
+    protected void removeHandler(ThingHandler thingHandler) {
+        if (this.discoveryServiceRegs != null) {
+            ServiceRegistration<?> serviceReg = this.discoveryServiceRegs.get(thingHandler.getThing().getUID());
+            if (serviceReg != null) {
+                serviceReg.unregister();
+                discoveryServiceRegs.remove(thingHandler.getThing().getUID());
+            }
+        }
+    }
+
+    private void registerDeviceDiscoveryService(RfLinkBridgeHandler handler) {
+        RfLinkDeviceDiscoveryService discoveryService = new RfLinkDeviceDiscoveryService(handler);
+        discoveryService.activate();
+        this.discoveryServiceRegs.put(handler.getThing().getUID(), bundleContext
+                .registerService(DiscoveryService.class.getName(), discoveryService, new Hashtable<String, Object>()));
     }
 }

@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
+import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.rflink.RfLinkBindingConstants;
 
@@ -45,6 +46,11 @@ public class RfLinkWindMessage extends RfLinkBaseMessage {
 
     public RfLinkWindMessage(String data) {
         encodeMessage(data);
+    }
+
+    @Override
+    public ThingTypeUID getThingType() {
+        return RfLinkBindingConstants.THING_TYPE_WIND;
     }
 
     @Override

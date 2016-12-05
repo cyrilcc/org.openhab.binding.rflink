@@ -11,6 +11,7 @@ package org.openhab.binding.rflink.messages;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 
@@ -38,26 +39,25 @@ public interface RfLinkMessage {
     void encodeMessage(String data);
 
     /**
-     * Procedure for converting RFXCOM value to Openhab state.
-     *
-     * @param valueSelector
-     *
-     * @return Openhab state.
-     */
-    // State convertToState(RFXComValueSelector valueSelector) throws RFXComException;
-
-    /**
-     * Procedure for converting Openhab state to RFXCOM object.
-     *
-     */
-    // void convertFromState(RFXComValueSelector valueSelector, Type type) throws RFXComException;
-
-    /**
      * Procedure to get device id.
      *
      * @return device Id.
      */
     String getDeviceId() throws RfLinkException;
+
+    /**
+     * Procedure to get device name.
+     *
+     * @return device Name.
+     */
+    String getDeviceName();
+
+    /**
+     * Procedure to thingType linked to message.
+     *
+     * @return Thing type.
+     */
+    ThingTypeUID getThingType();
 
     /**
      * Get all the value names that concerns this message

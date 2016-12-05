@@ -209,7 +209,8 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
         public void packetReceived(String packet) {
             try {
                 RfLinkMessage message = RfLinkMessageFactory.createMessage(packet);
-                logger.debug("Message received: {}", message);
+                logger.debug("Message received: {}, running against {} listeners", message,
+                        deviceStatusListeners.size());
 
                 for (DeviceMessageListener deviceStatusListener : deviceStatusListeners) {
                     try {
@@ -239,7 +240,8 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
         if (deviceStatusListener == null) {
             throw new IllegalArgumentException("It's not allowed to pass a null deviceStatusListener.");
         }
-        return deviceStatusListeners.add(deviceStatusListener);
+        return deviceStatusListeners.contains(deviceStatusListener) ? false
+                : deviceStatusListeners.add(deviceStatusListener);
     }
 
     public boolean unregisterDeviceStatusListener(DeviceMessageListener deviceStatusListener) {
