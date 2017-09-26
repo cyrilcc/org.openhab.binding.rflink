@@ -20,6 +20,7 @@ public class RfLinkMessageFactory {
         addMappingOfClass(RfLinkWindMessage.class);
         addMappingOfClass(RfLinkRainMessage.class);
         addMappingOfClass(RfLinkLightingMessage.class);
+        addMappingOfClass(RfLinkTemperatureMessage.class);
     }
 
     private static void addMappingOfClass(Class _class) {

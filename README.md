@@ -23,6 +23,7 @@ RFLink binding currently supports following types of devices:
 * Lighting switch
 * Wind (_to be tested_)
 * Rain (_to be tested_)
+* Temperature
 
 As the project is at its very beginning, the binding does not support yet commands.
 
@@ -51,11 +52,18 @@ Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyACM0", baudRate=57600 ] {
     energy myEnergy [ deviceId="Oregon CM119-0004" ]
 }
 ```
+or
+```
+Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyUSB0", baudRate=57600 ] {
+    temperature myTemperature [ deviceId="Oregon Temp-0710" ]
+}
+```
 
 _.items file_
 ```
 Number myInstantPower "Instant Power [%d]"  <chart> (GroupA) {channel="rflink:energy:usb0:myEnergy:instantPower"}
 Number myTotalPower   "Total Power [%d]"    <chart> (GroupA) {channel="rflink:energy:usb0:myEnergy:totalUsage"}
+Number oregonTemp     "Oregon Temp [%.2f °C]"                {channel="rflink:temperature:usb0:myTemperature:temperature"}
 ```
 
 ## Supported Channels
@@ -92,6 +100,14 @@ Number myTotalPower   "Total Power [%d]"    <chart> (GroupA) {channel="rflink:en
 | rainRate   | Number       | Rain fall rate in millimeters per hour. |
 
 
+### Temperature
+
+
+| Channel ID  | Item Type    | Description  |
+|-------------|--------------|--------------|
+| temperature | Number       | Temperature  |
+
+
 ## Dependencies
 
 This binding depends on the following plugins
@@ -114,21 +130,29 @@ RFLink message are very simple ';' separated strings.
 
 ### Packet structure - Received data from RF
 
+Old format:
 ```
 20;ID=9999;Name;LABEL=data;
+```
+New Format:
+```
+20;FF;Protocol;ID=9999;LABEL=data;
 ```
 
 * 20          => Node number 20 means from the RFLink Gateway to the master, 10 means from the master to the RFLink Gateway
 * ;           => field separator
-* NAME        => Device name (can be used to display in applications etc.)
+* FF          => packet sequence number
+* Protocol    => Protocol
+* ID          => ID to use in Things file
 * LABEL=data  => contains the field type and data for that field, can be present multiple times per device
+
 
 ### Examples
 
 ```
 20;6A;UPM/Esic;ID=1002;WINSP=0041;WINDIR=5A;BAT=OK;
 20;47;Cresta;ID=8001;WINDIR=0002;WINSP=0060;WINGS=0088;WINCHL=b0;
-
+20;0B;Oregon Temp;ID=0710;TEMP=00a8;BAT=LOW;
 ```
 
 The full protocol reference is available in this [archive](https://drive.google.com/open?id=0BwEYW5Q6bg_ZTDhKQXphN0ZxdEU) 
@@ -136,9 +160,9 @@ The full protocol reference is available in this [archive](https://drive.google.
 ### How to get sample messages of your Thing
 
 To get sample messages of your Thing, you can enable the DEBUG mode for this binding. 
-Add this line is your logback_debug.xml file.
+Add this line is your org.ops4j.pax.logging.cfg file
  ```
- <logger name="org.openhab.binding.rflink" level="DEBUG" />
+ log4j.logger.org.openhab.binding.rflink = DEBUG
  ```
 
 Or you can use the Serial Monitor of your arduino IDE.
