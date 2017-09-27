@@ -68,7 +68,10 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
             if (NODE_NUMBER_FROM_GATEWAY.equals(elements[0])) {
 
                 seqNbr = (byte) Integer.parseInt(elements[1], 16);
-                deviceName = elements[2];
+
+                // Fix for "UID segment 'Oregon Temp_0710' contains invalid characters. Each segment of the UID must
+                // match the pattern [A-Za-z0-9_-]*."
+                deviceName = elements[2].replaceAll("[^A-Za-z0-9_-]", "");
                 deviceId = elements[3].split(STR_VALUE_DELIMITER)[1];
 
                 // Raw values are stored, and will be decoded by sub implementations

@@ -4,15 +4,16 @@
 	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
-	<thing-type id="lighting">
+	<thing-type id="switch">
 	
         <supported-bridge-type-refs>
             <bridge-type-ref id="bridge" />
         </supported-bridge-type-refs>
 
-		<label>RFLink Lighting device</label>
-		<description>A socket lighting device.</description>
+		<label>RFLink Switch or Contact device</label>
+		<description>A switch or contact device. (Contacts are read-only Switches).</description>
 
+        <!--X10 DS90 Door / Window contacts: 20;04;X10Secure;ID=12ab;SWITCH=00;CMD=OFF; -->
 		<channels>
 			<channel id="command" typeId="command" />
 		</channels>
@@ -20,7 +21,7 @@
 		<config-description>
 			<parameter name="deviceId" type="text" required="true">
 				<label>Device Id</label>
-				<description>Device Id. Device name + channel. Example Kaku-44</description>
+				<description>Device Id. Device name + channel. Example Kaku-44 or Device name + ID + channel; X10Secure-12ab-00</description>
 			</parameter>
 		</config-description>
 	</thing-type>
