@@ -24,15 +24,12 @@ import org.openhab.binding.rflink.RfLinkBindingConstants;
  */
 
 public class RfLinkTemperatureMessage extends RfLinkBaseMessage {
-
     private static final String KEY_TEMPERATURE = "TEMP";
-
     private static final List<String> keys = Arrays.asList(KEY_TEMPERATURE);
 
     public double temperature = 0;
 
     public RfLinkTemperatureMessage() {
-
     }
 
     public RfLinkTemperatureMessage(String data) {
@@ -46,7 +43,6 @@ public class RfLinkTemperatureMessage extends RfLinkBaseMessage {
 
     @Override
     public void encodeMessage(String data) {
-
         super.encodeMessage(data);
 
         if (values.containsKey(KEY_TEMPERATURE)) {
@@ -63,7 +59,6 @@ public class RfLinkTemperatureMessage extends RfLinkBaseMessage {
     public HashMap<String, State> getStates() {
 
         HashMap<String, State> map = new HashMap<>();
-
         map.put(RfLinkBindingConstants.CHANNEL_TEMPERATURE, new DecimalType(temperature));
 
         return map;
@@ -78,5 +73,4 @@ public class RfLinkTemperatureMessage extends RfLinkBaseMessage {
 
         return str;
     }
-
 }

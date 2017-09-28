@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
  * actual commands.
  *
  * @author Cyril Cauchois - Initial contribution
+ * @author John Jore - Added initial support to transmit messages to devices
  */
 public class RfLinkBridgeHandler extends BaseBridgeHandler {
 
@@ -219,5 +220,4 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
         }
         return deviceStatusListeners.remove(deviceStatusListener);
     }
-
 }

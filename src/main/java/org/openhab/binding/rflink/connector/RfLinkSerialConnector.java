@@ -106,7 +106,7 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
             throw new IOException("Not connected, sending messages is not possible");
         }
 
-        data = data + "\r\n"; // All commands need "enter" to take effect. May not need both \r and \n...
+        data = "10;" + data + "\r\n"; // Pre and Post for command. May not need both \r and \n...
         logger.debug("Send data (len={}): {}", data.length(), data);
         output.write(data.getBytes());
         output.flush();
@@ -161,6 +161,5 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
                 logger.error(e.toString());
             }
         }
-
     }
 }

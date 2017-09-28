@@ -24,7 +24,6 @@ import org.openhab.binding.rflink.exceptions.RfLinkException;
  * @author Daan Sieben - Initial contribution
  */
 public class RfLinkSwitchMessage extends RfLinkBaseMessage {
-
     private static final String KEY_SWITCH = "SWITCH";
     private static final String KEY_CMD = "CMD";
 
@@ -68,7 +67,6 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
     public Commands command = Commands.OFF;
 
     public RfLinkSwitchMessage() {
-
     }
 
     public RfLinkSwitchMessage(String data) {
@@ -97,7 +95,6 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
     @Override
     public void encodeMessage(String data) {
-
         super.encodeMessage(data);
 
         if (values.containsKey(KEY_CMD)) {
@@ -114,7 +111,6 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
         if (values.containsKey(KEY_SWITCH)) {
             switchCode = values.get(KEY_SWITCH);
         }
-
     }
 
     @Override
@@ -132,7 +128,5 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
         }
 
         return map;
-
     }
-
 }
