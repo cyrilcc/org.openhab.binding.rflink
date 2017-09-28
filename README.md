@@ -23,11 +23,12 @@ RFLink binding currently supports following types of devices:
 * Lighting switch
 * Wind (_to be tested_)
 * Rain (_to be tested_)
-* Temperature
-* Switch / Contact (Recieve only)
+* Temperature (Recieve)
+* X10 Switch (Send)
+* X10Secure Contact (Recieve)
 * RTS / Somfy blinds (Send only)
 
-As the project is at its very beginning, the binding does not support many devices and only RTS / Somfy commands.
+As the project is at its very beginning, the binding does not support many devices.
 
 ## Discovery
 
@@ -35,7 +36,7 @@ A first version of discovery is supported, currently depending on the type of de
 
 ## Sending messages
 
-Sending of triggers from openhab -> rflink -> device only works for RTS / Somfy devices
+Sending of triggers from openhab -> rflink -> device only works for a few devices.
 
 ## Configuration
 
@@ -58,10 +59,13 @@ or
 ```
 Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyUSB0", baudRate=57600 ] {
     temperature myTemperature [ deviceId="OregonTemp-0123" ]
-    switch myContact [ deviceId="X10Secure-12ab-00" ]
-    rts    123abc    [ deviceId="RTS-123abc" ]
+    switch      myContact     [ deviceId="X10Secure-12ab-00" ]
+    rts         rts-123abc    [ deviceId="RTS-123abc" ]
+    switch      x10-01001a-2  [ deviceId="X10-01001a-2" ]
 }
 ```
+All receiving devices must have the protocol as part of the device name (rts and x10).
+
 
 _.items file_
 ```
@@ -69,7 +73,8 @@ Number myInstantPower "Instant Power [%d]"  <chart> (GroupA) {channel="rflink:en
 Number myTotalPower   "Total Power [%d]"    <chart> (GroupA) {channel="rflink:energy:usb0:myEnergy:totalUsage"}
 Number oregonTemp     "Oregon Temp [%.2f °C]"                {channel="rflink:temperature:usb0:myTemperature:temperature"}
 Switch myContact      "Contact [%s]"                         {channel="rflink:switch:usb0:myContact:command"}
-Rollershutter myBlind "Blind [%s]"                           {channel="rflink:rts:usb0:123abc:command"}
+Rollershutter myBlind "Blind [%s]"                           {channel="rflink:rts:usb0:rts-123abc:command"}
+Switch   mySwitch "X10Switch [%s]"                           {channel="rflink:switch:usb0:x10-01001a-2:command"}
 ```
 
 ## Supported Channels

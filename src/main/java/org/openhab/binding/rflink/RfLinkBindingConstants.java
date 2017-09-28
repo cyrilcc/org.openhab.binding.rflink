@@ -18,7 +18,7 @@ import com.google.common.collect.ImmutableSet;
  * used across the whole binding.
  *
  * @author Cyril Cauchois - Initial contribution
- * @author Cyril Cauchois - Added temperature, X10, X10Secure and RTS/Somfy support
+ * @author John Jore- Added temperature, X10, X10Secure and RTS/Somfy support
  */
 public class RfLinkBindingConstants {
 
