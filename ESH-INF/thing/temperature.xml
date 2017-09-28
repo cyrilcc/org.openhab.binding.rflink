@@ -12,7 +12,7 @@
 		<label>RFLink Temperature Sensor</label>
 		<description>A Temperature device.</description>
 
-        <!-- Sample: 2017-09-25 14:49:55 - 20;51;Oregon Temp;ID=0710;TEMP=00b5;BAT=LOW; ->
+		<!-- Sample: 2017-09-25 14:49:55 - 20;51;Oregon Temp;ID=0710;TEMP=00b5;BAT=LOW; -->
 		<channels>
 			<channel id="temperature" typeId="temperature" />
 			<channel id="lowBattery" typeId="system.low-battery" />

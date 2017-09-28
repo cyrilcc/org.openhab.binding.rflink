@@ -1,4 +1,4 @@
-# RFLink binding for OpenHAB 2.0
+﻿# RFLink binding for OpenHAB 2.0
 
 [![Build Status](https://travis-ci.org/cyrilcc/org.openhab.binding.rflink.svg?branch=master)](https://travis-ci.org/cyrilcc/org.openhab.binding.rflink)
 
@@ -24,6 +24,7 @@ RFLink binding currently supports following types of devices:
 * Wind (_to be tested_)
 * Rain (_to be tested_)
 * Temperature
+* Switch / Contact
 
 As the project is at its very beginning, the binding does not support yet commands.
 
@@ -49,13 +50,14 @@ Bridge rflink:bridge:usb0 [ serialPort="COM19", baudRate=57600 ] {
 most of the time on a raspberry
 ```
 Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyACM0", baudRate=57600 ] {
-    energy myEnergy [ deviceId="Oregon CM119-0004" ]
+    energy myEnergy [ deviceId="OregonCM119-0004" ]
 }
 ```
 or
 ```
 Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyUSB0", baudRate=57600 ] {
-    temperature myTemperature [ deviceId="Oregon Temp-0710" ]
+    temperature myTemperature [ deviceId="OregonTemp-0710" ]
+    switch myContact [ deviceId="X10Secure-12ab-00" ]
 }
 ```
 
@@ -64,6 +66,7 @@ _.items file_
 Number myInstantPower "Instant Power [%d]"  <chart> (GroupA) {channel="rflink:energy:usb0:myEnergy:instantPower"}
 Number myTotalPower   "Total Power [%d]"    <chart> (GroupA) {channel="rflink:energy:usb0:myEnergy:totalUsage"}
 Number oregonTemp     "Oregon Temp [%.2f °C]"                {channel="rflink:temperature:usb0:myTemperature:temperature"}
+Switch myContact      "Contact [%s]"                         {channel="rflink:switch:usb0:myContact:command"}
 ```
 
 ## Supported Channels
@@ -106,6 +109,14 @@ Number oregonTemp     "Oregon Temp [%.2f °C]"                {channel="rflink:t
 | Channel ID  | Item Type    | Description  |
 |-------------|--------------|--------------|
 | temperature | Number       | Temperature  |
+
+
+### Switch
+
+
+| Channel ID  | Item Type    | Description  |
+|-------------|--------------|--------------|
+| switch      | Switch       | Command      |
 
 
 ## Dependencies
@@ -160,7 +171,7 @@ The full protocol reference is available in this [archive](https://drive.google.
 ### How to get sample messages of your Thing
 
 To get sample messages of your Thing, you can enable the DEBUG mode for this binding. 
-Add this line is your org.ops4j.pax.logging.cfg file
+Add this line to your org.ops4j.pax.logging.cfg file
  ```
  log4j.logger.org.openhab.binding.rflink = DEBUG
  ```

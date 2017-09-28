@@ -23,7 +23,7 @@ import org.openhab.binding.rflink.exceptions.RfLinkException;
  *
  * @author Daan Sieben - Initial contribution
  */
-public class RfLinkLightingMessage extends RfLinkBaseMessage {
+public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
     private static final String KEY_SWITCH = "SWITCH";
     private static final String KEY_CMD = "CMD";
@@ -67,17 +67,17 @@ public class RfLinkLightingMessage extends RfLinkBaseMessage {
     public String switchCode = "";
     public Commands command = Commands.OFF;
 
-    public RfLinkLightingMessage() {
+    public RfLinkSwitchMessage() {
 
     }
 
-    public RfLinkLightingMessage(String data) {
+    public RfLinkSwitchMessage(String data) {
         encodeMessage(data);
     }
 
     @Override
     public ThingTypeUID getThingType() {
-        return RfLinkBindingConstants.THING_TYPE_LIGHTNING;
+        return RfLinkBindingConstants.THING_TYPE_SWITCH;
     }
 
     @Override
@@ -104,7 +104,7 @@ public class RfLinkLightingMessage extends RfLinkBaseMessage {
             try {
                 command = Commands.fromString(values.get(KEY_CMD));
                 if (command == null) {
-                    throw new RfLinkException("Can't convert " + values.get(KEY_CMD) + " to Lighting Command");
+                    throw new RfLinkException("Can't convert " + values.get(KEY_CMD) + " to Switch Command");
                 }
             } catch (Exception e) {
                 command = Commands.UNKNOWN;
