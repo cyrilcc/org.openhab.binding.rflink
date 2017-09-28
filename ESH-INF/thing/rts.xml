@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="rflink" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="rts">
+	
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="bridge" />
+        </supported-bridge-type-refs>
+
+		<label>RFLink Somfy/RTS device</label>
+		<description>A Somfy/RTS device.</description>
+
+        <!--
+            Command: 10;RTS;123ABC;0;UP;
+            Command: 10;RTS;123ABC;0;DOWN;
+            Command: 10;RTS;123ABC;0;STOP;
+        -->
+		<channels>
+			<channel id="command" typeId="command" />
+		</channels>
+
+		<config-description>
+			<parameter name="deviceId" type="text" required="true">
+				<label>Device Id</label>
+				<description>Device Id. Device type + address; RTS-123abc</description>
+			</parameter>
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>

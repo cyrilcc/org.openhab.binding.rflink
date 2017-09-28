@@ -24,9 +24,10 @@ RFLink binding currently supports following types of devices:
 * Wind (_to be tested_)
 * Rain (_to be tested_)
 * Temperature
-* Switch / Contact
+* Switch / Contact (Recieve only)
+* RTS / Somfy blinds (Send only)
 
-As the project is at its very beginning, the binding does not support yet commands.
+As the project is at its very beginning, the binding does not support many devices and only RTS / Somfy commands.
 
 ## Discovery
 
@@ -34,7 +35,7 @@ A first version of discovery is supported, currently depending on the type of de
 
 ## Sending messages
 
-Sending of triggers from openhab -> rflink -> device does not work yet.
+Sending of triggers from openhab -> rflink -> device only works for RTS / Somfy devices
 
 ## Configuration
 
@@ -43,7 +44,7 @@ A manual configuration looks like
 _.things file_
 ```
 Bridge rflink:bridge:usb0 [ serialPort="COM19", baudRate=57600 ] {
-    energy myEnergy [ deviceId="Oregon CM119-0004" ]
+    energy myEnergy [ deviceId="OregonCM119-0004" ]
 }
 ```
 
@@ -56,8 +57,9 @@ Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyACM0", baudRate=57600 ] {
 or
 ```
 Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyUSB0", baudRate=57600 ] {
-    temperature myTemperature [ deviceId="OregonTemp-0710" ]
+    temperature myTemperature [ deviceId="OregonTemp-0123" ]
     switch myContact [ deviceId="X10Secure-12ab-00" ]
+    rts    123abc    [ deviceId="RTS-123abc" ]
 }
 ```
 
@@ -67,6 +69,7 @@ Number myInstantPower "Instant Power [%d]"  <chart> (GroupA) {channel="rflink:en
 Number myTotalPower   "Total Power [%d]"    <chart> (GroupA) {channel="rflink:energy:usb0:myEnergy:totalUsage"}
 Number oregonTemp     "Oregon Temp [%.2f °C]"                {channel="rflink:temperature:usb0:myTemperature:temperature"}
 Switch myContact      "Contact [%s]"                         {channel="rflink:switch:usb0:myContact:command"}
+Rollershutter myBlind "Blind [%s]"                           {channel="rflink:rts:usb0:123abc:command"}
 ```
 
 ## Supported Channels
@@ -117,6 +120,14 @@ Switch myContact      "Contact [%s]"                         {channel="rflink:sw
 | Channel ID  | Item Type    | Description  |
 |-------------|--------------|--------------|
 | switch      | Switch       | Command      |
+
+
+### RTS / Somfy
+
+
+| Channel ID  | Item Type    | Description  |
+|-------------|--------------|--------------|
+| rts         | Rollershutter| Command      |
 
 
 ## Dependencies
@@ -171,9 +182,13 @@ The full protocol reference is available in this [archive](https://drive.google.
 ### How to get sample messages of your Thing
 
 To get sample messages of your Thing, you can enable the DEBUG mode for this binding. 
-Add this line to your org.ops4j.pax.logging.cfg file
+Add this line to your org.ops4j.pax.logging.cfg (Linux?) file 
  ```
  log4j.logger.org.openhab.binding.rflink = DEBUG
+ ```
+or add this line to your logback_debug.xml (Windows?) file
+ ```
+ <logger name="org.openhab.binding.rflink" level="DEBUG" />
  ```
 
 Or you can use the Serial Monitor of your arduino IDE.

@@ -49,15 +49,18 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
         logger.debug("Received channel: {}, command: {}", channelUID, command);
 
         if (bridgeHandler != null) {
+            // there must be a better way?
+            String protocol = channelUID.getAsString().split(":")[1].toUpperCase();
+            String deviceID = channelUID.getAsString().split(":")[3].toUpperCase();
 
-            // TODO forge a message to be transmitted
-
-            // bridgeHandler.sendMessage(msg);
-
-            logger.warn("RFLink doesn't support transmitting for channel '{}' yet", channelUID.getId());
-
+            // This is specific for RTS/Somfy and will not work for switches or other devices
+            String msg = "10;" + protocol + ";" + deviceID + ";0;" + command + ";";
+            try {
+                bridgeHandler.sendMessage(msg);
+            } catch (RfLinkException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     /**
@@ -134,6 +137,5 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
 
             logger.error("Error occured during message receiving", e);
         }
-
     }
 }

@@ -32,9 +32,7 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
      * making the displayed results codepage independent
      */
     private BufferedReader input;
-    /** The output stream to the port */
     private OutputStream output;
-    /** Milliseconds to block while waiting for port open */
     private static final int TIME_OUT = 2000;
 
     public RfLinkSerialConnector() {
@@ -83,6 +81,7 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
             // open the streams
             input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
             output = serialPort.getOutputStream();
+            output.flush();
 
             // add event listeners
             serialPort.addEventListener(this);
@@ -91,7 +90,6 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
             logger.error(e.toString(), e);
             sendErrorToListeners("Unhandled exception " + e.toString());
         }
-
     }
 
     @Override
@@ -100,13 +98,18 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
             serialPort.removeEventListener();
             serialPort.close();
         }
-
     }
 
     @Override
-    public void sendMessage(byte[] data) throws IOException {
-        // TODO Auto-generated method stub
+    public void sendMessage(String data) throws IOException {
+        if (output == null) {
+            throw new IOException("Not connected, sending messages is not possible");
+        }
 
+        data = data + "\r\n"; // All commands need "enter" to take effect. May not need both \r and \n...
+        logger.debug("Send data (len={}): {}", data.length(), data);
+        output.write(data.getBytes());
+        output.flush();
     }
 
     @Override
@@ -160,5 +163,4 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
         }
 
     }
-
 }
