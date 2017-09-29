@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
  * sent to one of the channels.
  *
  * @author Cyril Cauchois - Initial contribution
+ * @author John Jore - Added initial support to send commands to devices
  */
 public class RfLinkHandler extends BaseThingHandler implements DeviceMessageListener {
 
@@ -50,14 +51,29 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
 
         if (bridgeHandler != null) {
 
-            // TODO forge a message to be transmitted
+            // there must be a better way?
+            String[] tmp = channelUID.getAsString().split(":")[3].split("-");
+            String protocol = tmp[0];
 
-            // bridgeHandler.sendMessage(msg);
+            // RfLink needs to know which protocol to use. Different devices have different formats.
+            String msg = null;
+            switch (protocol.toUpperCase()) {
+                case "RTS":
+                    msg = protocol + ";" + tmp[1] + ";0;" + command + ";";
+                    break;
+                case "X10":
+                    msg = protocol + ";" + tmp[1] + ";" + tmp[2] + ";" + command + ";";
+                    break;
+            }
 
-            logger.warn("RFLink doesn't support transmitting for channel '{}' yet", channelUID.getId());
-
+            try {
+                if (msg != null) {
+                    bridgeHandler.sendMessage(msg.toUpperCase());
+                }
+            } catch (RfLinkException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     /**
@@ -134,6 +150,5 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
 
             logger.error("Error occured during message receiving", e);
         }
-
     }
 }

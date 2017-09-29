@@ -8,8 +8,11 @@
  */
 package org.openhab.binding.rflink.handler;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -37,6 +40,7 @@ import org.slf4j.LoggerFactory;
  * actual commands.
  *
  * @author Cyril Cauchois - Initial contribution
+ * @author John Jore - Added initial support to transmit messages to devices
  */
 public class RfLinkBridgeHandler extends BaseBridgeHandler {
 
@@ -48,11 +52,36 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
     private List<DeviceMessageListener> deviceStatusListeners = new CopyOnWriteArrayList<>();
 
     // private static final int timeout = 5000;
-    private static byte seqNbr = 0;
+    // private static byte seqNbr = 0;
     // private static RFXComTransmitterMessage responseMessage = null;
     // private Object notifierObject = new Object();
     private RfLinkBridgeConfiguration configuration = null;
     private ScheduledFuture<?> connectorTask;
+
+    private class TransmitQueue {
+        private Queue<String> queue = new LinkedBlockingQueue<String>();
+
+        public synchronized void enqueue(String msg) throws IOException {
+            boolean wasEmpty = queue.isEmpty();
+            if (queue.offer(msg)) {
+                if (wasEmpty) {
+                    send();
+                }
+            } else {
+                logger.error("Transmit queue overflow. Lost message: {}", msg);
+            }
+        }
+
+        public synchronized void send() throws IOException {
+            while (!queue.isEmpty()) {
+                String msg = queue.poll();
+                logger.debug("Transmitting message '{}'", msg);
+                connector.sendMessage(msg);
+            }
+        }
+    }
+
+    private TransmitQueue transmitQueue = new TransmitQueue();
 
     public RfLinkBridgeHandler(Bridge br) {
         super(br);
@@ -101,26 +130,6 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
         }
     }
 
-    // private static synchronized byte getSeqNumber() {
-    // return seqNbr;
-    // }
-    //
-    // private static synchronized byte getNextSeqNumber() {
-    // if (++seqNbr == 0) {
-    // seqNbr = 1;
-    // }
-    //
-    // return seqNbr;
-    // }
-
-    // private static synchronized RFXComTransmitterMessage getResponseMessage() {
-    // return responseMessage;
-    // }
-    //
-    // private static synchronized void setResponseMessage(RFXComTransmitterMessage respMessage) {
-    // responseMessage = respMessage;
-    // }
-
     private void connect() {
         logger.debug("Connecting to RFLink transceiver on " + configuration.serialPort + " port");
 
@@ -152,55 +161,16 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
         }
     }
 
-    public synchronized void sendMessage(RfLinkMessage msg) throws RfLinkException {
+    public synchronized void sendMessage(String msg) throws RfLinkException {
+        logger.warn("sendMessage: " + msg);
 
-        logger.warn("RFLink sendMessage not implemented yet");
-
-        // ((RfLinkBaseMessage) msg).seqNbr = getNextSeqNumber();
-        // byte[] data = msg.decodeMessage();
-        //
-        // logger.debug("Transmitting message '{}'", msg);
-        // logger.trace("Transmitting data: {}", DatatypeConverter.printHexBinary(data));
-        //
-        // setResponseMessage(null);
-        //
-        // try {
-        // connector.sendMessage(data);
-        // } catch (IOException e) {
-        // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
-        // throw new RfLinkException(e);
-        // }
-        //
-        // try {
-        //
-        // RFXComTransmitterMessage resp = null;
-        // synchronized (notifierObject) {
-        // notifierObject.wait(timeout);
-        // resp = getResponseMessage();
-        // }
-        //
-        // if (resp != null) {
-        // switch (resp.response) {
-        // case ACK:
-        // case ACK_DELAYED:
-        // logger.debug("Command successfully transmitted, '{}' received", resp.response);
-        // break;
-        //
-        // case NAK:
-        // case NAK_INVALID_AC_ADDRESS:
-        // case UNKNOWN:
-        // logger.error("Command transmit failed, '{}' received", resp.response);
-        // break;
-        // }
-        // } else {
-        // logger.warn("No response received from transceiver");
-        // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
-        // }
-        //
-        // } catch (InterruptedException ie) {
-        // logger.error("No acknowledge received from RFLink controller, timeout {}ms ", timeout);
-        // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
-        // }
+        try {
+            String baseMsg = msg;
+            transmitQueue.enqueue(baseMsg);
+        } catch (IOException e) {
+            logger.error("I/O Error", e);
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, e.getMessage());
+        }
     }
 
     private class MessageListener implements RfLinkEventListener {
@@ -250,5 +220,4 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
         }
         return deviceStatusListeners.remove(deviceStatusListener);
     }
-
 }

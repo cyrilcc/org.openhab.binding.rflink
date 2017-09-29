@@ -25,19 +25,12 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
     protected final static char VALUE_DELIMITER = '=';
     protected final static String STR_VALUE_DELIMITER = "=";
     public final static String ID_DELIMITER = "-";
-
     private final static String NODE_NUMBER_FROM_GATEWAY = "20";
-
     private final static int MINIMAL_SIZE_MESSAGE = 5;
-
     public String rawMessage;
-
     public byte seqNbr = 0;
-
     private String deviceName;
-
     private String deviceId;
-
     protected HashMap<String, String> values = new HashMap<>();
 
     public RfLinkBaseMessage() {

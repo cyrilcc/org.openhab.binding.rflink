@@ -21,6 +21,7 @@ public class RfLinkMessageFactory {
         addMappingOfClass(RfLinkRainMessage.class);
         addMappingOfClass(RfLinkSwitchMessage.class);
         addMappingOfClass(RfLinkTemperatureMessage.class);
+        addMappingOfClass(RfLinkRtsMessage.class);
     }
 
     private static void addMappingOfClass(Class _class) {
@@ -59,5 +60,4 @@ public class RfLinkMessageFactory {
         return createMessage(new RfLinkBaseMessage(packet) {
         });
     }
-
 }

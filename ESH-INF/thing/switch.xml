@@ -13,15 +13,19 @@
 		<label>RFLink Switch or Contact device</label>
 		<description>A switch or contact device. (Contacts are read-only Switches).</description>
 
-        <!--X10 DS90 Door / Window contacts: 20;04;X10Secure;ID=12ab;SWITCH=00;CMD=OFF; -->
+        <!--
+            X10 DS90 Door / Window contacts: 20;04;X10Secure;ID=12ab;SWITCH=00;CMD=OFF;
+            X10 Switch                       20;0A;X10;ID=019001a;SWITCH=2;CMD=ON;
+        -->
 		<channels>
 			<channel id="command" typeId="command" />
+			<channel id="contact" typeId="contact" />
 		</channels>
 
 		<config-description>
 			<parameter name="deviceId" type="text" required="true">
 				<label>Device Id</label>
-				<description>Device Id. Device name + channel. Example Kaku-44 or Device name + ID + channel; X10Secure-12ab-00</description>
+				<description>Device Id. Protocol name + channel. Example Kaku-44 or Protocol name + ID + channel; X10Secure-12ab-00</description>
 			</parameter>
 		</config-description>
 	</thing-type>
