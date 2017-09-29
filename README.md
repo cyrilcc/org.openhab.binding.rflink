@@ -124,8 +124,8 @@ Switch mySwitch       "X10Switch [%s]"                       {channel="rflink:sw
 
 | Channel ID  | Item Type    | Description  |
 |-------------|--------------|--------------|
-| switch      | Switch       | Command      |
-| switch      | Contact      | Contact      |
+| command     | Switch       | Command      |
+| contact     | Contact      | Contact state|
 
 
 ### RTS / Somfy
