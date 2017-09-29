@@ -21,12 +21,12 @@ RFLink binding currently supports following types of devices:
 
 * Energy
 * Lighting switch
-* Wind (_to be tested_)
 * Rain (_to be tested_)
-* Temperature (Recieve)
+* RTS / Somfy blinds (Send)
+* Temperature (Receive)
+* Wind (_to be tested_)
 * X10 Switch (Send)
-* X10Secure Contact (Recieve)
-* RTS / Somfy blinds (Send only)
+* X10Secure Contact (Receive)
 
 As the project is at its very beginning, the binding does not support many devices.
 
@@ -72,9 +72,9 @@ _.items file_
 Number myInstantPower "Instant Power [%d]"  <chart> (GroupA) {channel="rflink:energy:usb0:myEnergy:instantPower"}
 Number myTotalPower   "Total Power [%d]"    <chart> (GroupA) {channel="rflink:energy:usb0:myEnergy:totalUsage"}
 Number oregonTemp     "Oregon Temp [%.2f °C]"                {channel="rflink:temperature:usb0:myTemperature:temperature"}
-Switch myContact      "Contact [%s]"                         {channel="rflink:switch:usb0:myContact:command"}
 Rollershutter myBlind "Blind [%s]"                           {channel="rflink:rts:usb0:rts-123abc:command"}
-Switch   mySwitch "X10Switch [%s]"                           {channel="rflink:switch:usb0:x10-01001a-2:command"}
+Switch myContact      "Contact [%s]"                         {channel="rflink:switch:usb0:myContact:contact"}
+Switch mySwitch       "X10Switch [%s]"                       {channel="rflink:switch:usb0:x10-01001a-2:command"}
 ```
 
 ## Supported Channels
@@ -125,6 +125,7 @@ Switch   mySwitch "X10Switch [%s]"                           {channel="rflink:sw
 | Channel ID  | Item Type    | Description  |
 |-------------|--------------|--------------|
 | switch      | Switch       | Command      |
+| switch      | Contact      | Contact      |
 
 
 ### RTS / Somfy

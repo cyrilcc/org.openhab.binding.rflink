@@ -19,6 +19,7 @@
         -->
 		<channels>
 			<channel id="command" typeId="command" />
+			<channel id="contact" typeId="contact" />
 		</channels>
 
 		<config-description>

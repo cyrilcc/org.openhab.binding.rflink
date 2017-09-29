@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.smarthome.core.library.types.OnOffType;
+import org.eclipse.smarthome.core.library.types.OpenClosedType;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.rflink.RfLinkBindingConstants;
@@ -63,8 +64,42 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
         }
     }
 
+    public enum Contacts {
+        CLOSED("OFF", OpenClosedType.CLOSED),
+        OPEN("ON", OpenClosedType.OPEN),
+        UNKNOWN("", null);
+
+        private final String contact;
+        private final OpenClosedType openClosedType;
+
+        Contacts(String contact, OpenClosedType openClosedType) {
+            this.contact = contact;
+            this.openClosedType = openClosedType;
+        }
+
+        public String getText() {
+            return this.contact;
+        }
+
+        public OpenClosedType getOpenClosedType() {
+            return this.openClosedType;
+        }
+
+        public static Contacts fromString(String text) {
+            if (text != null) {
+                for (Contacts c : Contacts.values()) {
+                    if (text.equalsIgnoreCase(c.contact)) {
+                        return c;
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
     public String switchCode = "";
     public Commands command = Commands.OFF;
+    public Contacts contact = Contacts.CLOSED;
 
     public RfLinkSwitchMessage() {
     }
@@ -89,6 +124,7 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
         str += super.toString();
         str += ", Command = " + command;
+        str += ", Contact = " + contact;
 
         return str;
     }
@@ -106,6 +142,16 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
             } catch (Exception e) {
                 command = Commands.UNKNOWN;
             }
+
+            try {
+                contact = Contacts.fromString(values.get(KEY_CMD));
+                if (contact == null) {
+                    throw new RfLinkException("Can't convert " + values.get(KEY_CMD) + " to Contact state");
+                }
+            } catch (Exception e) {
+                contact = Contacts.UNKNOWN;
+            }
+
         }
 
         if (values.containsKey(KEY_SWITCH)) {
@@ -125,6 +171,10 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
         if (this.command.getOnOffType() != null) {
             map.put(RfLinkBindingConstants.CHANNEL_COMMAND, this.command.getOnOffType());
+        }
+
+        if (this.contact.getOpenClosedType() != null) {
+            map.put(RfLinkBindingConstants.CHANNEL_CONTACT, this.contact.getOpenClosedType());
         }
 
         return map;
