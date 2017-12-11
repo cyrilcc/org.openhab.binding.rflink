@@ -1,22 +1,30 @@
 Manifest-Version: 1.0
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: 
+ .,
+ lib/jd2xx.jar
 Bundle-ManifestVersion: 2
-Bundle-Name: RfLink Binding
+Bundle-Name: RFLink Binding
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: org.openhab.binding.rflink;singleton:=true
 Bundle-Vendor: openHAB
-Bundle-Version: 2.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Bundle-ClassPath: .
-Import-Package: com.google.common.collect,
+Bundle-Version: 2.2.0.qualifier
+Export-Package: 
+ org.openhab.binding.rflink,
+ org.openhab.binding.rflink.handler
+Import-Package: 
+ com.google.common.collect,
  gnu.io,
+ org.apache.commons.io,
+ org.apache.commons.lang,
  org.eclipse.smarthome.config.core,
  org.eclipse.smarthome.config.discovery,
  org.eclipse.smarthome.core.library.types,
  org.eclipse.smarthome.core.thing,
  org.eclipse.smarthome.core.thing.binding,
  org.eclipse.smarthome.core.types,
+ org.openhab.binding.rflink,
+ org.openhab.binding.rflink.handler,
  org.osgi.framework,
  org.slf4j
-Service-Component: OSGI-INF/*
-Export-Package: 
- org.openhab.binding.rflink,
- org.openhab.binding.rflink.handler
+Service-Component: OSGI-INF/*.xml

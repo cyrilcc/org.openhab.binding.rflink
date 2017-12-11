@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014-2015 openHAB UG (haftungsbeschraenkt) and others.
+ * Copyright (c) 2010-2017 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -59,9 +59,9 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
     private ScheduledFuture<?> connectorTask;
 
     private class TransmitQueue {
-        private Queue<String> queue = new LinkedBlockingQueue<String>();
+        private Queue<RfLinkMessage> queue = new LinkedBlockingQueue<RfLinkMessage>();
 
-        public synchronized void enqueue(String msg) throws IOException {
+        public synchronized void enqueue(RfLinkMessage msg) throws IOException {
             boolean wasEmpty = queue.isEmpty();
             if (queue.offer(msg)) {
                 if (wasEmpty) {
@@ -74,9 +74,9 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
 
         public synchronized void send() throws IOException {
             while (!queue.isEmpty()) {
-                String msg = queue.poll();
+                RfLinkMessage msg = queue.poll();
                 logger.debug("Transmitting message '{}'", msg);
-                connector.sendMessage(msg);
+                connector.sendMessage(msg.decodeMessage(""));
             }
         }
     }
@@ -131,7 +131,7 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
     }
 
     private void connect() {
-        logger.debug("Connecting to RFLink transceiver on " + configuration.serialPort + " port");
+        logger.debug("Connecting to RFLink transceiver on {} port", configuration.serialPort);
 
         try {
 
@@ -155,18 +155,14 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
             logger.error("Error occured when trying to load native library for OS '{}' version '{}', processor '{}'",
                     System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"), e);
             updateStatus(ThingStatus.OFFLINE);
-        } catch (Throwable t) {
-            logger.error("RFLink error", t);
-            updateStatus(ThingStatus.OFFLINE);
         }
     }
 
-    public synchronized void sendMessage(String msg) throws RfLinkException {
-        logger.warn("sendMessage: " + msg);
+    public synchronized void sendMessage(RfLinkMessage msg) throws RfLinkException {
+        logger.warn("sendMessage: {}", msg.decodeMessage(""));
 
         try {
-            String baseMsg = msg;
-            transmitQueue.enqueue(baseMsg);
+            transmitQueue.enqueue(msg);
         } catch (IOException e) {
             logger.error("I/O Error", e);
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, e.getMessage());

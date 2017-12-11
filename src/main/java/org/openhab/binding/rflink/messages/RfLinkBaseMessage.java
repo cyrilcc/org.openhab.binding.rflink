@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2017 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,8 +11,15 @@ package org.openhab.binding.rflink.messages;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
+import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.State;
+import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
+import org.openhab.binding.rflink.exceptions.RfLinkException;
+import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base class for RFLink data classes. All other data classes should extend this class.
@@ -21,16 +28,25 @@ import org.eclipse.smarthome.core.types.State;
  */
 public abstract class RfLinkBaseMessage implements RfLinkMessage {
 
+    private Logger logger = LoggerFactory.getLogger(RfLinkBaseMessage.class);
+
     protected final static String FIELDS_DELIMITER = ";";
     protected final static char VALUE_DELIMITER = '=';
     protected final static String STR_VALUE_DELIMITER = "=";
     public final static String ID_DELIMITER = "-";
+
     private final static String NODE_NUMBER_FROM_GATEWAY = "20";
+
     private final static int MINIMAL_SIZE_MESSAGE = 5;
+
     public String rawMessage;
+
     public byte seqNbr = 0;
+
     private String deviceName;
-    private String deviceId;
+
+    protected String deviceId;
+
     protected HashMap<String, String> values = new HashMap<>();
 
     public RfLinkBaseMessage() {
@@ -61,10 +77,7 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
             if (NODE_NUMBER_FROM_GATEWAY.equals(elements[0])) {
 
                 seqNbr = (byte) Integer.parseInt(elements[1], 16);
-
-                // Fix for "UID segment 'Oregon Temp_0710' contains invalid characters. Each segment of the UID must
-                // match the pattern [A-Za-z0-9_-]*."
-                deviceName = elements[2].replaceAll("[^A-Za-z0-9_-]", "");
+                deviceName = elements[2];
                 deviceId = elements[3].split(STR_VALUE_DELIMITER)[1];
 
                 // Raw values are stored, and will be decoded by sub implementations
@@ -120,5 +133,41 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
     @Override
     public HashMap<String, State> getStates() {
         return null;
+    }
+
+    @Override
+    public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command command)
+            throws RfLinkNotImpException, RfLinkException {
+        String[] elements = config.deviceId.split(ID_DELIMITER);
+        if (elements.length >= 2) {
+            this.deviceName = elements[0];
+            this.deviceId = config.deviceId.substring(this.deviceName.length() + ID_DELIMITER.length());
+        }
+    }
+
+    @Override
+    public byte[] decodeMessage(String suffix) {
+        String message = "10;"; // message for bridge
+
+        String[] deviceIdParts = this.deviceId.split(ID_DELIMITER, 2);
+        String primaryId = deviceIdParts[0];
+
+        // convert channel to 6 character string, RfLink spec is a bit unclear on this, but seems to work...
+        String deviceChannel = "000000".substring(primaryId.length()) + primaryId;
+        if (deviceIdParts.length > 1) {
+            deviceChannel += ID_DELIMITER + deviceIdParts[1];
+        }
+
+        message += this.getDeviceName() + ";";
+        // some protocols, like X10 use multiple id parts, convert all - in deviceId to ;
+        message += deviceChannel.replaceAll(ID_DELIMITER, ";") + ";";
+        message += suffix;
+
+        logger.debug("Decoded message to be sent: {}, deviceName: {}, deviceChannel: {}, primaryId: {}", message,
+                this.getDeviceName(), deviceChannel, primaryId);
+
+        message += "\n"; // close message with newline
+
+        return message.getBytes();
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2017 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,9 +12,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
+import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.rflink.RfLinkBindingConstants;
+import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
+import org.openhab.binding.rflink.exceptions.RfLinkException;
+import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
 
 /**
  * RfLink data class for Somfy/RTS message. Dummy? class for item. No inbound messages from RfLink, only outbound.
@@ -25,7 +30,7 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
     private static final String KEY_RTS = "RTS";
     private static final List<String> keys = Arrays.asList(KEY_RTS);
 
-    public String switchCode = "";
+    public Command command = null;
 
     public RfLinkRtsMessage() {
     }
@@ -37,11 +42,6 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
     @Override
     public ThingTypeUID getThingType() {
         return RfLinkBindingConstants.THING_TYPE_RTS;
-    }
-
-    @Override
-    public String getDeviceId() {
-        return super.getDeviceId() + ID_DELIMITER + switchCode;
     }
 
     @Override
@@ -65,5 +65,17 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
     public HashMap<String, State> getStates() {
         HashMap<String, State> map = new HashMap<>();
         return map;
+    }
+
+    @Override
+    public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command triggeredCommand)
+            throws RfLinkNotImpException, RfLinkException {
+        super.initializeFromChannel(config, channelUID, triggeredCommand);
+        command = triggeredCommand;
+    }
+
+    @Override
+    public byte[] decodeMessage(String suffix) {
+        return super.decodeMessage(this.command.toString() + ";");
     }
 }
