@@ -26,6 +26,7 @@ RFLink binding currently supports following types of devices:
 * Temperature (Receive)
 * Wind (_to be tested_)
 * X10 Switch (Send)
+* AB400D Elro Switch (Send)
 * X10Secure Contact (Receive)
 
 As the project is at its very beginning, the binding does not support many devices.
@@ -62,9 +63,11 @@ Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyUSB0", baudRate=57600 ] {
     switch      myContact     [ deviceId="X10Secure-12ab-00" ]
     rts         rts-123abc    [ deviceId="RTS-123abc" ]
     switch      x10-01001a-2  [ deviceId="X10-01001a-2" ]
+    switch      AB400D-52-2   [ deviceId="AB400D-52-2" ]
+
 }
 ```
-All receiving devices must have the protocol as part of the device name (rts and x10).
+All receiving devices must have the protocol as part of the device name (rts, x10 and AB400D).
 
 
 _.items file_
@@ -75,6 +78,7 @@ Number oregonTemp     "Oregon Temp [%.2f °C]"                {channel="rflink:t
 Rollershutter myBlind "Blind [%s]"                           {channel="rflink:rts:usb0:rts-123abc:command"}
 Switch myContact      "Contact [%s]"                         {channel="rflink:switch:usb0:myContact:contact"}
 Switch mySwitch       "X10Switch [%s]"                       {channel="rflink:switch:usb0:x10-01001a-2:command"}
+Switch myElroSwitch   "AB400DSwitch [%s]"                    {channel="rflink:switch:usb0:AB400D-52-2:command"}
 ```
 
 ## Supported Channels

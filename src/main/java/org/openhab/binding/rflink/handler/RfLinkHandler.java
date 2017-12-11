@@ -62,6 +62,7 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
                     msg = protocol + ";" + tmp[1] + ";0;" + command + ";";
                     break;
                 case "X10":
+                case "AB400D":
                     msg = protocol + ";" + tmp[1] + ";" + tmp[2] + ";" + command + ";";
                     break;
             }
