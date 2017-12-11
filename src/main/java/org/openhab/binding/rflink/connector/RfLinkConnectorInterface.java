@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2017 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,7 +38,7 @@ public interface RfLinkConnectorInterface {
      * @param data
      *            raw bytes.
      */
-    public void sendMessage(String data) throws IOException;
+    public void sendMessage(byte[] data) throws IOException;
 
     /**
      * Procedure for register event listener.
