@@ -72,10 +72,12 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
                     // we don't use split() method since values can have '=' in it
 
                     final int idx = elements[i].indexOf(VALUE_DELIMITER);
-                    final String name = elements[i].substring(0, idx);
-                    final String value = elements[i].substring(idx + 1, elements[i].length());
+                    if (idx > -1) { //  can return "BAD_CRC?" in values
+                        final String name = elements[i].substring(0, idx);
+                        final String value = elements[i].substring(idx + 1, elements[i].length());
 
-                    values.put(name, value);
+                        values.put(name, value);
+                    }
                 }
             }
         }
