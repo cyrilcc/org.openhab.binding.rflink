@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2014 openHAB UG (haftungsbeschraenkt) and others.
+ * Copyright (c) 2010-2017 by the respective copyright holders.
+ * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -36,8 +37,6 @@ import com.google.common.collect.Sets;
  * @author Cyril Cauchois - Initial contribution
  */
 public class RfLinkHandlerFactory extends BaseThingHandlerFactory {
-
-    @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(RfLinkHandlerFactory.class);
 
     /**
@@ -57,7 +56,7 @@ public class RfLinkHandlerFactory extends BaseThingHandlerFactory {
     @Override
     protected ThingHandler createHandler(Thing thing) {
 
-        logger.debug("RfLinkHandlerFactory createHandler(" + thing.getUID().toString() + ")");
+        logger.debug("RfLinkHandlerFactory createHandler({})", thing.getUID().toString());
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
         if (RfLinkBindingConstants.SUPPORTED_BRIDGE_THING_TYPES_UIDS.contains(thingTypeUID)) {

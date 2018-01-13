@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014-2015 openHAB UG (haftungsbeschraenkt) and others.
+ * Copyright (c) 2010-2017 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -131,7 +131,7 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
     }
 
     private void connect() {
-        logger.debug("Connecting to RFLink transceiver on " + configuration.serialPort + " port");
+        logger.debug("Connecting to RFLink transceiver on {} port", configuration.serialPort);
 
         try {
 
@@ -154,9 +154,6 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
         } catch (UnsatisfiedLinkError e) {
             logger.error("Error occured when trying to load native library for OS '{}' version '{}', processor '{}'",
                     System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"), e);
-            updateStatus(ThingStatus.OFFLINE);
-        } catch (Throwable t) {
-            logger.error("RFLink error", t);
             updateStatus(ThingStatus.OFFLINE);
         }
     }
