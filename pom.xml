@@ -9,6 +9,26 @@
     <version>2.2.0</version>
   </parent>
 
+  <properties>
+    <bundle.symbolicName>org.openhab.binding.rflink</bundle.symbolicName>
+    <bundle.namespace>org.openhab.binding.rflink</bundle.namespace>
+  </properties>
+  
+    <repositories>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>openhab-bintray</id>
+      <name>Bintray Repository for openHAB</name>
+      <url>https://dl.bintray.com/openhab/mvn/</url>
+    </repository>
+   </repositories>
+
   <groupId>org.openhab.binding</groupId>
   <artifactId>org.openhab.binding.rflink</artifactId>
   <version>2.2.0</version>
@@ -17,3 +37,5 @@
   <packaging>eclipse-plugin</packaging>
 
 </project>
+
+
