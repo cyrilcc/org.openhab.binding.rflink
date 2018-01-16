@@ -24,7 +24,7 @@ Import-Package:
  org.openhab.binding.rflink.handler,
  org.osgi.framework,
  org.slf4j
-Service-Component: OSGI-INF/*
+Service-Component: OSGI-INF/*.xml
 Export-Package: 
  org.openhab.binding.rflink,
  org.openhab.binding.rflink.handler 
