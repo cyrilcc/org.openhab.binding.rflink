@@ -38,7 +38,7 @@ public interface RfLinkConnectorInterface {
      * @param data
      *            raw bytes.
      */
-    public void sendMessage(String data) throws IOException;
+    public void sendMessage(byte[] data) throws IOException;
 
     /**
      * Procedure for register event listener.
