@@ -196,7 +196,7 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
         super.initializeFromChannel(config, channelUID, triggeredCommand);
             command = Commands.fromCommand(triggeredCommand);
         if (command == null) {
-            throw new RfLinkException("Can't convert " + triggeredCommand + " to Lighting Command");
+            throw new RfLinkException("Can't convert " + triggeredCommand + " to Switch Command");
         }
     }
 

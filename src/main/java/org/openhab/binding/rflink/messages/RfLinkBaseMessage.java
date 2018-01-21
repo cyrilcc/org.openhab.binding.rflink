@@ -72,23 +72,27 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
 
         // Every message should have at least 5 parts
         // Example : 20;31;Mebus;ID=c201;TEMP=00cf;
+        // Example : 20;07;Debug;RTS P1;a729000068622e;
         if (size >= MINIMAL_SIZE_MESSAGE) {
             // first element should be "20"
             if (NODE_NUMBER_FROM_GATEWAY.equals(elements[0])) {
 
                 seqNbr = (byte) Integer.parseInt(elements[1], 16);
                 deviceName = elements[2].replaceAll("[^A-Za-z0-9_-]", "");
-                deviceId = elements[3].split(STR_VALUE_DELIMITER)[1];
 
-                // Raw values are stored, and will be decoded by sub implementations
-                for (int i = 4; i < size; i++) {
-                    // we don't use split() method since values can have '=' in it
-                    final int idx = elements[i].indexOf(VALUE_DELIMITER);
-                    if (idx > -1) { //  can return "BAD_CRC?" in values
-                        final String name = elements[i].substring(0, idx);
-                        final String value = elements[i].substring(idx + 1, elements[i].length());
-
-                        values.put(name, value);
+                if ((elements[3].indexOf(STR_VALUE_DELIMITER)) > -1) { // can return "Debug" as ID
+                    deviceId = elements[3].split(STR_VALUE_DELIMITER)[1];
+                    
+                    // Raw values are stored, and will be decoded by sub implementations
+                    for (int i = 4; i < size; i++) {
+                        // we don't use split() method since values can have '=' in it
+                        final int idx = elements[i].indexOf(VALUE_DELIMITER);
+                        if (idx > -1) { //  can return "BAD_CRC?" in values
+                            final String name = elements[i].substring(0, idx);
+                            final String value = elements[i].substring(idx + 1, elements[i].length());
+    
+                            values.put(name, value);
+                        }
                     }
                 }
             }
