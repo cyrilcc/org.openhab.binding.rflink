@@ -17,6 +17,8 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.apache.commons.io.IOUtils;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.slf4j.Logger;
@@ -136,14 +138,13 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
     }
 
     @Override
-    public void sendMessage(String data) throws IOException {
+    public void sendMessage(byte[] data) throws IOException {
         if (output == null) {
             throw new IOException("Not connected, sending messages is not possible");
         }
 
-        data = "10;" + data + "\r\n"; // Pre and Post for command. May not need both \r and \n...
-        logger.debug("Send data (len={}): {}", data.length(), data);
-        output.write(data.getBytes());
+        logger.debug("Send data (len={}): {}", data.length, DatatypeConverter.printHexBinary(data));
+        output.write(data);
         output.flush();
     }
 

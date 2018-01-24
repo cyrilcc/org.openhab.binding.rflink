@@ -11,6 +11,7 @@ package org.openhab.binding.rflink.messages;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
+import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ public class RfLinkMessageFactory {
     private Logger logger = LoggerFactory.getLogger(RfLinkMessageFactory.class);
 
     private static HashMap<String, Class> mapping = new HashMap<>();
+    private static HashMap<ThingTypeUID, Class> thingTypeMapping = new HashMap<>();
 
     static {
         addMappingOfClass(RfLinkEnergyMessage.class);
@@ -45,6 +47,7 @@ public class RfLinkMessageFactory {
             for (String key : m.keys()) {
                 mapping.put(key, _class);
             }
+            thingTypeMapping.put(m.getThingType(), _class);
 
         } catch (InstantiationException | IllegalAccessException e) {
 
@@ -73,4 +76,17 @@ public class RfLinkMessageFactory {
         return createMessage(new RfLinkBaseMessage(packet) {
         });
     }
+    
+    public static RfLinkMessage createMessageForSendingToThing(ThingTypeUID thingType) throws RfLinkException {
+        if (thingTypeMapping.containsKey(thingType)) {
+            try {
+                Class<?> cl = thingTypeMapping.get(thingType);
+                Constructor<?> c = cl.getConstructor();
+                return (RfLinkMessage) c.newInstance();
+            } catch (Exception e) {
+                throw new RfLinkException("Unable to instanciate message object", e);
+            }
+        }
+        return null;
+    }    
 }
