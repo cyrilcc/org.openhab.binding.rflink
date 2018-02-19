@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * {@link RfLinkBridgeHandler} is the handler for a RFLink transceivers. All
- * {@link RfLinkHanlder}s use the {@link RfLinkBridgeHandler} to execute the
+ * {@link RfLinkHandler}s use the {@link RfLinkBridgeHandler} to execute the
  * actual commands.
  *
  * @author Cyril Cauchois - Initial contribution
@@ -159,7 +159,7 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
     }
 
     public synchronized void sendMessage(RfLinkMessage msg) throws RfLinkException {        
-        logger.warn("sendMessage: " + msg);
+        logger.warn("sendMessage: {}", msg);
 
         try {
             transmitQueue.enqueue(msg);
