@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2017 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,15 +14,20 @@ import java.util.List;
 
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.OpenClosedType;
+import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
+import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.rflink.RfLinkBindingConstants;
+import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
+import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
 
 /**
  * RfLink data class for power switch message.
  *
  * @author Daan Sieben - Initial contribution
+ * @author John Jore - Added channel for Contacts
  */
 public class RfLinkSwitchMessage extends RfLinkBaseMessage {
     private static final String KEY_SWITCH = "SWITCH";
@@ -30,6 +35,9 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
     private static final List<String> keys = Arrays.asList(KEY_SWITCH, KEY_CMD);
 
+    public Commands command = Commands.OFF;
+    public Contacts contact = Contacts.CLOSED;
+        
     public enum Commands {
         OFF("OFF", OnOffType.OFF),
         ON("ON", OnOffType.ON),
@@ -56,6 +64,17 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
             if (text != null) {
                 for (Commands c : Commands.values()) {
                     if (text.equalsIgnoreCase(c.command)) {
+                        return c;
+                    }
+                }
+            }
+            return null;
+        }
+        
+        public static Commands fromCommand(Command command) {
+            if (command != null) {
+                for (Commands c : Commands.values()) {
+                    if (command ==c.onOffType) {
                         return c;
                     }
                 }
@@ -97,10 +116,6 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
         }
     }
 
-    public String switchCode = "";
-    public Commands command = Commands.OFF;
-    public Contacts contact = Contacts.CLOSED;
-
     public RfLinkSwitchMessage() {
     }
 
@@ -111,11 +126,6 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
     @Override
     public ThingTypeUID getThingType() {
         return RfLinkBindingConstants.THING_TYPE_SWITCH;
-    }
-
-    @Override
-    public String getDeviceId() {
-        return super.getDeviceId() + ID_DELIMITER + switchCode;
     }
 
     @Override
@@ -155,7 +165,7 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
         }
 
         if (values.containsKey(KEY_SWITCH)) {
-            switchCode = values.get(KEY_SWITCH);
+            this.deviceId += ID_DELIMITER + values.get(KEY_SWITCH);
         }
     }
 
@@ -179,4 +189,19 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
         return map;
     }
-}
+
+    @Override
+    public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command triggeredCommand)
+        throws RfLinkNotImpException, RfLinkException {
+        super.initializeFromChannel(config, channelUID, triggeredCommand);
+            command = Commands.fromCommand(triggeredCommand);
+        if (command == null) {
+            throw new RfLinkException("Can't convert " + triggeredCommand + " to Switch Command");
+        }
+    }
+
+    @Override
+    public byte[] decodeMessage(String suffix) {
+        return super.decodeMessage(this.command.getText() + ";");
+        }
+    }

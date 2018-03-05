@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2014 openHAB UG (haftungsbeschraenkt) and others.
+ * Copyright (c) 2010-2017 by the respective copyright holders.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,11 +19,14 @@ import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
+import org.eclipse.smarthome.core.types.RefreshType;
 import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
+import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
 import org.openhab.binding.rflink.internal.DeviceMessageListener;
 import org.openhab.binding.rflink.messages.RfLinkMessage;
+import org.openhab.binding.rflink.messages.RfLinkMessageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,30 +53,19 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
     public void handleCommand(ChannelUID channelUID, Command command) {
         logger.debug("Received channel: {}, command: {}", channelUID, command);
 
-        if (bridgeHandler != null) {
-
-            // there must be a better way?
-            String[] tmp = channelUID.getAsString().split(":")[3].split("-");
-            String protocol = tmp[0];
-
-            // RfLink needs to know which protocol to use. Different devices have different formats.
-            String msg = null;
-            switch (protocol.toUpperCase()) {
-                case "RTS":
-                    msg = protocol + ";" + tmp[1] + ";0;" + command + ";";
-                    break;
-                case "X10":
-                case "AB400D":
-                    msg = protocol + ";" + tmp[1] + ";" + tmp[2] + ";" + command + ";";
-                    break;
-            }
-
-            try {
-                if (msg != null) {
-                    bridgeHandler.sendMessage(msg.toUpperCase());
+        if (bridgeHandler != null) {            
+            if (command instanceof RefreshType) {
+                // Not supported
+            } else {
+                try {
+                    RfLinkMessage msg = RfLinkMessageFactory.createMessageForSendingToThing(getThing().getThingTypeUID());
+                    msg.initializeFromChannel(getConfigAs(RfLinkDeviceConfiguration.class), channelUID, command);
+                    bridgeHandler.sendMessage(msg);
+                } catch (RfLinkNotImpException e) {
+                    logger.error("Message not supported: {}", e.getMessage());
+                } catch (RfLinkException e) {
+                    logger.error("Transmitting error: {}", e.getMessage());
                 }
-            } catch (RfLinkException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -133,8 +126,7 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
 
         try {
             String id = message.getDeviceId();
-            logger.debug(
-                    "Message fom bridge " + bridge.toString() + " from device [" + id + "], attempting to match {}",
+            logger.debug("Message fom bridge {} from device [{}], attempting to match {}", bridge.toString(), id,
                     config.deviceId);
             if (config.deviceId.equals(id)) {
                 updateStatus(ThingStatus.ONLINE);

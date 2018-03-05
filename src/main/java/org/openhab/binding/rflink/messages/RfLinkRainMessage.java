@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2015, openHAB.org and others.
+ * Copyright (c) 2010-2017 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,9 +13,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
+import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
+import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.rflink.RfLinkBindingConstants;
+import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
+import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
 
 /**
  * RfLink data class for rain message.
@@ -88,4 +92,9 @@ public class RfLinkRainMessage extends RfLinkBaseMessage {
         return str;
     }
 
+    @Override
+    public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command command)
+            throws RfLinkNotImpException {
+        throw new RfLinkNotImpException("Message handler for " + channelUID + " does not support message transmission");
+    }
 }
