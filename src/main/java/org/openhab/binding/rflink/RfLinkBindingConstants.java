@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableSet;
  *
  * @author Cyril Cauchois - Initial contribution
  * @author John Jore- Added temperature, X10, X10Secure and RTS/Somfy support
+ * @author Marvyn Zalewski - Added humidity support
  */
 public class RfLinkBindingConstants {
 
@@ -79,11 +80,12 @@ public class RfLinkBindingConstants {
     public final static ThingTypeUID THING_TYPE_WIND = new ThingTypeUID(BINDING_ID, "wind");
     public final static ThingTypeUID THING_TYPE_RAIN = new ThingTypeUID(BINDING_ID, "rain");
     public final static ThingTypeUID THING_TYPE_TEMPERATURE = new ThingTypeUID(BINDING_ID, "temperature");
+    public final static ThingTypeUID THING_TYPE_HUMIDITY = new ThingTypeUID(BINDING_ID, "humidity");
     public final static ThingTypeUID THING_TYPE_RTS = new ThingTypeUID(BINDING_ID, "rts");
     public final static ThingTypeUID THING_TYPE_OREGONTEMPHYGRO = new ThingTypeUID(BINDING_ID, "OregonTempHygro");
 
     // Presents all supported Thing types by RFLink binding.
     public final static Set<ThingTypeUID> SUPPORTED_DEVICE_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_ENERGY,
-            THING_TYPE_WIND, THING_TYPE_SWITCH, THING_TYPE_RAIN, THING_TYPE_TEMPERATURE, THING_TYPE_RTS, 
+            THING_TYPE_WIND, THING_TYPE_SWITCH, THING_TYPE_RAIN, THING_TYPE_TEMPERATURE, THING_TYPE_RTS, THING_TYPE_HUMIDITY,
             THING_TYPE_OREGONTEMPHYGRO);
 }

@@ -24,6 +24,7 @@ RFLink binding currently supports following types of devices:
 * Rain (_to be tested_)
 * RTS / Somfy blinds (Send)
 * Temperature (Receive)
+* Humidity (Receive) 
 * Wind (_to be tested_)
 * X10 Switch (Send)
 * AB400D Elro Switch (Send)
@@ -64,6 +65,7 @@ Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyUSB0", baudRate=57600 ] {
     rts         rts-123abc    [ deviceId="RTS-123abc" ]
     switch      x10-01001a-2  [ deviceId="X10-01001a-2" ]
     switch      AB400D-52-2   [ deviceId="AB400D-52-2" ]
+    humidity    myHumidity    [ deviceId="AuriolV3-A901" ]
 
 }
 ```
@@ -75,6 +77,7 @@ _.items file_
 Number myInstantPower "Instant Power [%d]"  <chart> (GroupA) {channel="rflink:energy:usb0:myEnergy:instantPower"}
 Number myTotalPower   "Total Power [%d]"    <chart> (GroupA) {channel="rflink:energy:usb0:myEnergy:totalUsage"}
 Number oregonTemp     "Oregon Temp [%.2f °C]"                {channel="rflink:temperature:usb0:myTemperature:temperature"}
+Number auriolHumidity "Humidity [%d %%]"                     {channel="rflink:humidity:usb0:myHumidity:humidity"}
 Rollershutter myBlind "Blind [%s]"                           {channel="rflink:rts:usb0:rts-123abc:command"}
 Switch myContact      "Contact [%s]"                         {channel="rflink:switch:usb0:myContact:contact"}
 Switch mySwitch       "X10Switch [%s]"                       {channel="rflink:switch:usb0:x10-01001a-2:command"}
@@ -121,6 +124,14 @@ Switch myElroSwitch   "AB400DSwitch [%s]"                    {channel="rflink:sw
 | Channel ID  | Item Type    | Description  |
 |-------------|--------------|--------------|
 | temperature | Number       | Temperature  |
+
+
+### Humidity
+
+
+| Channel ID  | Item Type    | Description  |
+|-------------|--------------|--------------|
+|   humidity  |   Number     |   Humidity   |
 
 
 ### Switch
@@ -200,6 +211,11 @@ or add this line to your logback_debug.xml (Windows?) file
  ```
  <logger name="org.openhab.binding.rflink" level="DEBUG" />
  ```
+or execute the following command in your Karaf Shell for temporary debug log
+ ```
+ log:set DEBUG org.openhab.binding.rflink
+ ```
+
 
 Or you can use the Serial Monitor of your arduino IDE.
 
@@ -218,5 +234,7 @@ Or you can use the RFLinkLoader application. [See how](http://www.nemcon.nl/blog
 
 ### How to package your binding
 
-In Eclipse IDE, right click on the pom.xml file, then "Run As", and "Maven Install" 
-
+In Eclipse IDE, right click on the pom.xml file, then "Run As", and "Maven Install"  or execute
+```
+ mvn package
+```
