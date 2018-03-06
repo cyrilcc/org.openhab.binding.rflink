@@ -219,7 +219,7 @@ or execute the following command in your Karaf Shell for temporary debug log
 
 Or you can use the Serial Monitor of your arduino IDE.
 
-Or you can use the RFLinkLoader application. [See how](http://www.nemcon.nl/blog2/2015/07/cc).
+Or you can use the RFLinkLoader application. [See how](http://www.rflink.nl/blog2/development).
 
 ### Add your code
 
