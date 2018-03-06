@@ -38,6 +38,7 @@ public class RfLinkMessageFactory {
         addMappingOfClass(RfLinkTemperatureMessage.class);
         addMappingOfClass(RfLinkRtsMessage.class);
         addMappingOfClass(RfLinkHumidityMessage.class);
+        addMappingOfClass(RfLinkOregonTempHygroMessage.class);
     }
 
     private static void addMappingOfClass(Class _class) {
