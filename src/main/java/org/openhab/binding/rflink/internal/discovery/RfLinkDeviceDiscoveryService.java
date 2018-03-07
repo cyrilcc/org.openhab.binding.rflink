@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Pauli Anttila - Initial contribution
  * @author Daan Sieben - Modified for RfLink
+ * @author Marvyn Zalewski - Added the ability to ignore discoveries
  */
 public class RfLinkDeviceDiscoveryService extends AbstractDiscoveryService implements DeviceMessageListener {
 
@@ -63,7 +64,7 @@ public class RfLinkDeviceDiscoveryService extends AbstractDiscoveryService imple
 
     @Override
     public void onDeviceMessageReceived(ThingUID bridge, RfLinkMessage message) {
-        logger.trace("Received: bridge: {} message: {}", bridge, message);
+        logger.debug("Received: bridge: {} message: {}", bridge, message);
 
         try {
             RfLinkMessage msg = RfLinkMessageFactory.createMessage((RfLinkBaseMessage) message);

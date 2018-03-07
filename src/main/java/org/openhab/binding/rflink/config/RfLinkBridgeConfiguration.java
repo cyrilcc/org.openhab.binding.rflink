@@ -12,6 +12,7 @@ package org.openhab.binding.rflink.config;
  * Configuration class for {@link RflinkBinding} device.
  *
  * @author Cyril Cauchois - Initial contribution
+ * @author Marvyn Zalewski - added disableDiscovery Configuration
  */
 public class RfLinkBridgeConfiguration {
 
