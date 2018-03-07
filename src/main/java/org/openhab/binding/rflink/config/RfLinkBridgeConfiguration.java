@@ -23,4 +23,7 @@ public class RfLinkBridgeConfiguration {
 
     // Serial port baud rate
     public int baudRate;
+
+    // Prevent unknown devices from being added to the inbox
+    public boolean disableDiscovery;
 }

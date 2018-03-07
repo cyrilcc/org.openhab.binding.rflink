@@ -216,4 +216,9 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
         }
         return deviceStatusListeners.remove(deviceStatusListener);
     }
+
+    public RfLinkBridgeConfiguration getConfiguration() {
+        return configuration;
+    }
 }
+
