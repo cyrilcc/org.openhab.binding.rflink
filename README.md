@@ -150,8 +150,13 @@ Switch low_bat_out    "Low battery [%s]"                     {channel="rflink:Or
 | humidityStatus | String       | Humidity status  |
 | lowBattery     | Switch       |   Low battery status   |
 
-Humidity status: Normal (0), Comfort (1), Dry (2), Wet (3).
-Raw data = 20;EB;Oregon TempHygro;ID=2D50;TEMP=0013;HUM=77;HSTATUS=3;BAT=LOW;
+Humidity status: 
+```
+Normal (0)
+Comfort (1)
+Dry (2)
+Wet (3)
+```
 
 ### Switch
 
@@ -215,6 +220,7 @@ New Format:
 20;6A;UPM/Esic;ID=1002;WINSP=0041;WINDIR=5A;BAT=OK;
 20;47;Cresta;ID=8001;WINDIR=0002;WINSP=0060;WINGS=0088;WINCHL=b0;
 20;0B;Oregon Temp;ID=0710;TEMP=00a8;BAT=LOW;
+20;EB;Oregon TempHygro;ID=2D50;TEMP=0013;HUM=77;HSTATUS=3;BAT=LOW;
 ```
 
 The full protocol reference is available in this [archive](https://drive.google.com/open?id=0BwEYW5Q6bg_ZTDhKQXphN0ZxdEU) 
