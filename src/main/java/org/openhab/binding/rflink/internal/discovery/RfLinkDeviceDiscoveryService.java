@@ -80,7 +80,7 @@ public class RfLinkDeviceDiscoveryService extends AbstractDiscoveryService imple
                             .withProperty(RfLinkBindingConstants.DEVICE_ID, msg.getDeviceId()).withBridge(bridge).build();
                     thingDiscovered(discoveryResult);
                 } else {
-                    logger.trace("Ignoring RFXCOM {} with id '{}' - discovery disabled", thingUID, id);
+                    logger.trace("Ignoring RfLink {} with id '{}' - discovery disabled", thingUID, id);
                 }
             }
         } catch (Exception e) {
