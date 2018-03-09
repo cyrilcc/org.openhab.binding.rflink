@@ -42,6 +42,14 @@ Sending of triggers from openhab -> rflink -> device only works for a few device
 
 ## Configuration
 
+| Thing Config | Type    | Description  | Example |
+|------------|--------------|--------------|--------------|
+| serialPort | String | Path to Device | "/dev/tty.wchusbserial1410" |
+| baudRate | Integer | baudRate of the Gateway | 57600 |
+| disableDiscovery | Boolean | Enable or disable device Discovery | true |
+
+
+
 A manual configuration looks like
 
 _.things file_
@@ -53,7 +61,7 @@ Bridge rflink:bridge:usb0 [ serialPort="COM19", baudRate=57600 ] {
 
 most of the time on a raspberry
 ```
-Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyACM0", baudRate=57600 ] {
+Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyACM0", baudRate=57600, disableDiscovery=true ] {
     energy myEnergy [ deviceId="OregonCM119-0004" ]
 }
 ```

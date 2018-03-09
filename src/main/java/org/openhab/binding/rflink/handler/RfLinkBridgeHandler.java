@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Cyril Cauchois - Initial contribution
  * @author John Jore - Added initial support to transmit messages to devices
+ * @author Marvyn Zalewski - Added getConfiguration Method
  */
 public class RfLinkBridgeHandler extends BaseBridgeHandler {
 
@@ -216,4 +217,9 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
         }
         return deviceStatusListeners.remove(deviceStatusListener);
     }
+
+    public RfLinkBridgeConfiguration getConfiguration() {
+        return configuration;
+    }
 }
+
