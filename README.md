@@ -25,6 +25,7 @@ RFLink binding currently supports following types of devices:
 * RTS / Somfy blinds (Send)
 * Temperature (Receive)
 * Humidity (Receive) 
+* Temperature and Humidity (Receive) 
 * Wind (_to be tested_)
 * X10 Switch (Send)
 * AB400D Elro Switch (Send)
@@ -74,7 +75,7 @@ Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyUSB0", baudRate=57600 ] {
     switch      x10-01001a-2  [ deviceId="X10-01001a-2" ]
     switch      AB400D-52-2   [ deviceId="AB400D-52-2" ]
     humidity    myHumidity    [ deviceId="AuriolV3-A901" ]
-
+    OregonTempHygro myOregon  [ deviceId="OregonTempHygro-2D60" ]
 }
 ```
 All receiving devices must have the protocol as part of the device name (rts, x10 and AB400D).
@@ -90,6 +91,11 @@ Rollershutter myBlind "Blind [%s]"                           {channel="rflink:rt
 Switch myContact      "Contact [%s]"                         {channel="rflink:switch:usb0:myContact:contact"}
 Switch mySwitch       "X10Switch [%s]"                       {channel="rflink:switch:usb0:x10-01001a-2:command"}
 Switch myElroSwitch   "AB400DSwitch [%s]"                    {channel="rflink:switch:usb0:AB400D-52-2:command"}
+Number temp_outdoor   "Temperature [%.1f °C]"		     {channel="rflink:OregonTempHygro:usb0:myOregon:temperature"}
+Number hum_out        "Humidity [%d %%]"		     {channel="rflink:OregonTempHygro:usb0:myOregon:humidity"}
+String hstatus_out    "Humidity status [%s]"                 {channel="rflink:OregonTempHygro:usb0:myOregon:humidityStatus" }
+Switch low_bat_out    "Low battery [%s]"                     {channel="rflink:OregonTempHygro:usb0:myOregon:lowBattery" }
+
 ```
 
 ## Supported Channels
@@ -141,6 +147,24 @@ Switch myElroSwitch   "AB400DSwitch [%s]"                    {channel="rflink:sw
 |-------------|--------------|--------------|
 |   humidity  |   Number     |   Humidity   |
 
+
+### OregonTempHygro
+
+
+| Channel ID  | Item Type    | Description  |
+|----------------|--------------|--------------|
+| temperature    | Number       | Temperature  |
+| humidity       | Number       |   Humidity   |
+| humidityStatus | String       | Humidity status  |
+| lowBattery     | Switch       |   Low battery status   |
+
+Humidity status: 
+```
+Normal (0)
+Comfort (1)
+Dry (2)
+Wet (3)
+```
 
 ### Switch
 
@@ -204,6 +228,7 @@ New Format:
 20;6A;UPM/Esic;ID=1002;WINSP=0041;WINDIR=5A;BAT=OK;
 20;47;Cresta;ID=8001;WINDIR=0002;WINSP=0060;WINGS=0088;WINCHL=b0;
 20;0B;Oregon Temp;ID=0710;TEMP=00a8;BAT=LOW;
+20;EB;Oregon TempHygro;ID=2D50;TEMP=0013;HUM=77;HSTATUS=3;BAT=LOW;
 ```
 
 The full protocol reference is available in this [archive](https://drive.google.com/open?id=0BwEYW5Q6bg_ZTDhKQXphN0ZxdEU) 
