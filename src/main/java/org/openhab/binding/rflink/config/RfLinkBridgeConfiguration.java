@@ -12,6 +12,7 @@ package org.openhab.binding.rflink.config;
  * Configuration class for {@link RflinkBinding} device.
  *
  * @author Cyril Cauchois - Initial contribution
+ * @author Marvyn Zalewski - added disableDiscovery Configuration
  */
 public class RfLinkBridgeConfiguration {
 
@@ -23,4 +24,7 @@ public class RfLinkBridgeConfiguration {
 
     // Serial port baud rate
     public int baudRate;
+
+    // Prevent unknown devices from being added to the inbox
+    public boolean disableDiscovery;
 }
