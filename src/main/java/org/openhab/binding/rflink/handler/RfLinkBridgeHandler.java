@@ -222,4 +222,3 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
         return configuration;
     }
 }
-

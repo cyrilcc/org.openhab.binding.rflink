@@ -50,7 +50,9 @@ public class RfLinkTemperatureMessage extends RfLinkBaseMessage {
         super.encodeMessage(data);
 
         if (values.containsKey(KEY_TEMPERATURE)) {
-            temperature = Integer.parseInt(values.get(KEY_TEMPERATURE), 16) / 10.0f;
+            temperature = 1.0 * Integer.parseInt(values.get(KEY_TEMPERATURE).substring(1,4), 16) / 10.0f;
+            if (!values.get(KEY_TEMPERATURE).substring(0,1).equals("0"))
+                temperature = -1.0 * Integer.parseInt(values.get(KEY_TEMPERATURE).substring(1,4), 16) / 10.0f;
         }
     }
 
