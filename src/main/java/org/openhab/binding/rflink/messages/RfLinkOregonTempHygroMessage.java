@@ -11,10 +11,12 @@ package org.openhab.binding.rflink.messages;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Calendar;
 
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.StringType;
+import org.eclipse.smarthome.core.library.types.DateTimeType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.types.Command;
@@ -149,6 +151,7 @@ public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
     public HashMap<String, State> getStates() {
 
         HashMap<String, State> map = new HashMap<>();
+        map.put(RfLinkBindingConstants.CHANNEL_OBSERVATION_TIME, new DateTimeType(Calendar.getInstance()));
         map.put(RfLinkBindingConstants.CHANNEL_TEMPERATURE, new DecimalType(this.temperature));
         map.put(RfLinkBindingConstants.CHANNEL_HUMIDITY, new DecimalType(this.humidity));
         map.put(RfLinkBindingConstants.CHANNEL_HUMIDITY_STATUS, new StringType(this.humidity_status));

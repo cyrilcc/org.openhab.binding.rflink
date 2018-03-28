@@ -73,6 +73,7 @@ public class RfLinkBindingConstants {
     public final static String CHANNEL_CONTACT = "contact";
     public final static String CHANNEL_VOLTAGE = "voltage";
     public final static String CHANNEL_SET_POINT = "setpoint";
+    public final static String CHANNEL_OBSERVATION_TIME = "observationTime";
 
     // List of all Thing Type UIDs
     public final static ThingTypeUID THING_TYPE_SWITCH = new ThingTypeUID(BINDING_ID, "switch");
