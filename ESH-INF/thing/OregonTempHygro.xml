@@ -18,6 +18,7 @@
 			<channel id="humidity" typeId="humidity" />
 			<channel id="humidityStatus" typeId="humiditystatus" />
 			<channel id="lowBattery" typeId="system.low-battery" />
+			<channel id="observationTime" typeId="observationTime" />
 		</channels>
 
 		<config-description>

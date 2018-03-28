@@ -95,6 +95,8 @@ Number temp_outdoor   "Temperature [%.1f °C]"		     {channel="rflink:OregonTemp
 Number hum_out        "Humidity [%d %%]"		     {channel="rflink:OregonTempHygro:usb0:myOregon:humidity"}
 String hstatus_out    "Humidity status [%s]"                 {channel="rflink:OregonTempHygro:usb0:myOregon:humidityStatus" }
 Switch low_bat_out    "Low battery [%s]"                     {channel="rflink:OregonTempHygro:usb0:myOregon:lowBattery" }
+DateTime obstime_out  "Time of observation [%1$td/%1$tm/%1$tY - %1$tH:%1$tM:%1$tS]"    {channel="rflink:OregonTempHygro:usb0:myOregon:observationTime" }
+
 
 ```
 
@@ -157,6 +159,7 @@ Switch low_bat_out    "Low battery [%s]"                     {channel="rflink:Or
 | humidity       | Number       |   Humidity   |
 | humidityStatus | String       | Humidity status  |
 | lowBattery     | Switch       |   Low battery status   |
+| observationTime     | DateTime    |   Last time of observation  (to implement watchdog) |
 
 Humidity status: 
 ```
