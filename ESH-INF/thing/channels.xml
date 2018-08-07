@@ -76,7 +76,7 @@
 	<channel-type id="shutter">
 		<item-type>Rollershutter</item-type>
 		<label>Shutter</label>
-		<description>Shutter channel</description>
+		<description>Open/Close shutter/blind</description>
 	</channel-type>
 
 	<channel-type id="instantpower">
