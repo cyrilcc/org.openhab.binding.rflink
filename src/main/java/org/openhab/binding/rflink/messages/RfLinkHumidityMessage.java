@@ -22,40 +22,35 @@ import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
 
 /**
- * RfLink data class for temperature message.
+ * RfLink data class for humidity message.
  *
- * @author John Jore - Initial contribution
+ * @author Marvyn Zalewski - Initial contribution
  */
 
-public class RfLinkTemperatureMessage extends RfLinkBaseMessage {
-    private static final String KEY_TEMPERATURE = "TEMP";
-    private static final List<String> keys = Arrays.asList(KEY_TEMPERATURE);
+public class RfLinkHumidityMessage extends RfLinkBaseMessage {
+    private static final String KEY_HUMIDITY = "HUM";
+    private static final List<String> keys = Arrays.asList(KEY_HUMIDITY);
 
-    public double temperature = 0;
+    public double humidity = 0;
 
-    public RfLinkTemperatureMessage() {
+    public RfLinkHumidityMessage() {
     }
 
-    public RfLinkTemperatureMessage(String data) {
+    public RfLinkHumidityMessage(String data) {
         encodeMessage(data);
     }
 
     @Override
     public ThingTypeUID getThingType() {
-        return RfLinkBindingConstants.THING_TYPE_TEMPERATURE;
+        return RfLinkBindingConstants.THING_TYPE_HUMIDITY;
     }
 
     @Override
     public void encodeMessage(String data) {
         super.encodeMessage(data);
 
-        if (values.containsKey(KEY_TEMPERATURE)) {
-            int temp = Integer.parseInt(values.get(KEY_TEMPERATURE), 16);
-            if ((temp & 0x8000) > 0) {  // temperature is an signed int16
-                temp = temp & 0x7FFF;
-                temp = 0-temp;
-            }
-            temperature = temp / 10.0d;
+        if (values.containsKey(KEY_HUMIDITY)) {
+            humidity = Integer.parseInt(values.get(KEY_HUMIDITY));
         }
     }
 
@@ -68,7 +63,7 @@ public class RfLinkTemperatureMessage extends RfLinkBaseMessage {
     public HashMap<String, State> getStates() {
 
         HashMap<String, State> map = new HashMap<>();
-        map.put(RfLinkBindingConstants.CHANNEL_TEMPERATURE, new DecimalType(temperature));
+        map.put(RfLinkBindingConstants.CHANNEL_HUMIDITY, new DecimalType(humidity));
 
         return map;
     }
@@ -78,7 +73,7 @@ public class RfLinkTemperatureMessage extends RfLinkBaseMessage {
         String str = "";
 
         str += super.toString();
-        str += ", Temperature = " + temperature;
+        str += ", Humidity = " + humidity;
 
         return str;
     }

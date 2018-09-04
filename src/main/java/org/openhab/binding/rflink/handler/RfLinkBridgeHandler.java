@@ -36,11 +36,12 @@ import org.slf4j.LoggerFactory;
 
 /**
  * {@link RfLinkBridgeHandler} is the handler for a RFLink transceivers. All
- * {@link RfLinkHanlder}s use the {@link RfLinkBridgeHandler} to execute the
+ * {@link RfLinkHandler}s use the {@link RfLinkBridgeHandler} to execute the
  * actual commands.
  *
  * @author Cyril Cauchois - Initial contribution
  * @author John Jore - Added initial support to transmit messages to devices
+ * @author Marvyn Zalewski - Added getConfiguration Method
  */
 public class RfLinkBridgeHandler extends BaseBridgeHandler {
 
@@ -159,7 +160,7 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
     }
 
     public synchronized void sendMessage(RfLinkMessage msg) throws RfLinkException {        
-        logger.warn("sendMessage: " + msg);
+        logger.warn("sendMessage: {}", msg);
 
         try {
             transmitQueue.enqueue(msg);
@@ -215,5 +216,9 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
             throw new IllegalArgumentException("It's not allowed to pass a null deviceStatusListener.");
         }
         return deviceStatusListeners.remove(deviceStatusListener);
+    }
+
+    public RfLinkBridgeConfiguration getConfiguration() {
+        return configuration;
     }
 }

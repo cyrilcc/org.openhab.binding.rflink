@@ -15,9 +15,14 @@
 			</parameter>
 			
 			<parameter name="baudRate" type="integer" required="true">
-                <label>Baud Rate</label>
-                <description>Serial port baud rate (default is 57600).</description>
-            </parameter>
+				<label>Baud Rate</label>
+				<description>Serial port baud rate (default is 57600).</description>
+		   	 </parameter>
+
+		  	<parameter name="disableDiscovery" type="boolean" required="true">
+				<label>Disable Discovery</label>
+				<description>Set true if it should not discover to Inbox.</description>
+		   	</parameter>
 		</config-description>
 	</bridge-type>
 

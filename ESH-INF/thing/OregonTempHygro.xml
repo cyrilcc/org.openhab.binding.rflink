@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="rflink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="OregonTempHygro">
+		
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="bridge" />
+        </supported-bridge-type-refs>
+        
+		<label>RFLink Oregon TempHygro Sensor</label>
+		<description>A Temperature and Humidity device.</description>
+
+		<!-- Sample: 2017-09-25 14:49:55 - 20;51;Oregon Temp;ID=0123;TEMP=00b5;BAT=LOW; -->
+		<channels>
+			<channel id="temperature" typeId="temperature" />
+			<channel id="humidity" typeId="humidity" />
+			<channel id="humidityStatus" typeId="humiditystatus" />
+			<channel id="lowBattery" typeId="system.low-battery" />
+			<channel id="observationTime" typeId="observationTime" />
+		</channels>
+
+		<config-description>
+			<parameter name="deviceId" type="text" required="true">
+				<label>Device Id</label>
+				<description>Sensor Id. Example "OregonTempHygro-0123"</description>
+			</parameter>
+		</config-description>
+
+	</thing-type>
+
+</thing:thing-descriptions>
