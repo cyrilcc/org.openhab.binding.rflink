@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2010-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -52,14 +52,10 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
 
     private List<DeviceMessageListener> deviceStatusListeners = new CopyOnWriteArrayList<>();
 
-    // private static final int timeout = 5000;
-    // private static byte seqNbr = 0;
-    // private static RFXComTransmitterMessage responseMessage = null;
-    // private Object notifierObject = new Object();
     private RfLinkBridgeConfiguration configuration = null;
     private ScheduledFuture<?> connectorTask;
 
-    private class TransmitQueue {     
+    private class TransmitQueue {
         private Queue<RfLinkMessage> queue = new LinkedBlockingQueue<RfLinkMessage>();
 
         public synchronized void enqueue(RfLinkMessage msg) throws IOException {
@@ -118,7 +114,7 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
         configuration = getConfigAs(RfLinkBridgeConfiguration.class);
 
         if (connectorTask == null || connectorTask.isCancelled()) {
-            connectorTask = scheduler.scheduleAtFixedRate(new Runnable() {
+            connectorTask = scheduler.scheduleWithFixedDelay(new Runnable() {
 
                 @Override
                 public void run() {
@@ -159,8 +155,8 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
         }
     }
 
-    public synchronized void sendMessage(RfLinkMessage msg) throws RfLinkException {        
-        logger.warn("sendMessage: {}", msg);
+    public synchronized void sendMessage(RfLinkMessage msg) throws RfLinkException {
+        logger.debug("sendMessage: {}", msg);
 
         try {
             transmitQueue.enqueue(msg);
@@ -190,7 +186,7 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
             } catch (RfLinkNotImpException e) {
                 logger.debug("Message not supported, data: {}", packet.toString());
             } catch (RfLinkException e) {
-                logger.error("Error occured during packet receiving, data: {}", packet.toString(), e.getMessage());
+                logger.error("Error occured during packet receiving, data: {}; {}", packet.toString(), e.getMessage());
             }
 
             updateStatus(ThingStatus.ONLINE);

@@ -12,6 +12,12 @@
 		<description>Command channel</description>
 	</channel-type>
 
+    <channel-type id="color">
+        <item-type>Color</item-type>
+        <label>Color</label>
+        <description>Color channel</description>
+    </channel-type>
+
 	<channel-type id="contact">
 		<item-type>Contact</item-type>
 		<label>Contact</label>

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2010-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,24 +29,24 @@ import org.slf4j.LoggerFactory;
 public abstract class RfLinkBaseMessage implements RfLinkMessage {
 
     private Logger logger = LoggerFactory.getLogger(RfLinkBaseMessage.class);
-    
+
     protected final static String FIELDS_DELIMITER = ";";
     protected final static char VALUE_DELIMITER = '=';
     protected final static String STR_VALUE_DELIMITER = "=";
     public final static String ID_DELIMITER = "-";
-    
+
     private final static String NODE_NUMBER_FROM_GATEWAY = "20";
-    
+
     private final static int MINIMAL_SIZE_MESSAGE = 5;
-    
+
     public String rawMessage;
-    
+
     public byte seqNbr = 0;
-    
+
     private String deviceName;
-    
+
     protected String deviceId;
-    
+
     protected HashMap<String, String> values = new HashMap<>();
 
     public RfLinkBaseMessage() {
@@ -82,15 +82,15 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
 
                 if ((elements[3].indexOf(STR_VALUE_DELIMITER)) > -1) { // can return "Debug" as ID
                     deviceId = elements[3].split(STR_VALUE_DELIMITER)[1];
-                    
+
                     // Raw values are stored, and will be decoded by sub implementations
                     for (int i = 4; i < size; i++) {
                         // we don't use split() method since values can have '=' in it
                         final int idx = elements[i].indexOf(VALUE_DELIMITER);
-                        if (idx > -1) { //  can return "BAD_CRC?" in values
+                        if (idx > -1) { // can return "BAD_CRC?" in values
                             final String name = elements[i].substring(0, idx);
                             final String value = elements[i].substring(idx + 1, elements[i].length());
-    
+
                             values.put(name, value);
                         }
                     }
@@ -126,6 +126,9 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
         return deviceName;
     }
 
+    /**
+     * return a list of keys that are present in the message to be decoded
+     */
     @Override
     public List<String> keys() {
         return null;
@@ -139,7 +142,7 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
     public HashMap<String, State> getStates() {
         return null;
     }
-    
+
     @Override
     public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command command)
             throws RfLinkNotImpException, RfLinkException {
@@ -149,7 +152,7 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
             this.deviceId = config.deviceId.substring(this.deviceName.length() + ID_DELIMITER.length());
         }
     }
-    
+
     @Override
     public byte[] decodeMessage(String suffix) {
         String message = "10;"; // message for bridge
@@ -162,7 +165,7 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
         if (deviceIdParts.length > 1) {
             deviceChannel += ID_DELIMITER + deviceIdParts[1];
         }
-    
+
         message += this.getDeviceName() + ";";
         // some protocols, like X10 use multiple id parts, convert all - in deviceId to ;
         message += deviceChannel.replaceAll(ID_DELIMITER, ";") + ";";
@@ -174,5 +177,5 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
         message += "\n"; // close message with newline
 
         return message.getBytes();
-    } 
+    }
 }

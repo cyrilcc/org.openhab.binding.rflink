@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2010-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,10 +30,11 @@ import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 
 /**
-* RFLink connector for serial port communication.
-*
-* @author Cyril Cauchois - Initial contribution
-*/
+ * RFLink connector for serial port communication.
+ *
+ * @author Cyril Cauchois - Initial contribution
+ * @author Arjan Mels - Added 200ms pause between messages to improve communication
+ */
 public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPortEventListener {
 
     private final Logger logger = LoggerFactory.getLogger(RfLinkSerialConnector.class);
@@ -50,6 +51,11 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
     private BufferedReader input;
     private OutputStream output;
     private static final int TIME_OUT = 2000;
+
+    // delay between messages
+    private static final int SEND_DELAY = 50;
+
+    private static long lastSend = 0;
 
     public RfLinkSerialConnector() {
 
@@ -79,7 +85,7 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
                 break;
             }
         }
-        
+
         if (portId == null) {
             logger.error("Could not find COM port {}", comPort);
             sendErrorToListeners("Could not find COM port " + comPort);
@@ -110,12 +116,12 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
     @Override
     public void disconnect() {
         logger.debug("Disconnecting");
-        
+
         if (serialPort != null) {
             serialPort.removeEventListener();
             logger.debug("Serial port event listener stopped");
         }
-        
+
         if (output != null) {
             logger.debug("Close serial out stream");
             IOUtils.closeQuietly(output);
@@ -124,9 +130,9 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
             logger.debug("Close serial in stream");
             IOUtils.closeQuietly(input);
         }
-        
+
         if (serialPort != null) {
-            logger.debug("Close serial port");            
+            logger.debug("Close serial port");
             serialPort.close();
         }
 
@@ -143,9 +149,24 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
             throw new IOException("Not connected, sending messages is not possible");
         }
 
-        logger.debug("Send data (len={}): {}", data.length, DatatypeConverter.printHexBinary(data));
-        output.write(data);
-        output.flush();
+        synchronized (this) {
+            long towait = SEND_DELAY - (System.currentTimeMillis() - lastSend);
+            towait = Math.min(Math.max(towait, 0), SEND_DELAY);
+
+            logger.debug("Send data (after {}ms, len={}): {}", towait, data.length,
+                    DatatypeConverter.printHexBinary(data));
+            if (towait > 0) {
+                try {
+                    Thread.sleep(towait);
+                } catch (InterruptedException ignore) {
+                }
+            }
+
+            output.write(data);
+            output.flush();
+            lastSend = System.currentTimeMillis();
+
+        }
     }
 
     @Override
