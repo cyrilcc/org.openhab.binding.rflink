@@ -28,9 +28,11 @@ RFLink binding currently supports following types of devices:
 * Humidity (Receive) 
 * Temperature and Humidity (Receive) 
 * Wind (_to be tested_)
-* X10 Switch (Send)
+* MiLight RGB light (Send/Receive)i* X10 Switch (Send/Receive)
 * AB400D Elro Switch (Send)
 * X10Secure Contact (Receive)
+* Other simple RFLink switches (Send/Receive)
+
 
 As the project is at its very beginning, the binding does not support many devices.
 
@@ -45,6 +47,7 @@ Sending of triggers from openhab -> rflink -> device only works for a few device
 ## Configuration
 
 Bridge config:
+
 | Thing Config | Type    | Description  | Example |
 |------------|--------------|--------------|--------------|
 | serialPort | String | Path to Device | "/dev/tty.wchusbserial1410" |
@@ -52,6 +55,7 @@ Bridge config:
 | disableDiscovery | Boolean | Enable or disable device Discovery | true |
 
 Thing config:
+
 | Thing Config | Type    | Description  | Example |
 |------------|--------------|--------------|--------------|
 | deviceId | String | Device Id including protocol and switch number | "X10-01001a-2" |
