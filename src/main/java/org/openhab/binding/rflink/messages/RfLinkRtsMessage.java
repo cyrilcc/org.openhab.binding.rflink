@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2010-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.types.Command;
@@ -22,16 +23,18 @@ import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
 
 /**
- * RfLink data class for Somfy/RTS message. Dummy? class for item. No inbound messages from RfLink, only outbound.
+ * RfLink data class for Somfy/RTS message.
  *
  * @author John Jore - Initial contribution
+ * @author Arjan Mels - Added reception and debugged sending
  */
 public class RfLinkRtsMessage extends RfLinkBaseMessage {
     private static final String KEY_RTS = "RTS";
     private static final List<String> keys = Arrays.asList(KEY_RTS);
 
     public Command command = null;
-    
+    public UpDownType state = null;
+
     public RfLinkRtsMessage() {
     }
 
@@ -48,6 +51,8 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
     public String toString() {
         String str = "";
         str += super.toString();
+        str += ", State = " + state;
+        str += ", Command = " + command;
         return str;
     }
 
@@ -64,18 +69,24 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
     @Override
     public HashMap<String, State> getStates() {
         HashMap<String, State> map = new HashMap<>();
+        map.put(RfLinkBindingConstants.CHANNEL_SHUTTER, state);
         return map;
     }
-    
+
     @Override
     public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command triggeredCommand)
             throws RfLinkNotImpException, RfLinkException {
         super.initializeFromChannel(config, channelUID, triggeredCommand);
         command = triggeredCommand;
+        if (triggeredCommand.toFullString().equals(UpDownType.UP.toFullString())) {
+            state = UpDownType.UP;
+        } else if (triggeredCommand.toFullString().equals(UpDownType.DOWN.toFullString())) {
+            state = UpDownType.DOWN;
+        }
     }
 
     @Override
     public byte[] decodeMessage(String suffix) {
-        return super.decodeMessage("0;" + this.command.toString() + ";");
+        return super.decodeMessage(this.command.toString() + ";");
     }
 }
