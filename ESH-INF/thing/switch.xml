@@ -27,6 +27,11 @@
 				<label>Device Id</label>
 				<description>Device Id. Protocol name + channel. Example Kaku-44 or Protocol name + ID + channel; X10Secure-12ab-00</description>
 			</parameter>
+			<parameter name="repeats" type="integer" required="false" min="1" max="20" step="1">
+                <label>Repeat</label>
+                <description>Repeat send messages multiple times</description>
+            </parameter>
+			
 		</config-description>
 	</thing-type>
 

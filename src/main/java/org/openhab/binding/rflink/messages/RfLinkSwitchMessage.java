@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2010-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,7 @@ import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
  *
  * @author Daan Sieben - Initial contribution
  * @author John Jore - Added channel for Contacts
+ * @author Arjan Mels - Simplified by using system OnOffType and OpenClosedType
  */
 public class RfLinkSwitchMessage extends RfLinkBaseMessage {
     private static final String KEY_SWITCH = "SWITCH";
@@ -35,86 +36,8 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
     private static final List<String> keys = Arrays.asList(KEY_SWITCH, KEY_CMD);
 
-    public Commands command = Commands.OFF;
-    public Contacts contact = Contacts.CLOSED;
-        
-    public enum Commands {
-        OFF("OFF", OnOffType.OFF),
-        ON("ON", OnOffType.ON),
-
-        UNKNOWN("", null);
-
-        private final String command;
-        private final OnOffType onOffType;
-
-        Commands(String command, OnOffType onOffType) {
-            this.command = command;
-            this.onOffType = onOffType;
-        }
-
-        public String getText() {
-            return this.command;
-        }
-
-        public OnOffType getOnOffType() {
-            return this.onOffType;
-        }
-
-        public static Commands fromString(String text) {
-            if (text != null) {
-                for (Commands c : Commands.values()) {
-                    if (text.equalsIgnoreCase(c.command)) {
-                        return c;
-                    }
-                }
-            }
-            return null;
-        }
-        
-        public static Commands fromCommand(Command command) {
-            if (command != null) {
-                for (Commands c : Commands.values()) {
-                    if (command ==c.onOffType) {
-                        return c;
-                    }
-                }
-            }
-            return null;
-        }
-    }
-
-    public enum Contacts {
-        CLOSED("OFF", OpenClosedType.CLOSED),
-        OPEN("ON", OpenClosedType.OPEN),
-        UNKNOWN("", null);
-
-        private final String contact;
-        private final OpenClosedType openClosedType;
-
-        Contacts(String contact, OpenClosedType openClosedType) {
-            this.contact = contact;
-            this.openClosedType = openClosedType;
-        }
-
-        public String getText() {
-            return this.contact;
-        }
-
-        public OpenClosedType getOpenClosedType() {
-            return this.openClosedType;
-        }
-
-        public static Contacts fromString(String text) {
-            if (text != null) {
-                for (Contacts c : Contacts.values()) {
-                    if (text.equalsIgnoreCase(c.contact)) {
-                        return c;
-                    }
-                }
-            }
-            return null;
-        }
-    }
+    public OnOffType command = OnOffType.OFF;
+    public OpenClosedType contact = OpenClosedType.CLOSED;
 
     public RfLinkSwitchMessage() {
     }
@@ -145,21 +68,21 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
         if (values.containsKey(KEY_CMD)) {
             try {
-                command = Commands.fromString(values.get(KEY_CMD));
+                command = OnOffType.valueOf(values.get(KEY_CMD));
                 if (command == null) {
                     throw new RfLinkException("Can't convert " + values.get(KEY_CMD) + " to Switch Command");
                 }
             } catch (Exception e) {
-                command = Commands.UNKNOWN;
+                command = null;
             }
 
             try {
-                contact = Contacts.fromString(values.get(KEY_CMD));
+                contact = OpenClosedType.valueOf(values.get(KEY_CMD));
                 if (contact == null) {
                     throw new RfLinkException("Can't convert " + values.get(KEY_CMD) + " to Contact state");
                 }
             } catch (Exception e) {
-                contact = Contacts.UNKNOWN;
+                contact = null;
             }
 
         }
@@ -179,22 +102,17 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
         HashMap<String, State> map = new HashMap<>();
 
-        if (this.command.getOnOffType() != null) {
-            map.put(RfLinkBindingConstants.CHANNEL_COMMAND, this.command.getOnOffType());
-        }
-
-        if (this.contact.getOpenClosedType() != null) {
-            map.put(RfLinkBindingConstants.CHANNEL_CONTACT, this.contact.getOpenClosedType());
-        }
+        map.put(RfLinkBindingConstants.CHANNEL_COMMAND, command);
+        map.put(RfLinkBindingConstants.CHANNEL_CONTACT, contact);
 
         return map;
     }
 
     @Override
     public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command triggeredCommand)
-        throws RfLinkNotImpException, RfLinkException {
+            throws RfLinkNotImpException, RfLinkException {
         super.initializeFromChannel(config, channelUID, triggeredCommand);
-            command = Commands.fromCommand(triggeredCommand);
+        command = OnOffType.valueOf(triggeredCommand.toFullString());
         if (command == null) {
             throw new RfLinkException("Can't convert " + triggeredCommand + " to Switch Command");
         }
@@ -202,6 +120,6 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
     @Override
     public byte[] decodeMessage(String suffix) {
-        return super.decodeMessage(this.command.getText() + ";");
-        }
+        return super.decodeMessage(this.command.toFullString() + ";");
     }
+}

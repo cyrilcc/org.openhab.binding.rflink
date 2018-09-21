@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2010-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableSet;
  * used across the whole binding.
  *
  * @author Cyril Cauchois - Initial contribution
- * @author John Jore- Added temperature, X10, X10Secure and RTS/Somfy support
+ * @author John Jore - Added temperature, X10, X10Secure and RTS/Somfy support
  * @author Marvyn Zalewski - Added humidity support
  */
 public class RfLinkBindingConstants {
@@ -46,6 +46,7 @@ public class RfLinkBindingConstants {
     // List of all Channel ids
     public final static String CHANNEL_SHUTTER = "shutter";
     public final static String CHANNEL_COMMAND = "command";
+    public final static String CHANNEL_COLOR = "color";
     public final static String CHANNEL_MOOD = "mood";
     public final static String CHANNEL_SIGNAL_LEVEL = "signalLevel";
     public final static String CHANNEL_DIMMING_LEVEL = "dimmingLevel";
@@ -84,9 +85,10 @@ public class RfLinkBindingConstants {
     public final static ThingTypeUID THING_TYPE_HUMIDITY = new ThingTypeUID(BINDING_ID, "humidity");
     public final static ThingTypeUID THING_TYPE_RTS = new ThingTypeUID(BINDING_ID, "rts");
     public final static ThingTypeUID THING_TYPE_OREGONTEMPHYGRO = new ThingTypeUID(BINDING_ID, "OregonTempHygro");
+    public final static ThingTypeUID THING_TYPE_COLOR = new ThingTypeUID(BINDING_ID, "color");
 
     // Presents all supported Thing types by RFLink binding.
     public final static Set<ThingTypeUID> SUPPORTED_DEVICE_THING_TYPES_UIDS = ImmutableSet.of(THING_TYPE_ENERGY,
-            THING_TYPE_WIND, THING_TYPE_SWITCH, THING_TYPE_RAIN, THING_TYPE_TEMPERATURE, THING_TYPE_RTS, THING_TYPE_HUMIDITY,
-            THING_TYPE_OREGONTEMPHYGRO);
+            THING_TYPE_WIND, THING_TYPE_SWITCH, THING_TYPE_RAIN, THING_TYPE_TEMPERATURE, THING_TYPE_RTS,
+            THING_TYPE_HUMIDITY, THING_TYPE_OREGONTEMPHYGRO, THING_TYPE_COLOR);
 }

@@ -19,7 +19,7 @@
             Command: 10;RTS;123ABC;0;STOP;
         -->
 		<channels>
-			<channel id="command" typeId="command" />
+			<channel id="command" typeId="shutter" />
 		</channels>
 
 		<config-description>

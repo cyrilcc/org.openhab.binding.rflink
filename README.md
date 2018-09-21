@@ -6,7 +6,8 @@ This repository contains a binding for [OpenHAB 2.0](https://github.com/openhab/
 
 This binding is inspired by the [Rfxcom binding](https://github.com/openhab/openhab2-addons/tree/master/addons/binding/org.openhab.binding.rfxcom)
 
-RFLink gateway supports RF 433 Mhz protocols like: 
+RFLink gateway supports RF 433 Mhz protocols like:
+ 
 * Cresta 
 * La Crosse
 * OWL
@@ -27,9 +28,11 @@ RFLink binding currently supports following types of devices:
 * Humidity (Receive) 
 * Temperature and Humidity (Receive) 
 * Wind (_to be tested_)
-* X10 Switch (Send)
+* MiLight RGB light (Send/Receive)i* X10 Switch (Send/Receive)
 * AB400D Elro Switch (Send)
 * X10Secure Contact (Receive)
+* Other simple RFLink switches (Send/Receive)
+
 
 As the project is at its very beginning, the binding does not support many devices.
 
@@ -43,17 +46,27 @@ Sending of triggers from openhab -> rflink -> device only works for a few device
 
 ## Configuration
 
+Bridge config:
+
 | Thing Config | Type    | Description  | Example |
 |------------|--------------|--------------|--------------|
 | serialPort | String | Path to Device | "/dev/tty.wchusbserial1410" |
 | baudRate | Integer | baudRate of the Gateway | 57600 |
 | disableDiscovery | Boolean | Enable or disable device Discovery | true |
 
+Thing config:
+
+| Thing Config | Type    | Description  | Example |
+|------------|--------------|--------------|--------------|
+| deviceId | String | Device Id including protocol and switch number | "X10-01001a-2" |
+| repeats | Integer | number of times to transmit RF messages | 1 |
+
 
 
 A manual configuration looks like
 
 _.things file_
+
 ```
 Bridge rflink:bridge:usb0 [ serialPort="COM19", baudRate=57600 ] {
     energy myEnergy [ deviceId="OregonCM119-0004" ]
@@ -61,12 +74,15 @@ Bridge rflink:bridge:usb0 [ serialPort="COM19", baudRate=57600 ] {
 ```
 
 most of the time on a raspberry
+
 ```
 Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyACM0", baudRate=57600, disableDiscovery=true ] {
     energy myEnergy [ deviceId="OregonCM119-0004" ]
 }
 ```
+
 or
+
 ```
 Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyUSB0", baudRate=57600 ] {
     temperature myTemperature [ deviceId="OregonTemp-0123" ]
@@ -78,10 +94,12 @@ Bridge rflink:bridge:usb0 [ serialPort="/dev/ttyUSB0", baudRate=57600 ] {
     OregonTempHygro myOregon  [ deviceId="OregonTempHygro-2D60" ]
 }
 ```
+
 All receiving devices must have the protocol as part of the device name (rts, x10 and AB400D).
 
 
 _.items file_
+
 ```
 Number myInstantPower "Instant Power [%d]"  <chart> (GroupA) {channel="rflink:energy:usb0:myEnergy:instantPower"}
 Number myTotalPower   "Total Power [%d]"    <chart> (GroupA) {channel="rflink:energy:usb0:myEnergy:totalUsage"}
@@ -96,6 +114,7 @@ Number hum_out        "Humidity [%d %%]"		     {channel="rflink:OregonTempHygro:
 String hstatus_out    "Humidity status [%s]"                 {channel="rflink:OregonTempHygro:usb0:myOregon:humidityStatus" }
 Switch low_bat_out    "Low battery [%s]"                     {channel="rflink:OregonTempHygro:usb0:myOregon:lowBattery" }
 DateTime obstime_out  "Time of observation [%1$td/%1$tm/%1$tY - %1$tH:%1$tM:%1$tS]"    {channel="rflink:OregonTempHygro:usb0:myOregon:observationTime" }
+Color myRGBLight [ deviceId="MiLightv1-C63D-01", repeats=3 ]
 
 
 ```
@@ -162,6 +181,7 @@ DateTime obstime_out  "Time of observation [%1$td/%1$tm/%1$tY - %1$tH:%1$tM:%1$t
 | observationTime     | DateTime    |   Last time of observation  (to implement watchdog) |
 
 Humidity status: 
+
 ```
 Normal (0)
 Comfort (1)
@@ -185,16 +205,26 @@ Wet (3)
 |-------------|--------------|--------------|
 | rts         | Rollershutter| Command      |
 
+### Color
+
+
+| Channel ID  | Item Type    | Description  |
+|-------------|--------------|--------------|
+| color       | Color        | Command      |
+
 
 ## Dependencies
 
 This binding depends on the following plugins
+
 * org.openhab.io.transport.serial
 
 From the openHAB shell, just type 
+
 ```
 feature:install openhab-transport-serial
 ```
+
 
 Or if you are developing your plugin with Eclipse IDE, select Run / Run Configurations... then select openHAB_Runtime click on the plug-ins tab, and check org.openhab.io.transport.serial in the target platform section.
 
@@ -209,13 +239,17 @@ RFLink message are very simple ';' separated strings.
 ### Packet structure - Received data from RF
 
 Old format:
+
 ```
 20;ID=9999;Name;LABEL=data;
 ```
+
 New Format:
+
 ```
 20;FF;Protocol;ID=9999;LABEL=data;
 ```
+
 
 * 20          => Node number 20 means from the RFLink Gateway to the master, 10 means from the master to the RFLink Gateway
 * ;           => field separator
@@ -240,14 +274,19 @@ The full protocol reference is available in this [archive](https://drive.google.
 
 To get sample messages of your Thing, you can enable the DEBUG mode for this binding. 
 Add this line to your org.ops4j.pax.logging.cfg (Linux?) file 
+
  ```
  log4j.logger.org.openhab.binding.rflink = DEBUG
  ```
+
 or add this line to your logback_debug.xml (Windows?) file
+
  ```
  <logger name="org.openhab.binding.rflink" level="DEBUG" />
  ```
+
 or execute the following command in your Karaf Shell for temporary debug log
+
  ```
  log:set DEBUG org.openhab.binding.rflink
  ```
@@ -261,7 +300,7 @@ Or you can use the RFLinkLoader application. [See how](http://www.rflink.nl/blog
 
 1. Add you thing description XML file in the ESH-INF/thing/ directory
 2. Implement your message in the org.openhab.binding.rflink.messages package
-3. Add the mapping of your new message in the static part of the RfLinkMessageFactory class
+3. Add the mapping of your new message in the static part of the RfLinkMessageFactory class.
 4. Add your new channels names in the RfLinkBindingConstants class
 5. Add a ThingTypeUID constant (same class)
 6. Add this new constant in the SUPPORTED\_DEVICE\_THING\_TYPES\_UIDS list (same class)
@@ -271,6 +310,7 @@ Or you can use the RFLinkLoader application. [See how](http://www.rflink.nl/blog
 ### How to package your binding
 
 In Eclipse IDE, right click on the pom.xml file, then "Run As", and "Maven Install"  or execute
+
 ```
  mvn package
 ```
