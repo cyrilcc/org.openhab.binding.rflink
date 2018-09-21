@@ -290,6 +290,12 @@ or execute the following command in your Karaf Shell for temporary debug log
  ```
  log:set DEBUG org.openhab.binding.rflink
  ```
+ 
+From OH2.3 the file format has changed and the following two lines must be added:
+ ```
+log4j2.logger.org_openhab_binding_rflink.name = org.openhab.binding.rflink
+log4j2.logger.org_openhab_binding_rflink.level = DEBUG
+ ```
 
 
 Or you can use the Serial Monitor of your arduino IDE.
