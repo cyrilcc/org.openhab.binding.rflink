@@ -87,6 +87,6 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
 
     @Override
     public byte[] decodeMessage(String suffix) {
-        return super.decodeMessage(this.command.toString() + ";");
+        return super.decodeMessage("0;" + this.command.toString() + ";");        
     }
 }
