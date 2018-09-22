@@ -160,8 +160,8 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
         String[] deviceIdParts = this.deviceId.split(ID_DELIMITER, 2);
         String primaryId = deviceIdParts[0];
 
-        // convert channel to 6 character string, RfLink spec is a bit unclear on this, but seems to work...
-        String deviceChannel = "000000".substring(primaryId.length()) + primaryId;
+        // convert channel to 8 character string, RfLink spec is a bit unclear on this, but seems to work...
+        String deviceChannel = "00000000".substring(primaryId.length()) + primaryId;
         if (deviceIdParts.length > 1) {
             deviceChannel += ID_DELIMITER + deviceIdParts[1];
         }
