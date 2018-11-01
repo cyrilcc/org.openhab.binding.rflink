@@ -30,21 +30,21 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
 
     private Logger logger = LoggerFactory.getLogger(RfLinkBaseMessage.class);
 
-    protected final static String FIELDS_DELIMITER = ";";
-    protected final static char VALUE_DELIMITER = '=';
-    protected final static String STR_VALUE_DELIMITER = "=";
+    public final static String FIELDS_DELIMITER = ";";
+    public final static String VALUE_DELIMITER = "=";
     public final static String ID_DELIMITER = "-";
+    public final static String NEW_LINE = "\n";
 
     private final static String NODE_NUMBER_FROM_GATEWAY = "20";
+    private final static String NODE_NUMBER_TO_GATEWAY = "10";
+
+    private static final String DEVICE_MASK = "00000000";
 
     private final static int MINIMAL_SIZE_MESSAGE = 5;
 
     public String rawMessage;
-
-    public byte seqNbr = 0;
-
+    private byte seqNbr = 0;
     private String deviceName;
-
     protected String deviceId;
 
     protected HashMap<String, String> values = new HashMap<>();
@@ -64,37 +64,28 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
 
     @Override
     public void encodeMessage(String data) {
-
         rawMessage = data;
 
         final String[] elements = rawMessage.split(FIELDS_DELIMITER);
         final int size = elements.length;
-
         // Every message should have at least 5 parts
         // Example : 20;31;Mebus;ID=c201;TEMP=00cf;
+        // Example : 20;02;RTS;ID=82e8ac;SWITCH=01;CMD=DOWN;
         // Example : 20;07;Debug;RTS P1;a729000068622e;
         if (size >= MINIMAL_SIZE_MESSAGE) {
             // first element should be "20"
             if (NODE_NUMBER_FROM_GATEWAY.equals(elements[0])) {
-
                 seqNbr = (byte) Integer.parseInt(elements[1], 16);
                 deviceName = elements[2].replaceAll("[^A-Za-z0-9_-]", "");
-
-                if ((elements[3].indexOf(STR_VALUE_DELIMITER)) > -1) { // can return "Debug" as ID
-                    deviceId = elements[3].split(STR_VALUE_DELIMITER)[1];
-
-                    // Raw values are stored, and will be decoded by sub implementations
-                    for (int i = 4; i < size; i++) {
-                        // we don't use split() method since values can have '=' in it
-                        final int idx = elements[i].indexOf(VALUE_DELIMITER);
-                        if (idx > -1) { // can return "BAD_CRC?" in values
-                            final String name = elements[i].substring(0, idx);
-                            final String value = elements[i].substring(idx + 1, elements[i].length());
-
-                            values.put(name, value);
-                        }
+                // build the key>value map
+                for (int i = 3; i < size; i++) {
+                    String[] keyValue = elements[i].split(VALUE_DELIMITER, 2);
+                    if (keyValue.length > 1) {
+                        // Raw values are stored, and will be decoded by sub implementations
+                        values.put(keyValue[0], keyValue[1]);
                     }
                 }
+                deviceId = values.get("ID");
             }
         }
     }
@@ -155,27 +146,40 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
 
     @Override
     public byte[] decodeMessage(String suffix) {
-        String message = "10;"; // message for bridge
+        return (decodeMessageAsString(suffix) + NEW_LINE).getBytes();
+    }
 
+    @Override
+    public String decodeMessageAsString(String suffix) {
+        // prepare data
         String[] deviceIdParts = this.deviceId.split(ID_DELIMITER, 2);
-        String primaryId = deviceIdParts[0];
-
-        // convert channel to 8 character string, RfLink spec is a bit unclear on this, but seems to work...
-        String deviceChannel = "00000000".substring(primaryId.length()) + primaryId;
+        String channel = deviceIdParts[0];
+        String channelSuffix = null;
         if (deviceIdParts.length > 1) {
-            deviceChannel += ID_DELIMITER + deviceIdParts[1];
+            channelSuffix = deviceIdParts[1].replaceAll(ID_DELIMITER, FIELDS_DELIMITER);
         }
 
-        message += this.getDeviceName() + ";";
-        // some protocols, like X10 use multiple id parts, convert all - in deviceId to ;
-        message += deviceChannel.replaceAll(ID_DELIMITER, ";") + ";";
-        message += suffix;
+        // encode the message
+        StringBuilder message = new StringBuilder();
+        appendToMessage(message, NODE_NUMBER_TO_GATEWAY); // To Bridge
+        appendToMessage(message, this.getDeviceName()); // Protocol
+        // convert channel to 8 character string, RfLink spec is a bit unclear on this, but seems to work...
+        appendToMessage(message, DEVICE_MASK.substring(channel.length()) + channel);
+        if (channelSuffix != null) {
+            // some protocols, like X10 use multiple id parts, convert all - in deviceId to ;
+            appendToMessage(message, channelSuffix.replaceAll(ID_DELIMITER, FIELDS_DELIMITER));
+        }
+        if (suffix != null && !suffix.isEmpty()) {
+            message.append(suffix + FIELDS_DELIMITER);
+        }
 
         logger.debug("Decoded message to be sent: {}, deviceName: {}, deviceChannel: {}, primaryId: {}", message,
-                this.getDeviceName(), deviceChannel, primaryId);
+                this.getDeviceName(), channel, channelSuffix);
 
-        message += "\n"; // close message with newline
-
-        return message.getBytes();
+        return message.toString();
     }
+
+    private void appendToMessage(StringBuilder message, String element) {
+        message.append(element).append(FIELDS_DELIMITER);
+    };
 }

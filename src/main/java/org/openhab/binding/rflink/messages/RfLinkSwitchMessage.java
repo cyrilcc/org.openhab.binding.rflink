@@ -152,7 +152,7 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public byte[] decodeMessage(String suffix) {
-        return super.decodeMessage(this.command.toFullString() + ";");
+    public String decodeMessageAsString(String suffix) {
+        return super.decodeMessageAsString(this.command.toFullString());
     }
 }

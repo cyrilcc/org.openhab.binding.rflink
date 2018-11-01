@@ -38,7 +38,7 @@ public interface RfLinkMessage {
      * Procedure for encode raw data.
      *
      * @param data
-     *            Raw data.
+     *                 Raw data.
      */
     void encodeMessage(String data);
 
@@ -49,7 +49,16 @@ public interface RfLinkMessage {
      * @return bytes to be send over serial.
      */
     byte[] decodeMessage(String suffix);
-    
+
+    /**
+     * procedure to 'decode' a RfLinkMessage into a String for
+     * streaming through the gateway.
+     *
+     * @param suffix
+     * @return
+     */
+    public String decodeMessageAsString(String suffix);
+
     /**
      * Procedure to get device id.
      *
@@ -84,7 +93,7 @@ public interface RfLinkMessage {
      * @return
      */
     HashMap<String, State> getStates();
-    
+
     /**
      * Initializes message to be transmitted
      *
