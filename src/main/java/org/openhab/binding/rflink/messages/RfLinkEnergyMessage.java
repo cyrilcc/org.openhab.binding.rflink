@@ -9,8 +9,9 @@
 package org.openhab.binding.rflink.messages;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -33,7 +34,7 @@ public class RfLinkEnergyMessage extends RfLinkBaseMessage {
     private static final String KEY_INSTANT_POWER = "WATT";
     private static final String KEY_TOTAL_POWER = "KWATT";
 
-    private static final List<String> keys = Arrays.asList(KEY_INSTANT_POWER, KEY_TOTAL_POWER);
+    private static final Collection<String> KEYS = Arrays.asList(KEY_INSTANT_POWER, KEY_TOTAL_POWER);
 
     public double instantAmps = 0;
     public double totalAmpHours = 0;
@@ -85,24 +86,20 @@ public class RfLinkEnergyMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public List<String> keys() {
-        return keys;
+    public Collection<String> keys() {
+        return KEYS;
     }
 
     @Override
-    public HashMap<String, State> getStates() {
-
-        HashMap<String, State> map = new HashMap<>();
-
+    public Map<String, State> getStates() {
+        Map<String, State> map = new HashMap<>();
         map.put(RfLinkBindingConstants.CHANNEL_INSTANT_POWER, new DecimalType(instantPower));
         map.put(RfLinkBindingConstants.CHANNEL_INSTANT_AMPS, new DecimalType(instantAmps));
         map.put(RfLinkBindingConstants.CHANNEL_TOTAL_AMP_HOURS, new DecimalType(totalAmpHours));
         map.put(RfLinkBindingConstants.CHANNEL_TOTAL_USAGE, new DecimalType(totalUsage));
-
         return map;
-
     }
-    
+
     @Override
     public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command command)
             throws RfLinkNotImpException {

@@ -9,8 +9,9 @@
 package org.openhab.binding.rflink.messages;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -29,7 +30,7 @@ import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
 
 public class RfLinkTemperatureMessage extends RfLinkBaseMessage {
     private static final String KEY_TEMPERATURE = "TEMP";
-    private static final List<String> keys = Arrays.asList(KEY_TEMPERATURE);
+    private static final Collection<String> KEYS = Arrays.asList(KEY_TEMPERATURE);
 
     public double temperature = 0;
 
@@ -51,38 +52,33 @@ public class RfLinkTemperatureMessage extends RfLinkBaseMessage {
 
         if (values.containsKey(KEY_TEMPERATURE)) {
             int temp = Integer.parseInt(values.get(KEY_TEMPERATURE), 16);
-            if ((temp & 0x8000) > 0) {  // temperature is an signed int16
+            if ((temp & 0x8000) > 0) { // temperature is an signed int16
                 temp = temp & 0x7FFF;
-                temp = 0-temp;
+                temp = 0 - temp;
             }
             temperature = temp / 10.0d;
         }
     }
 
     @Override
-    public List<String> keys() {
-        return keys;
+    public Collection<String> keys() {
+        return KEYS;
     }
 
     @Override
-    public HashMap<String, State> getStates() {
-
-        HashMap<String, State> map = new HashMap<>();
+    public Map<String, State> getStates() {
+        Map<String, State> map = new HashMap<>();
         map.put(RfLinkBindingConstants.CHANNEL_TEMPERATURE, new DecimalType(temperature));
-
         return map;
     }
 
     @Override
     public String toString() {
-        String str = "";
-
-        str += super.toString();
+        String str = super.toString();
         str += ", Temperature = " + temperature;
-
         return str;
     }
-    
+
     @Override
     public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command command)
             throws RfLinkNotImpException {

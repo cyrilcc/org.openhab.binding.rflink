@@ -9,8 +9,9 @@
 package org.openhab.binding.rflink.messages;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -30,7 +31,7 @@ import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
  */
 public class RfLinkRtsMessage extends RfLinkBaseMessage {
     private static final String KEY_RTS = "RTS";
-    private static final List<String> keys = Arrays.asList(KEY_RTS);
+    private static final Collection<String> KEYS = Arrays.asList(KEY_RTS);
 
     public Command command = null;
     public UpDownType state = null;
@@ -62,13 +63,13 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public List<String> keys() {
-        return keys;
+    public Collection<String> keys() {
+        return KEYS;
     }
 
     @Override
-    public HashMap<String, State> getStates() {
-        HashMap<String, State> map = new HashMap<>();
+    public Map<String, State> getStates() {
+        Map<String, State> map = new HashMap<>();
         map.put(RfLinkBindingConstants.CHANNEL_SHUTTER, state);
         return map;
     }

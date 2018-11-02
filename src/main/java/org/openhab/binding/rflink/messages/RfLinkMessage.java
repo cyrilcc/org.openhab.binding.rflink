@@ -8,8 +8,8 @@
  */
 package org.openhab.binding.rflink.messages;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
@@ -85,14 +85,14 @@ public interface RfLinkMessage {
      *
      * @return
      */
-    List<String> keys();
+    Collection<String> keys();
 
     /**
      * Get all the values in form of smarthome states
      *
      * @return
      */
-    HashMap<String, State> getStates();
+    Map<String, State> getStates();
 
     /**
      * Initializes message to be transmitted

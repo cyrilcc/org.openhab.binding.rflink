@@ -9,8 +9,9 @@
 package org.openhab.binding.rflink.messages;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -35,8 +36,8 @@ public class RfLinkWindMessage extends RfLinkBaseMessage {
     private static final String KEY_WIND_GUST = "WINGS";
     private static final String KEY_WIND_CHILL = "WINCHL";
 
-    private static final List<String> keys = Arrays.asList(KEY_WIND_SPEED, KEY_AVERAGE_WIND_SPEED, KEY_WIND_DIRECTION,
-            KEY_W_DIRECTION, KEY_WIND_GUST, KEY_WIND_CHILL);
+    private static final Collection<String> KEYS = Arrays.asList(KEY_WIND_SPEED, KEY_AVERAGE_WIND_SPEED,
+            KEY_WIND_DIRECTION, KEY_W_DIRECTION, KEY_WIND_GUST, KEY_WIND_CHILL);
 
     public int windSpeed = 0;
     public double averageWindSpeed = 0;
@@ -89,39 +90,33 @@ public class RfLinkWindMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public List<String> keys() {
-        return keys;
+    public Collection<String> keys() {
+        return KEYS;
     }
 
     @Override
-    public HashMap<String, State> getStates() {
-
-        HashMap<String, State> map = new HashMap<>();
-
+    public Map<String, State> getStates() {
+        Map<String, State> map = new HashMap<>();
         map.put(RfLinkBindingConstants.CHANNEL_WIND_SPEED, new DecimalType(windSpeed));
         map.put(RfLinkBindingConstants.CHANNEL_WIND_DIRECTION, new DecimalType(windDirection));
         map.put(RfLinkBindingConstants.CHANNEL_AVERAGE_WIND_SPEED, new DecimalType(averageWindSpeed));
         map.put(RfLinkBindingConstants.CHANNEL_GUST, new DecimalType(windGust));
         map.put(RfLinkBindingConstants.CHANNEL_WIND_CHILL, new DecimalType(windChill));
-
         return map;
 
     }
 
     @Override
     public String toString() {
-        String str = "";
-
-        str += super.toString();
+        String str = super.toString();
         str += ", Wind Speed = " + windSpeed;
         str += ", Avg Wind Speed = " + averageWindSpeed;
         str += ", Wind Direction = " + windDirection;
         str += ", Wind Gust = " + windGust;
         str += ", Wind Chill = " + windChill;
-
         return str;
     }
-    
+
     @Override
     public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command command)
             throws RfLinkNotImpException {

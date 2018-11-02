@@ -8,8 +8,9 @@
  */
 package org.openhab.binding.rflink.messages;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
@@ -47,7 +48,7 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
     private String deviceName;
     protected String deviceId;
 
-    protected HashMap<String, String> values = new HashMap<>();
+    protected Map<String, String> values = new HashMap<>();
 
     public RfLinkBaseMessage() {
 
@@ -92,9 +93,7 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
 
     @Override
     public String toString() {
-
         String str = "";
-
         if (rawMessage == null) {
             str += "Raw data = unknown";
         } else {
@@ -103,7 +102,6 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
             str += ", Device name = " + deviceName;
             str += ", Device ID = " + deviceId;
         }
-
         return str;
     }
 
@@ -117,20 +115,17 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
         return deviceName;
     }
 
-    /**
-     * return a list of keys that are present in the message to be decoded
-     */
     @Override
-    public List<String> keys() {
+    public Collection<String> keys() {
         return null;
     }
 
-    public HashMap<String, String> getValues() {
+    public Map<String, String> getValues() {
         return values;
     }
 
     @Override
-    public HashMap<String, State> getStates() {
+    public Map<String, State> getStates() {
         return null;
     }
 

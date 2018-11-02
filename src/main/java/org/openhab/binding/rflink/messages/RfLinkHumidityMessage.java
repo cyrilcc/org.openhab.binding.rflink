@@ -9,8 +9,9 @@
 package org.openhab.binding.rflink.messages;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -29,7 +30,7 @@ import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
 
 public class RfLinkHumidityMessage extends RfLinkBaseMessage {
     private static final String KEY_HUMIDITY = "HUM";
-    private static final List<String> keys = Arrays.asList(KEY_HUMIDITY);
+    private static final Collection<String> KEYS = Arrays.asList(KEY_HUMIDITY);
 
     public double humidity = 0;
 
@@ -55,14 +56,14 @@ public class RfLinkHumidityMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public List<String> keys() {
-        return keys;
+    public Collection<String> keys() {
+        return KEYS;
     }
 
     @Override
-    public HashMap<String, State> getStates() {
+    public Map<String, State> getStates() {
 
-        HashMap<String, State> map = new HashMap<>();
+        Map<String, State> map = new HashMap<>();
         map.put(RfLinkBindingConstants.CHANNEL_HUMIDITY, new DecimalType(humidity));
 
         return map;
@@ -77,7 +78,7 @@ public class RfLinkHumidityMessage extends RfLinkBaseMessage {
 
         return str;
     }
-    
+
     @Override
     public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command command)
             throws RfLinkNotImpException {

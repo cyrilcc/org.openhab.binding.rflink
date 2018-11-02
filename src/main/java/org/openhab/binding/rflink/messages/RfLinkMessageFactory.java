@@ -27,11 +27,10 @@ import org.slf4j.LoggerFactory;
  */
 public class RfLinkMessageFactory {
 
-    @SuppressWarnings("unused")
     private static Logger logger = LoggerFactory.getLogger(RfLinkMessageFactory.class);
 
-    private static LinkedHashMap<String, Class> mapping = new LinkedHashMap<>();
-    private static HashMap<ThingTypeUID, Class> thingTypeMapping = new HashMap<>();
+    private static LinkedHashMap<String, Class> KEY_TO_CLASS = new LinkedHashMap<>();
+    private static HashMap<ThingTypeUID, Class> THINGTYPE_TO_CLASS = new HashMap<>();
 
     /**
      * Mapping of the various message classes.
@@ -55,9 +54,9 @@ public class RfLinkMessageFactory {
             RfLinkMessage m = (RfLinkMessage) _class.newInstance();
 
             for (String key : m.keys()) {
-                mapping.put(key, _class);
+                KEY_TO_CLASS.put(key, _class);
             }
-            thingTypeMapping.put(m.getThingType(), _class);
+            THINGTYPE_TO_CLASS.put(m.getThingType(), _class);
 
         } catch (InstantiationException | IllegalAccessException e) {
 
@@ -67,13 +66,12 @@ public class RfLinkMessageFactory {
 
     public static RfLinkMessage createMessage(RfLinkBaseMessage message) throws RfLinkException, RfLinkNotImpException {
         String packet = message.rawMessage;
-        for (String key : mapping.keySet()) {
+        for (String key : KEY_TO_CLASS.keySet()) {
             if (message.values.containsKey(key)) {
                 try {
-                    Class<?> cl = mapping.get(key);
+                    Class<?> cl = KEY_TO_CLASS.get(key);
                     Constructor<?> c = cl.getConstructor(String.class);
                     return (RfLinkMessage) c.newInstance(packet);
-
                 } catch (Exception e) {
                     logger.error("Exception: {}", e);
                     throw new RfLinkException("unable to instanciate message object", e);
@@ -89,9 +87,9 @@ public class RfLinkMessageFactory {
     }
 
     public static RfLinkMessage createMessageForSendingToThing(ThingTypeUID thingType) throws RfLinkException {
-        if (thingTypeMapping.containsKey(thingType)) {
+        if (THINGTYPE_TO_CLASS.containsKey(thingType)) {
             try {
-                Class<?> cl = thingTypeMapping.get(thingType);
+                Class<?> cl = THINGTYPE_TO_CLASS.get(thingType);
                 Constructor<?> c = cl.getConstructor();
                 return (RfLinkMessage) c.newInstance();
             } catch (Exception e) {

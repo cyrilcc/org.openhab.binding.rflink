@@ -9,8 +9,9 @@
 package org.openhab.binding.rflink.messages;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.OpenClosedType;
@@ -22,6 +23,8 @@ import org.openhab.binding.rflink.RfLinkBindingConstants;
 import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * RfLink data class for power switch message.
@@ -35,7 +38,8 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
     private static final String KEY_SWITCH = "SWITCH";
     private static final String KEY_CMD = "CMD";
 
-    private static final List<String> keys = Arrays.asList(KEY_SWITCH, KEY_CMD);
+    private static final Collection<String> KEYS = Arrays.asList(KEY_SWITCH, KEY_CMD);
+    private static Logger logger = LoggerFactory.getLogger(RfLinkSwitchMessage.class);
 
     public OnOffType command = OnOffType.OFF;
     public Contacts contact = Contacts.CLOSED;
@@ -102,17 +106,13 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
         if (values.containsKey(KEY_CMD)) {
             try {
                 command = OnOffType.valueOf(values.get(KEY_CMD));
-                if (command == null) {
-                    throw new RfLinkException("Can't convert " + values.get(KEY_CMD) + " to Switch Command");
-                }
             } catch (Exception e) {
-                command = null;
+                logger.error("Can't convert " + values.get(KEY_CMD) + " to Switch Command", e);
             }
-
             try {
                 contact = Contacts.fromString(values.get(KEY_CMD));
                 if (contact == null) {
-                    throw new RfLinkException("Can't convert " + values.get(KEY_CMD) + " to Contact state");
+                    logger.error("Can't convert " + values.get(KEY_CMD) + " to Contact state");
                 }
             } catch (Exception e) {
                 contact = null;
@@ -126,18 +126,15 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public List<String> keys() {
-        return keys;
+    public Collection<String> keys() {
+        return KEYS;
     }
 
     @Override
-    public HashMap<String, State> getStates() {
-
-        HashMap<String, State> map = new HashMap<>();
-
+    public Map<String, State> getStates() {
+        Map<String, State> map = new HashMap<>();
         map.put(RfLinkBindingConstants.CHANNEL_COMMAND, command);
         map.put(RfLinkBindingConstants.CHANNEL_CONTACT, this.contact.getOpenClosedType());
-
         return map;
     }
 
@@ -146,9 +143,6 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
             throws RfLinkNotImpException, RfLinkException {
         super.initializeFromChannel(config, channelUID, triggeredCommand);
         command = OnOffType.valueOf(triggeredCommand.toFullString());
-        if (command == null) {
-            throw new RfLinkException("Can't convert " + triggeredCommand + " to Switch Command");
-        }
     }
 
     @Override

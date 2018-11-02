@@ -9,7 +9,7 @@
 package org.openhab.binding.rflink.handler;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -85,9 +85,7 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
     @Override
     public void initialize() {
         config = getConfigAs(RfLinkDeviceConfiguration.class);
-
         logger.debug("Initializing thing {}, deviceId={}", getThing().getUID(), config.deviceId);
-
         initializeBridge((getBridge() == null) ? null : getBridge().getHandler(),
                 (getBridge() == null) ? null : getBridge().getStatus());
     }
@@ -142,7 +140,7 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
                         message.getClass().getSimpleName());
                 updateStatus(ThingStatus.ONLINE);
 
-                HashMap<String, State> map = message.getStates();
+                Map<String, State> map = message.getStates();
 
                 for (String channel : map.keySet()) {
                     logger.debug("Update channel: {}, state: {}", channel, map.get(channel));

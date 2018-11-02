@@ -9,8 +9,9 @@
 package org.openhab.binding.rflink.messages;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.HSBType;
@@ -38,10 +39,9 @@ public class RfLinkColorMessage extends RfLinkBaseMessage {
     private Logger logger = LoggerFactory.getLogger(RfLinkColorMessage.class);
 
     private static final String KEY_RGBW = "RGBW";
-    private static final List<String> keys = Arrays.asList(KEY_RGBW);
-
     private static final String KEY_SWITCH = "SWITCH";
     private static final String KEY_CMD = "CMD";
+    private static final Collection<String> KEYS = Arrays.asList(KEY_RGBW);
 
     // angle between OpenHab Hue and RFLink/MiLight Hue
     private static final int COLOR_OFFSET = 45;
@@ -118,15 +118,15 @@ public class RfLinkColorMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public List<String> keys() {
-        return keys;
+    public Collection<String> keys() {
+        return KEYS;
     }
 
     @Override
-    public HashMap<String, State> getStates() {
+    public Map<String, State> getStates() {
         logger.debug("Color State Requested: [{}]", stateColor);
 
-        HashMap<String, State> map = new HashMap<>();
+        Map<String, State> map = new HashMap<>();
         if (stateColor == null) {
             map.put(RfLinkBindingConstants.CHANNEL_COLOR, null);
         } else if (stateOnOff == null || stateOnOff.equals(OnOffType.OFF)) {
