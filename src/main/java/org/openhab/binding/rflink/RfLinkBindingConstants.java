@@ -31,6 +31,7 @@ public class RfLinkBindingConstants {
 
     // List of all Bridge Type UIDs
     public static final String BRIDGE_TYPE_MANUAL_BRIDGE = "bridge";
+    public final static int BAUD_RATE_DEFAULT = 57600;
 
     public final static ThingTypeUID BRIDGE_MANUAL = new ThingTypeUID(BINDING_ID, BRIDGE_TYPE_MANUAL_BRIDGE);
 

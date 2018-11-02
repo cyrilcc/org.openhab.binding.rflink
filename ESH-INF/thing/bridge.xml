@@ -14,7 +14,7 @@
 				<description>Serial port where RFLink transceiver is connected.</description>
 			</parameter>
 			
-			<parameter name="baudRate" type="integer" required="true">
+			<parameter name="baudRate" type="integer" required="false">
 				<label>Baud Rate</label>
 				<description>Serial port baud rate (default is 57600).</description>
 		   	 </parameter>
