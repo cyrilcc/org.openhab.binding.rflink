@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.smarthome.core.library.types.OnOffType;
+import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.types.Command;
@@ -43,10 +45,20 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
 
     private final static int MINIMAL_SIZE_MESSAGE = 5;
 
+    private static final Map<Command, Command> REVERSE_COMMAND_MAP = new HashMap<Command, Command>();
+
+    static {
+        REVERSE_COMMAND_MAP.put(UpDownType.DOWN, UpDownType.UP);
+        REVERSE_COMMAND_MAP.put(UpDownType.UP, UpDownType.DOWN);
+        REVERSE_COMMAND_MAP.put(OnOffType.ON, OnOffType.OFF);
+        REVERSE_COMMAND_MAP.put(OnOffType.OFF, OnOffType.ON);
+    }
+
     public String rawMessage;
     private byte seqNbr = 0;
     private String deviceName;
     protected String deviceId;
+    protected Boolean isCommandReversed;
 
     protected Map<String, String> values = new HashMap<>();
 
@@ -137,6 +149,7 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
             this.deviceName = elements[0];
             this.deviceId = config.deviceId.substring(this.deviceName.length() + ID_DELIMITER.length());
         }
+        this.isCommandReversed = config.isCommandReversed;
     }
 
     @Override
@@ -176,5 +189,18 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
 
     private void appendToMessage(StringBuilder message, String element) {
         message.append(element).append(FIELDS_DELIMITER);
-    };
+    }
+
+    protected Command getEffectiveCommand(Command inputCommand) {
+        if (isCommandReversed) {
+            // reverse the command
+            Command effectiveCommand = REVERSE_COMMAND_MAP.get(inputCommand);
+            if (effectiveCommand == null) {
+                // no reverse available : defaulting
+                return inputCommand;
+            }
+            return effectiveCommand;
+        }
+        return inputCommand;
+    }
 }

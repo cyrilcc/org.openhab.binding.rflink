@@ -39,7 +39,7 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
     private static final Collection<String> KEYS = Arrays.asList(KEY_RTS);
 
     public Command command = null;
-    public UpDownType state = null;
+    public State state = null;
 
     public RfLinkRtsMessage() {
     }
@@ -83,7 +83,8 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
     public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command triggeredCommand)
             throws RfLinkNotImpException, RfLinkException {
         super.initializeFromChannel(config, channelUID, triggeredCommand);
-        attachCommandAction(channelUID.getId(), triggeredCommand);
+        this.command = getCommandAction(channelUID.getId(), triggeredCommand);
+        this.state = getStateFromCommand();
     }
 
     @Override
@@ -95,19 +96,28 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
         return this.command.toString();
     }
 
-    public void attachCommandAction(String channelId, Type type) throws RfLinkException {
+    public State getStateFromCommand() {
+        State state = null;
+        if (UpDownType.DOWN.equals(command) || OpenClosedType.CLOSED.equals(command) || OnOffType.OFF.equals(command)) {
+            state = UpDownType.DOWN;
+        } else if (UpDownType.UP.equals(command) || OpenClosedType.OPEN.equals(command)
+                || OnOffType.ON.equals(command)) {
+            state = UpDownType.UP;
+        }
+        return state;
+    }
+
+    public Command getCommandAction(String channelId, Type type) throws RfLinkException {
+        Command command = null;
         switch (channelId) {
             case RfLinkBindingConstants.CHANNEL_COMMAND:
             case RfLinkBindingConstants.CHANNEL_SHUTTER:
                 if (type instanceof OpenClosedType) {
-                    this.command = (type == OpenClosedType.CLOSED ? UpDownType.DOWN : UpDownType.UP);
-                    this.state = (UpDownType) command;
+                    command = (type == OpenClosedType.CLOSED ? UpDownType.DOWN : UpDownType.UP);
                 } else if (type instanceof UpDownType) {
-                    this.command = (UpDownType) type;
-                    this.state = (UpDownType) command;
+                    command = (UpDownType) type;
                 } else if (type instanceof OnOffType) {
-                    this.command = (Command) type;
-                    this.state = OnOffType.ON.equals(command) ? UpDownType.DOWN : UpDownType.UP;
+                    command = (Command) type;
                 } else if (type instanceof StopMoveType) {
                     command = StopMoveType.STOP;
                 } else if (type instanceof PercentType) {
@@ -124,5 +134,6 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
             default:
                 throw new RfLinkException("Channel " + channelId + " is not relevant here");
         }
+        return getEffectiveCommand(command);
     }
 }

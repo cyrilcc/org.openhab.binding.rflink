@@ -22,4 +22,12 @@ public class RfLinkDeviceConfiguration {
     // Number of times to repeat a message
     public int repeats;
 
+    // reverse commands on the device
+    public boolean isCommandReversed = Boolean.FALSE;
+
+    @Override
+    public String toString() {
+        return "RfLinkDeviceConfiguration [deviceId=" + deviceId + "]";
+    }
+
 }

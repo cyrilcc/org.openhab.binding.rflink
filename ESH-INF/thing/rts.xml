@@ -28,6 +28,11 @@
 				<label>Device Id</label>
 				<description>Must contain the Protocol + Address + EPROM index (using '-' as separator). For instance : RTS-123ABC-1</description>
 			</parameter>
+			
+            <parameter name="isCommandReversed" type="boolean" required="false">
+                <label>Reverse Command</label>
+                <description>Enable in case thing commands works up-side-down</description>
+            </parameter>
 		</config-description>
 	</thing-type>
 
