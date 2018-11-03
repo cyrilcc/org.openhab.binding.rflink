@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RfLinkHandler extends BaseThingHandler implements DeviceMessageListener {
 
+    public static final int TIME_BETWEEN_COMMANDS = 50;
     private Logger logger = LoggerFactory.getLogger(RfLinkHandler.class);
 
     private RfLinkBridgeHandler bridgeHandler;
@@ -60,22 +61,34 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
                 // Not supported
             } else {
                 try {
-                    RfLinkMessage msg = RfLinkMessageFactory
+                    RfLinkMessage message = RfLinkMessageFactory
                             .createMessageForSendingToThing(getThing().getThingTypeUID());
-                    msg.initializeFromChannel(getConfigAs(RfLinkDeviceConfiguration.class), channelUID, command);
+                    message.initializeFromChannel(getConfigAs(RfLinkDeviceConfiguration.class), channelUID, command);
+                    updateThingStates(message);
                     int repeats = 1;
                     if (getThing().getConfiguration().containsKey("repeats")) {
                         repeats = ((BigDecimal) getThing().getConfiguration().get("repeats")).intValue();
                     }
                     repeats = Math.min(Math.max(repeats, 1), 20);
                     for (int i = 0; i < repeats; i++) {
-                        bridgeHandler.sendMessage(msg);
+                        waitBeforeCommandExecution(i);
+                        bridgeHandler.sendMessage(message);
                     }
                 } catch (RfLinkNotImpException e) {
                     logger.error("Message not supported: {}", e.getMessage());
                 } catch (RfLinkException e) {
                     logger.error("Transmitting error: {}", e.getMessage());
                 }
+            }
+        }
+    }
+
+    private void waitBeforeCommandExecution(int i) {
+        if (i > 0) {
+            try {
+                Thread.sleep(TIME_BETWEEN_COMMANDS);
+            } catch (InterruptedException e) {
+                logger.error("Sleep time between command repeat ended in error", e);
             }
         }
     }
