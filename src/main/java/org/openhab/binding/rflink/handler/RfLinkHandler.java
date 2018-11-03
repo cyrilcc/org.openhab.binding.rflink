@@ -139,18 +139,20 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
                 logger.debug("Message from bridge {} from device [{}] type [{}] matched", bridge.toString(), id,
                         message.getClass().getSimpleName());
                 updateStatus(ThingStatus.ONLINE);
-
-                Map<String, State> map = message.getStates();
-
-                for (String channel : map.keySet()) {
-                    logger.debug("Update channel: {}, state: {}", channel, map.get(channel));
-                    updateState(new ChannelUID(getThing().getUID(), channel), map.get(channel));
-                }
+                updateThingStates(message);
 
             }
 
         } catch (RfLinkException e) {
             logger.error("Error occured during message receiving", e);
+        }
+    }
+
+    private void updateThingStates(RfLinkMessage message) {
+        Map<String, State> map = message.getStates();
+        for (String channel : map.keySet()) {
+            logger.debug("Update channel: {}, state: {}", channel, map.get(channel));
+            updateState(new ChannelUID(getThing().getUID(), channel), map.get(channel));
         }
     }
 }
