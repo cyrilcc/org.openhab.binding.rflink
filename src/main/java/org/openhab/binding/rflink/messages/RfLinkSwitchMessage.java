@@ -19,6 +19,7 @@ import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.State;
+import org.eclipse.smarthome.core.types.Type;
 import org.openhab.binding.rflink.RfLinkBindingConstants;
 import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
@@ -41,40 +42,8 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
     private static final Collection<String> KEYS = Arrays.asList(KEY_SWITCH, KEY_CMD);
     private static Logger logger = LoggerFactory.getLogger(RfLinkSwitchMessage.class);
 
-    public OnOffType command = OnOffType.OFF;
-    public Contacts contact = Contacts.CLOSED;
-
-    public enum Contacts {
-        CLOSED("OFF", OpenClosedType.CLOSED),
-        OPEN("ON", OpenClosedType.OPEN),
-        UNKNOWN("", null);
-        private final String contact;
-        private final OpenClosedType openClosedType;
-
-        Contacts(String contact, OpenClosedType openClosedType) {
-            this.contact = contact;
-            this.openClosedType = openClosedType;
-        }
-
-        public String getText() {
-            return this.contact;
-        }
-
-        public OpenClosedType getOpenClosedType() {
-            return this.openClosedType;
-        }
-
-        public static Contacts fromString(String text) {
-            if (text != null) {
-                for (Contacts c : Contacts.values()) {
-                    if (text.equalsIgnoreCase(c.contact)) {
-                        return c;
-                    }
-                }
-            }
-            return null;
-        }
-    }
+    public Type command = OnOffType.OFF;
+    public Type contact = OpenClosedType.CLOSED;
 
     public RfLinkSwitchMessage() {
     }
@@ -90,12 +59,9 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
     @Override
     public String toString() {
-        String str = "";
-
-        str += super.toString();
+        String str = super.toString();
         str += ", Command = " + command;
         str += ", Contact = " + contact;
-
         return str;
     }
 
@@ -105,12 +71,12 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
         if (values.containsKey(KEY_CMD)) {
             try {
-                command = OnOffType.valueOf(values.get(KEY_CMD));
+                command = RfLinkTypeUtils.getTypeFromStringValue(values.get(KEY_CMD));
             } catch (Exception e) {
                 logger.error("Can't convert " + values.get(KEY_CMD) + " to Switch Command", e);
             }
             try {
-                contact = Contacts.fromString(values.get(KEY_CMD));
+                contact = RfLinkTypeUtils.getSynonym(command, OpenClosedType.class);
                 if (contact == null) {
                     logger.error("Can't convert " + values.get(KEY_CMD) + " to Contact state");
                 }
@@ -133,8 +99,8 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
     @Override
     public Map<String, State> getStates() {
         Map<String, State> map = new HashMap<>();
-        map.put(RfLinkBindingConstants.CHANNEL_COMMAND, command);
-        map.put(RfLinkBindingConstants.CHANNEL_CONTACT, this.contact.getOpenClosedType());
+        map.put(RfLinkBindingConstants.CHANNEL_COMMAND, (State) command);
+        map.put(RfLinkBindingConstants.CHANNEL_CONTACT, (State) contact);
         return map;
     }
 
