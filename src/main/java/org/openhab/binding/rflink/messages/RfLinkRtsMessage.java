@@ -13,16 +13,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.smarthome.core.library.types.OnOffType;
-import org.eclipse.smarthome.core.library.types.OpenClosedType;
-import org.eclipse.smarthome.core.library.types.PercentType;
 import org.eclipse.smarthome.core.library.types.StopMoveType;
-import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.State;
 import org.eclipse.smarthome.core.types.Type;
+import org.eclipse.smarthome.core.types.UnDefType;
 import org.openhab.binding.rflink.RfLinkBindingConstants;
 import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
@@ -84,7 +81,7 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
             throws RfLinkNotImpException, RfLinkException {
         super.initializeFromChannel(config, channelUID, triggeredCommand);
         this.command = getCommandAction(channelUID.getId(), triggeredCommand);
-        this.state = getStateFromCommand();
+        this.state = (State) RfLinkTypeUtils.getOnOffTypeFromType(command);
     }
 
     @Override
@@ -96,39 +93,22 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
         return this.command.toString();
     }
 
-    public State getStateFromCommand() {
-        State state = null;
-        if (UpDownType.DOWN.equals(command) || OpenClosedType.CLOSED.equals(command) || OnOffType.OFF.equals(command)) {
-            state = UpDownType.DOWN;
-        } else if (UpDownType.UP.equals(command) || OpenClosedType.OPEN.equals(command)
-                || OnOffType.ON.equals(command)) {
-            state = UpDownType.UP;
-        }
-        return state;
-    }
-
     public Command getCommandAction(String channelId, Type type) throws RfLinkException {
         Command command = null;
         switch (channelId) {
             case RfLinkBindingConstants.CHANNEL_COMMAND:
             case RfLinkBindingConstants.CHANNEL_SHUTTER:
-                if (type instanceof OpenClosedType) {
-                    command = (type == OpenClosedType.CLOSED ? UpDownType.DOWN : UpDownType.UP);
-                } else if (type instanceof UpDownType) {
-                    command = (UpDownType) type;
-                } else if (type instanceof OnOffType) {
-                    command = (Command) type;
-                } else if (type instanceof StopMoveType) {
+                if (type instanceof StopMoveType) {
+                    // STOP action : easy to handle
                     command = StopMoveType.STOP;
-                } else if (type instanceof PercentType) {
-                    int value = ((PercentType) type).intValue();
-                    if (value > 50) {
-                        command = UpDownType.DOWN;
-                    } else {
-                        command = UpDownType.UP;
-                    }
                 } else {
-                    throw new RfLinkException("Channel " + channelId + " does not accept " + type);
+                    // try to match UP/DOWN switch type from input type
+                    Type switchType = RfLinkTypeUtils.getUpDownTypeFromType(type);
+                    if (UnDefType.UNDEF.equals(switchType)) {
+                        throw new RfLinkException("Channel " + channelId + " does not accept " + type);
+                    } else {
+                        command = (Command) switchType;
+                    }
                 }
                 break;
             default:

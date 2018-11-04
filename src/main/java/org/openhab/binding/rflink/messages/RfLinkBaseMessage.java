@@ -12,8 +12,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.smarthome.core.library.types.OnOffType;
-import org.eclipse.smarthome.core.library.types.UpDownType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.types.Command;
@@ -44,15 +42,6 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
     private static final String DEVICE_MASK = "00000000";
 
     private final static int MINIMAL_SIZE_MESSAGE = 5;
-
-    private static final Map<Command, Command> REVERSE_COMMAND_MAP = new HashMap<Command, Command>();
-
-    static {
-        REVERSE_COMMAND_MAP.put(UpDownType.DOWN, UpDownType.UP);
-        REVERSE_COMMAND_MAP.put(UpDownType.UP, UpDownType.DOWN);
-        REVERSE_COMMAND_MAP.put(OnOffType.ON, OnOffType.OFF);
-        REVERSE_COMMAND_MAP.put(OnOffType.OFF, OnOffType.ON);
-    }
 
     public String rawMessage;
     private byte seqNbr = 0;
@@ -194,7 +183,7 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
     protected Command getEffectiveCommand(Command inputCommand) {
         if (isCommandReversed) {
             // reverse the command
-            Command effectiveCommand = REVERSE_COMMAND_MAP.get(inputCommand);
+            Command effectiveCommand = (Command) RfLinkTypeUtils.getAntonym(inputCommand);
             if (effectiveCommand == null) {
                 // no reverse available : defaulting
                 return inputCommand;
