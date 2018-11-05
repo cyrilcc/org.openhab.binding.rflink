@@ -8,8 +8,8 @@
  */
 package org.openhab.binding.rflink.messages;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
@@ -38,7 +38,7 @@ public interface RfLinkMessage {
      * Procedure for encode raw data.
      *
      * @param data
-     *            Raw data.
+     *                 Raw data.
      */
     void encodeMessage(String data);
 
@@ -49,7 +49,16 @@ public interface RfLinkMessage {
      * @return bytes to be send over serial.
      */
     byte[] decodeMessage(String suffix);
-    
+
+    /**
+     * procedure to 'decode' a RfLinkMessage into a String for
+     * streaming through the gateway.
+     *
+     * @param suffix
+     * @return
+     */
+    public String decodeMessageAsString(String suffix);
+
     /**
      * Procedure to get device id.
      *
@@ -76,15 +85,15 @@ public interface RfLinkMessage {
      *
      * @return
      */
-    List<String> keys();
+    Collection<String> keys();
 
     /**
      * Get all the values in form of smarthome states
      *
      * @return
      */
-    HashMap<String, State> getStates();
-    
+    Map<String, State> getStates();
+
     /**
      * Initializes message to be transmitted
      *

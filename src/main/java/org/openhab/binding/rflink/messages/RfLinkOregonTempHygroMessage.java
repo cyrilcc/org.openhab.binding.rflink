@@ -9,14 +9,15 @@
 package org.openhab.binding.rflink.messages;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.eclipse.smarthome.core.library.types.OnOffType;
-import org.eclipse.smarthome.core.library.types.DecimalType;
-import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.library.types.DateTimeType;
+import org.eclipse.smarthome.core.library.types.DecimalType;
+import org.eclipse.smarthome.core.library.types.OnOffType;
+import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.types.Command;
@@ -37,13 +38,14 @@ public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
     private static final String KEY_HUMIDITY = "HUM";
     private static final String KEY_HUMIDITY_STATUS = "HSTATUS";
     private static final String KEY_LOW_BATTERY = "BAT";
-    private static final List<String> keys = Arrays.asList(KEY_TEMPERATURE, KEY_HUMIDITY, KEY_HUMIDITY_STATUS, KEY_LOW_BATTERY);
+    private static final Collection<String> KEYS = Arrays.asList(KEY_TEMPERATURE, KEY_HUMIDITY, KEY_HUMIDITY_STATUS,
+            KEY_LOW_BATTERY);
 
     public double temperature = 0;
     public int humidity = 0;
     public String humidity_status = "UNKNOWN";
     public Commands battery_status = Commands.OFF;
-        
+
     public enum Commands {
         OFF("OK", OnOffType.OFF),
         ON("LOW", OnOffType.ON),
@@ -76,11 +78,11 @@ public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
             }
             return null;
         }
-        
+
         public static Commands fromCommand(Command command) {
             if (command != null) {
                 for (Commands c : Commands.values()) {
-                    if (command ==c.onOffType) {
+                    if (command == c.onOffType) {
                         return c;
                     }
                 }
@@ -88,7 +90,6 @@ public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
             return null;
         }
     }
-
 
     public RfLinkOregonTempHygroMessage() {
     }
@@ -106,12 +107,11 @@ public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
     public void encodeMessage(String data) {
         super.encodeMessage(data);
 
-
         if (values.containsKey(KEY_TEMPERATURE)) {
             int temp = Integer.parseInt(values.get(KEY_TEMPERATURE), 16);
-            if ((temp & 0x8000) > 0) {  // temperature is an signed int16
+            if ((temp & 0x8000) > 0) { // temperature is an signed int16
                 temp = temp & 0x7FFF;
-                temp = 0-temp;
+                temp = 0 - temp;
             }
             temperature = temp / 10.0d;
         }
@@ -122,11 +122,21 @@ public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
 
         if (values.containsKey(KEY_HUMIDITY_STATUS)) {
             switch (Integer.parseInt(values.get(KEY_HUMIDITY_STATUS), 10)) {
-                case 0: humidity_status = "NORMAL"; break;
-                case 1: humidity_status = "COMFORT"; break;
-                case 2: humidity_status = "DRY"; break;
-                case 3: humidity_status = "WET"; break;
-                default: humidity_status = "UNKNOWN"; break;
+                case 0:
+                    humidity_status = "NORMAL";
+                    break;
+                case 1:
+                    humidity_status = "COMFORT";
+                    break;
+                case 2:
+                    humidity_status = "DRY";
+                    break;
+                case 3:
+                    humidity_status = "WET";
+                    break;
+                default:
+                    humidity_status = "UNKNOWN";
+                    break;
             }
         }
 
@@ -143,14 +153,13 @@ public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public List<String> keys() {
-        return keys;
+    public Collection<String> keys() {
+        return KEYS;
     }
 
     @Override
-    public HashMap<String, State> getStates() {
-
-        HashMap<String, State> map = new HashMap<>();
+    public Map<String, State> getStates() {
+        Map<String, State> map = new HashMap<>();
         map.put(RfLinkBindingConstants.CHANNEL_OBSERVATION_TIME, new DateTimeType(Calendar.getInstance()));
         map.put(RfLinkBindingConstants.CHANNEL_TEMPERATURE, new DecimalType(this.temperature));
         map.put(RfLinkBindingConstants.CHANNEL_HUMIDITY, new DecimalType(this.humidity));
@@ -158,26 +167,20 @@ public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
         if (this.battery_status.getOnOffType() != null) {
             map.put(RfLinkBindingConstants.CHANNEL_LOW_BATTERY, this.battery_status.getOnOffType());
         }
-
-
-
-
         return map;
     }
 
     @Override
     public String toString() {
         String str = "";
-
         str += super.toString();
         str += ", temperature = " + temperature;
         str += ", humidity = " + humidity;
         str += ", humidity status = " + humidity_status;
         str += ", low battery status = " + battery_status;
-
         return str;
     }
-    
+
     @Override
     public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command command)
             throws RfLinkNotImpException {

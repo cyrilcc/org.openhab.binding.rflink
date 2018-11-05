@@ -9,14 +9,17 @@
 package org.openhab.binding.rflink.messages;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
-import org.eclipse.smarthome.core.library.types.UpDownType;
+import org.eclipse.smarthome.core.library.types.StopMoveType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.State;
+import org.eclipse.smarthome.core.types.Type;
+import org.eclipse.smarthome.core.types.UnDefType;
 import org.openhab.binding.rflink.RfLinkBindingConstants;
 import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
@@ -30,10 +33,10 @@ import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
  */
 public class RfLinkRtsMessage extends RfLinkBaseMessage {
     private static final String KEY_RTS = "RTS";
-    private static final List<String> keys = Arrays.asList(KEY_RTS);
+    private static final Collection<String> KEYS = Arrays.asList(KEY_RTS);
 
     public Command command = null;
-    public UpDownType state = null;
+    public State state = null;
 
     public RfLinkRtsMessage() {
     }
@@ -62,13 +65,13 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public List<String> keys() {
-        return keys;
+    public Collection<String> keys() {
+        return KEYS;
     }
 
     @Override
-    public HashMap<String, State> getStates() {
-        HashMap<String, State> map = new HashMap<>();
+    public Map<String, State> getStates() {
+        Map<String, State> map = new HashMap<>();
         map.put(RfLinkBindingConstants.CHANNEL_SHUTTER, state);
         return map;
     }
@@ -77,16 +80,40 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
     public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command triggeredCommand)
             throws RfLinkNotImpException, RfLinkException {
         super.initializeFromChannel(config, channelUID, triggeredCommand);
-        command = triggeredCommand;
-        if (triggeredCommand.toFullString().equals(UpDownType.UP.toFullString())) {
-            state = UpDownType.UP;
-        } else if (triggeredCommand.toFullString().equals(UpDownType.DOWN.toFullString())) {
-            state = UpDownType.DOWN;
-        }
+        this.command = getCommandAction(channelUID.getId(), triggeredCommand);
+        this.state = (State) RfLinkTypeUtils.getOnOffTypeFromType(command);
     }
 
     @Override
-    public byte[] decodeMessage(String suffix) {
-        return super.decodeMessage("0;" + this.command.toString() + ";");        
+    public String decodeMessageAsString(String suffix) {
+        return super.decodeMessageAsString(this.command.toString());
+    }
+
+    public String getEffectiveCommand() {
+        return this.command.toString();
+    }
+
+    public Command getCommandAction(String channelId, Type type) throws RfLinkException {
+        Command command = null;
+        switch (channelId) {
+            case RfLinkBindingConstants.CHANNEL_COMMAND:
+            case RfLinkBindingConstants.CHANNEL_SHUTTER:
+                if (type instanceof StopMoveType) {
+                    // STOP action : easy to handle
+                    command = StopMoveType.STOP;
+                } else {
+                    // try to match UP/DOWN switch type from input type
+                    Type switchType = RfLinkTypeUtils.getUpDownTypeFromType(type);
+                    if (UnDefType.UNDEF.equals(switchType)) {
+                        throw new RfLinkException("Channel " + channelId + " does not accept " + type);
+                    } else {
+                        command = (Command) switchType;
+                    }
+                }
+                break;
+            default:
+                throw new RfLinkException("Channel " + channelId + " is not relevant here");
+        }
+        return getEffectiveCommand(command);
     }
 }

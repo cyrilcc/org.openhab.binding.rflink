@@ -8,6 +8,8 @@
  */
 package org.openhab.binding.rflink.config;
 
+import org.openhab.binding.rflink.RfLinkBindingConstants;
+
 /**
  * Configuration class for {@link RflinkBinding} device.
  *
@@ -23,7 +25,7 @@ public class RfLinkBridgeConfiguration {
     public String serialPort;
 
     // Serial port baud rate
-    public int baudRate;
+    public int baudRate = RfLinkBindingConstants.BAUD_RATE_DEFAULT;
 
     // Prevent unknown devices from being added to the inbox
     public boolean disableDiscovery;

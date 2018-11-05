@@ -13,20 +13,26 @@
 		<label>RFLink Somfy/RTS device</label>
 		<description>A Somfy/RTS device.</description>
 
-        <!--
-            Command: 10;RTS;123ABC;0;UP;
-            Command: 10;RTS;123ABC;0;DOWN;
-            Command: 10;RTS;123ABC;0;STOP;
+        <!-- for remote {1} with adress {123ABC}
+            Command: 10;RTS;123ABC;1;UP;
+            Command: 10;RTS;123ABC;1;DOWN;
+            Command: 10;RTS;123ABC;1;STOP;
         -->
 		<channels>
-			<channel id="command" typeId="shutter" />
+			<channel id="command" typeId="command" />
+            <channel id="shutter" typeId="shutter" />
 		</channels>
 
 		<config-description>
 			<parameter name="deviceId" type="text" required="true">
 				<label>Device Id</label>
-				<description>Device Id. Protocol + address; RTS-123abc</description>
+				<description>Must contain the Protocol + Address + EPROM index (using '-' as separator). For instance : RTS-123ABC-1</description>
 			</parameter>
+			
+            <parameter name="isCommandReversed" type="boolean" required="false">
+                <label>Reverse Command</label>
+                <description>Enable in case thing commands works up-side-down</description>
+            </parameter>
 		</config-description>
 	</thing-type>
 

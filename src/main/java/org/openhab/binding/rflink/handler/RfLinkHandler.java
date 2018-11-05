@@ -9,7 +9,7 @@
 package org.openhab.binding.rflink.handler;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RfLinkHandler extends BaseThingHandler implements DeviceMessageListener {
 
+    public static final int TIME_BETWEEN_COMMANDS = 50;
     private Logger logger = LoggerFactory.getLogger(RfLinkHandler.class);
 
     private RfLinkBridgeHandler bridgeHandler;
@@ -60,16 +61,18 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
                 // Not supported
             } else {
                 try {
-                    RfLinkMessage msg = RfLinkMessageFactory
+                    RfLinkMessage message = RfLinkMessageFactory
                             .createMessageForSendingToThing(getThing().getThingTypeUID());
-                    msg.initializeFromChannel(getConfigAs(RfLinkDeviceConfiguration.class), channelUID, command);
+                    message.initializeFromChannel(getConfigAs(RfLinkDeviceConfiguration.class), channelUID, command);
+                    updateThingStates(message);
                     int repeats = 1;
                     if (getThing().getConfiguration().containsKey("repeats")) {
                         repeats = ((BigDecimal) getThing().getConfiguration().get("repeats")).intValue();
                     }
                     repeats = Math.min(Math.max(repeats, 1), 20);
                     for (int i = 0; i < repeats; i++) {
-                        bridgeHandler.sendMessage(msg);
+                        waitBeforeCommandExecution(i);
+                        bridgeHandler.sendMessage(message);
                     }
                 } catch (RfLinkNotImpException e) {
                     logger.error("Message not supported: {}", e.getMessage());
@@ -80,14 +83,22 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
         }
     }
 
+    private void waitBeforeCommandExecution(int i) {
+        if (i > 0) {
+            try {
+                Thread.sleep(TIME_BETWEEN_COMMANDS);
+            } catch (InterruptedException e) {
+                logger.error("Sleep time between command repeat ended in error", e);
+            }
+        }
+    }
+
     /**
      */
     @Override
     public void initialize() {
         config = getConfigAs(RfLinkDeviceConfiguration.class);
-
         logger.debug("Initializing thing {}, deviceId={}", getThing().getUID(), config.deviceId);
-
         initializeBridge((getBridge() == null) ? null : getBridge().getHandler(),
                 (getBridge() == null) ? null : getBridge().getStatus());
     }
@@ -141,18 +152,20 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
                 logger.debug("Message from bridge {} from device [{}] type [{}] matched", bridge.toString(), id,
                         message.getClass().getSimpleName());
                 updateStatus(ThingStatus.ONLINE);
-
-                HashMap<String, State> map = message.getStates();
-
-                for (String channel : map.keySet()) {
-                    logger.debug("Update channel: {}, state: {}", channel, map.get(channel));
-                    updateState(new ChannelUID(getThing().getUID(), channel), map.get(channel));
-                }
+                updateThingStates(message);
 
             }
 
         } catch (RfLinkException e) {
             logger.error("Error occured during message receiving", e);
+        }
+    }
+
+    private void updateThingStates(RfLinkMessage message) {
+        Map<String, State> map = message.getStates();
+        for (String channel : map.keySet()) {
+            logger.debug("Update channel: {}, state: {}", channel, map.get(channel));
+            updateState(new ChannelUID(getThing().getUID(), channel), map.get(channel));
         }
     }
 }
