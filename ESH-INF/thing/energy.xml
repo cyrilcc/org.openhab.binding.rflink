@@ -19,9 +19,6 @@
             <channel id="totalUsage" typeId="totalusage" />
             <channel id="instantAmp" typeId="instantamp" />
             <channel id="totalAmpHours" typeId="totalamphours" />
-            <channel id="signalLevel" typeId="system.signal-strength" />
-            <channel id="batteryLevel" typeId="system.battery-level" />
-            <channel id="lowBattery" typeId="system.low-battery" />
         </channels>
 		
 		<config-description>
