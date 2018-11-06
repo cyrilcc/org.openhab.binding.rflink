@@ -111,7 +111,7 @@
 		<item-type>Number</item-type>
 		<label>Temperature</label>
 		<description>Current temperature in degree Celsius</description>
-		<state pattern="%d °C" readOnly="true"></state>
+		<state pattern="%.1f °C" readOnly="true"></state>
 	</channel-type>
 
 	<channel-type id="humidity">
@@ -160,7 +160,7 @@
 		<item-type>Number</item-type>
 		<label>Wind Speed</label>
 		<description>Wind speed in km per hour</description>
-		<state pattern="%d km/h" readOnly="true"></state>
+		<state pattern="%.1f km/h" readOnly="true"></state>
 	</channel-type>
 
 	<channel-type id="winddirection">
