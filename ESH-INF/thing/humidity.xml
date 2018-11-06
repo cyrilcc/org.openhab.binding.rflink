@@ -15,7 +15,6 @@
 		<!-- Sample: 2018-03-05 21:15:33 - 20;25;Auriol V3;ID=A901;TEMP=00cf;HUM=38; -->
 		<channels>
 			<channel id="humidity" typeId="humidity" />
-			<channel id="lowBattery" typeId="system.low-battery" />
 		</channels>
 
 		<config-description>
