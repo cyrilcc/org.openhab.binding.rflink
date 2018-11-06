@@ -12,11 +12,11 @@
 		<description>Command channel</description>
 	</channel-type>
 
-    <channel-type id="color">
-        <item-type>Color</item-type>
-        <label>Color</label>
-        <description>Color channel</description>
-    </channel-type>
+	<channel-type id="color">
+		<item-type>Color</item-type>
+		<label>Color</label>
+		<description>Color channel</description>
+	</channel-type>
 
 	<channel-type id="contact">
 		<item-type>Contact</item-type>
@@ -128,7 +128,7 @@
 		<state readOnly="true"></state>
 	</channel-type>
 
-        <channel-type id="humiditystatus" advanced="true">
+	<channel-type id="humiditystatus" advanced="true">
 		<item-type>String</item-type>
 		<label>Humidity Status</label>
 		<description>Current humidity status</description>
