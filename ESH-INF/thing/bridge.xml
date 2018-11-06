@@ -13,16 +13,16 @@
 				<label>Serial Port</label>
 				<description>Serial port where RFLink transceiver is connected.</description>
 			</parameter>
-			
+
 			<parameter name="baudRate" type="integer" required="false">
 				<label>Baud Rate</label>
 				<description>Serial port baud rate (default is 57600).</description>
-		   	 </parameter>
+			</parameter>
 
-		  	<parameter name="disableDiscovery" type="boolean" required="true">
+			<parameter name="disableDiscovery" type="boolean" required="true">
 				<label>Disable Discovery</label>
 				<description>Set true if it should not discover to Inbox.</description>
-		   	</parameter>
+			</parameter>
 		</config-description>
 	</bridge-type>
 
