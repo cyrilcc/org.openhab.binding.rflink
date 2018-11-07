@@ -71,7 +71,6 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
                     }
                     repeats = Math.min(Math.max(repeats, 1), 20);
                     for (int i = 0; i < repeats; i++) {
-                        waitBeforeCommandExecution(i);
                         bridgeHandler.sendMessage(message);
                     }
                 } catch (RfLinkNotImpException e) {
@@ -79,16 +78,6 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
                 } catch (RfLinkException e) {
                     logger.error("Transmitting error: {}", e.getMessage());
                 }
-            }
-        }
-    }
-
-    private void waitBeforeCommandExecution(int i) {
-        if (i > 0) {
-            try {
-                Thread.sleep(TIME_BETWEEN_COMMANDS);
-            } catch (InterruptedException e) {
-                logger.error("Sleep time between command repeat ended in error", e);
             }
         }
     }
