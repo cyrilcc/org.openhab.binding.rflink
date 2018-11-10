@@ -27,14 +27,6 @@ import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
 public interface RfLinkMessage {
 
     /**
-     * Procedure for present class information in string format. Used for
-     * logging purposes.
-     *
-     */
-    @Override
-    String toString();
-
-    /**
      * Procedure for encode raw data.
      *
      * @param data

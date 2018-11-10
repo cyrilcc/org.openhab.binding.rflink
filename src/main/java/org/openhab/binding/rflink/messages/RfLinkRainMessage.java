@@ -55,10 +55,10 @@ public class RfLinkRainMessage extends RfLinkBaseMessage {
     public void encodeMessage(String data) {
         super.encodeMessage(data);
         if (values.containsKey(KEY_RAIN)) {
-            rain = Integer.parseInt(values.get(KEY_RAIN), 16) / 10.0f;
+            rain = RfLinkDataParser.parseHexaToUnsignedInt(values.get(KEY_RAIN));
         }
         if (values.containsKey(KEY_RAIN_RATE)) {
-            rainRate = Integer.parseInt(values.get(KEY_RAIN_RATE), 16) / 10.0f;
+            rainRate = RfLinkDataParser.parseHexaToUnsignedInt(values.get(KEY_RAIN));
         }
     }
 

@@ -60,31 +60,26 @@ public class RfLinkWindMessage extends RfLinkBaseMessage {
 
     @Override
     public void encodeMessage(String data) {
-
         super.encodeMessage(data);
-
         if (values.containsKey(KEY_WIND_SPEED)) {
-            windSpeed = Integer.parseInt(values.get(KEY_WIND_SPEED), 16);
+            // should be DECIMAL
+            windSpeed = RfLinkDataParser.parseHexaToUnsignedInt(values.get(KEY_WIND_SPEED));
         }
-
         if (values.containsKey(KEY_AVERAGE_WIND_SPEED)) {
-            averageWindSpeed = Integer.parseInt(values.get(KEY_AVERAGE_WIND_SPEED), 16) / 10.0f;
+            averageWindSpeed = RfLinkDataParser.parseHexaToUnsignedDecimal(values.get(KEY_AVERAGE_WIND_SPEED));
         }
-
         if (values.containsKey(KEY_WIND_DIRECTION)) {
-            windDirection = RfLinkDataParser.parseWindDirection(values.get(KEY_WIND_DIRECTION));
+            windDirection = RfLinkDataParser.parseIntTo360Direction(values.get(KEY_WIND_DIRECTION));
         }
-
         if (values.containsKey(KEY_W_DIRECTION)) {
-            windDirection = Integer.parseInt(values.get(KEY_W_DIRECTION), 16);
+            windDirection = RfLinkDataParser.parseHexaToUnsignedInt(values.get(KEY_W_DIRECTION));
         }
-
         if (values.containsKey(KEY_WIND_GUST)) {
-            windGust = Integer.parseInt(values.get(KEY_WIND_GUST), 16);
+            // sould be DECIMAL
+            windGust = RfLinkDataParser.parseHexaToUnsignedInt(values.get(KEY_WIND_GUST));
         }
-
         if (values.containsKey(KEY_WIND_CHILL)) {
-            windChill = RfLinkDataParser.parseTemperature(values.get(KEY_WIND_CHILL));
+            windChill = RfLinkDataParser.parseHexaToSignedDecimal(values.get(KEY_WIND_CHILL));
         }
 
     }

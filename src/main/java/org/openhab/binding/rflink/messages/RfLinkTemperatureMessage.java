@@ -51,12 +51,7 @@ public class RfLinkTemperatureMessage extends RfLinkBaseMessage {
         super.encodeMessage(data);
 
         if (values.containsKey(KEY_TEMPERATURE)) {
-            int temp = Integer.parseInt(values.get(KEY_TEMPERATURE), 16);
-            if ((temp & 0x8000) > 0) { // temperature is an signed int16
-                temp = temp & 0x7FFF;
-                temp = 0 - temp;
-            }
-            temperature = temp / 10.0d;
+            temperature = RfLinkDataParser.parseHexaToSignedDecimal(values.get(KEY_TEMPERATURE));
         }
     }
 

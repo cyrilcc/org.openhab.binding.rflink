@@ -74,12 +74,12 @@ public class RfLinkEnergyMessage extends RfLinkBaseMessage {
 
         // all usage is reported in Watts based on 230V
         if (values.containsKey(KEY_INSTANT_POWER)) {
-            instantPower = Integer.parseInt(values.get(KEY_INSTANT_POWER), 16);
+            instantPower = RfLinkDataParser.parseHexaToUnsignedInt(values.get(KEY_INSTANT_POWER));
             instantAmps = instantPower / WATTS_TO_AMPS_CONVERSION_FACTOR;
         }
 
         if (values.containsKey(KEY_TOTAL_POWER)) {
-            totalUsage = Integer.parseInt(values.get(KEY_TOTAL_POWER), 16);
+            totalUsage = RfLinkDataParser.parseHexaToUnsignedInt(values.get(KEY_TOTAL_POWER));
             totalAmpHours = totalUsage / WATTS_TO_AMPS_CONVERSION_FACTOR;
         }
 
