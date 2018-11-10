@@ -16,5 +16,5 @@ deploy:
   skip_cleanup: true
   on:
     repo: cartemere/org.openhab.binding.rflink
-  name: Travis Build '#'${TRAVIS_BUILD_NUMBER} $(date +'%d.%m.%Y %R') - v${project_version}
-  body: Travis Build '#'${TRAVIS_BUILD_NUMBER} at ${TRAVIS_BUILD_WEB_URL} Commit Id '#'${TRAVIS_COMMIT} Commit Message ${TRAVIS_COMMIT_MESSAGE}  Commits Included '#'${TRAVIS_COMMIT_RANGE} Output path ${project_output_jar}
+  name: Travis Build ${TRAVIS_BUILD_NUMBER} - $(date +'%d.%m.%Y %R') - v${project_version}
+  body: Travis Build ${TRAVIS_BUILD_NUMBER} at ${TRAVIS_BUILD_WEB_URL} Commit Id ${TRAVIS_COMMIT} Commit Message ${TRAVIS_COMMIT_MESSAGE} Commits Included ${TRAVIS_COMMIT_RANGE} Output path ${project_output_jar}
