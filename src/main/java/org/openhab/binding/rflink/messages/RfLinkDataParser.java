@@ -15,32 +15,42 @@ package org.openhab.binding.rflink.messages;
  */
 public class RfLinkDataParser {
 
-    // TODO needs to be tested
-    /**
-     * Parse temperature
-     *
-     * @param value Temperature (hexadecimal string) high bit contains negative sign, needs division by 10 (0xC0 = 192
-     *            decimal = 19.2 degrees)
-     * @return the temperature in Celcius degrees
-     */
-    public static double parseTemperature(String value) {
+    public static final int BASE_TEN = 10;
+    public static final int BASE_HEXA = 16;
 
-        int iValue = Integer.parseInt(value, 16);
-        float negativeSignCoef = ((iValue & 0x80) > 0) ? -10.0f : 10.0f;
-
-        return (iValue & 0x7F) / negativeSignCoef;
+    public static int parseToInt(String value) {
+        return Integer.parseInt(value, BASE_TEN);
     }
 
-    // TODO needs to be tested
+    public static int parseHexaToUnsignedInt(String value) {
+        return Integer.parseInt(value, BASE_HEXA);
+    }
+
+    public static int parseHexaToSignedInt(String value) {
+        int iValue = parseHexaToUnsignedInt(value);
+        if ((iValue & 0x8000) > 0) {
+            return (iValue & 0x7FFF) / -1;
+        } else {
+            return (iValue & 0x7FFF);
+        }
+    }
+
+    public static double parseHexaToSignedDecimal(String value) {
+        return parseHexaToSignedInt(value) / 10.0d;
+    }
+
+    public static double parseHexaToUnsignedDecimal(String value) {
+        return parseHexaToUnsignedInt(value) / 10.0d;
+    }
+
     /**
      * Parse Wind Direction
      *
      * @param value Wind direction (integer value from 0-15) reflecting 0-360 degrees in 22.5 degree steps
      * @return the wind direction in degrees
      */
-    public static double parseWindDirection(String value) {
-
-        return Integer.parseInt(value, 10) * 22.5f;
+    public static double parseIntTo360Direction(String value) {
+        return parseToInt(value) * 22.5d;
     }
 
 }

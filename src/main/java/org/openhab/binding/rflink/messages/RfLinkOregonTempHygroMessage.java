@@ -37,9 +37,9 @@ public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
     private static final String KEY_TEMPERATURE = "TEMP";
     private static final String KEY_HUMIDITY = "HUM";
     private static final String KEY_HUMIDITY_STATUS = "HSTATUS";
-    private static final String KEY_LOW_BATTERY = "BAT";
+    private static final String KEY_BATTERY = "BAT";
     private static final Collection<String> KEYS = Arrays.asList(KEY_TEMPERATURE, KEY_HUMIDITY, KEY_HUMIDITY_STATUS,
-            KEY_LOW_BATTERY);
+            KEY_BATTERY);
 
     public double temperature = 0;
     public int humidity = 0;
@@ -108,16 +108,11 @@ public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
         super.encodeMessage(data);
 
         if (values.containsKey(KEY_TEMPERATURE)) {
-            int temp = Integer.parseInt(values.get(KEY_TEMPERATURE), 16);
-            if ((temp & 0x8000) > 0) { // temperature is an signed int16
-                temp = temp & 0x7FFF;
-                temp = 0 - temp;
-            }
-            temperature = temp / 10.0d;
+            temperature = RfLinkDataParser.parseHexaToSignedDecimal(values.get(KEY_TEMPERATURE));
         }
 
         if (values.containsKey(KEY_HUMIDITY)) {
-            humidity = Integer.parseInt(values.get(KEY_HUMIDITY), 10);
+            humidity = RfLinkDataParser.parseToInt(values.get(KEY_HUMIDITY));
         }
 
         if (values.containsKey(KEY_HUMIDITY_STATUS)) {
@@ -140,11 +135,11 @@ public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
             }
         }
 
-        if (values.containsKey(KEY_LOW_BATTERY)) {
+        if (values.containsKey(KEY_BATTERY)) {
             try {
-                battery_status = Commands.fromString(values.get(KEY_LOW_BATTERY));
+                battery_status = Commands.fromString(values.get(KEY_BATTERY));
                 if (battery_status == null) {
-                    throw new RfLinkException("Can't convert " + values.get(KEY_LOW_BATTERY) + " to Switch Command");
+                    throw new RfLinkException("Can't convert " + values.get(KEY_BATTERY) + " to Switch Command");
                 }
             } catch (Exception e) {
                 battery_status = Commands.UNKNOWN;
