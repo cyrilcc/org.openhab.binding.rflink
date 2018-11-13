@@ -188,15 +188,6 @@ public class RfLinkColorMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public Collection<byte[]> decodeByteMessages(String suffix) {
-        Collection<byte[]> byteMessages = new ArrayList<byte[]>();
-        Collection<String> messagesAsString = decodeMessagesAsString(suffix);
-        for (String messageAsString : messagesAsString) {
-            byteMessages.add((messageAsString + NEW_LINE).getBytes());
-        }
-        return byteMessages;
-    }
-
     public Collection<String> decodeMessagesAsString(String suffix) {
         logger.debug("Color decodeMessage: command={}, stateColor={}, stateOnOff={}", command, stateColor, stateOnOff);
 

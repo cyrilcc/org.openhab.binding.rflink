@@ -35,7 +35,6 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
     public final static String FIELDS_DELIMITER = ";";
     public final static String VALUE_DELIMITER = "=";
     public final static String ID_DELIMITER = "-";
-    public final static String NEW_LINE = "\n";
 
     private final static String NODE_NUMBER_FROM_GATEWAY = "20";
     private final static String NODE_NUMBER_TO_GATEWAY = "10";
@@ -143,11 +142,8 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
     }
 
     @Override
-    public Collection<byte[]> decodeByteMessages(String suffix) {
-        // delegate message generation to decodeMessage function
-        String action = getCommandSuffix(suffix);
-        byte[] byteMessage = (decodeMessageAsString(action) + NEW_LINE).getBytes();
-        return Collections.singleton(byteMessage);
+    public Collection<String> decodeMessagesAsString(String suffix) {
+        return Collections.singleton(decodeMessageAsString(getCommandSuffix(suffix)));
     }
 
     // to override in subClasses if needed

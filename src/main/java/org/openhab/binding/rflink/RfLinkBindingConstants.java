@@ -35,6 +35,8 @@ public class RfLinkBindingConstants {
 
     public final static ThingTypeUID BRIDGE_MANUAL = new ThingTypeUID(BINDING_ID, BRIDGE_TYPE_MANUAL_BRIDGE);
 
+    public final static String NEW_LINE = "\n";
+
     /**
      * Presents all supported Bridge types by RFLink binding.
      */
