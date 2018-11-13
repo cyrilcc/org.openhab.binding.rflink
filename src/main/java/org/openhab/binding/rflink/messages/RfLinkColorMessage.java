@@ -188,7 +188,7 @@ public class RfLinkColorMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public Collection<String> decodeMessagesAsString(String suffix) {
+    public Collection<String> buildMessages() {
         logger.debug("Color decodeMessage: command={}, stateColor={}, stateOnOff={}", command, stateColor, stateOnOff);
 
         if (command == null) {
@@ -227,9 +227,9 @@ public class RfLinkColorMessage extends RfLinkBaseMessage {
         }
 
         Collection<String> messages = new ArrayList<String>();
-        messages.add(super.decodeMessageAsString(rgbw + ";" + cmdString));
+        messages.add(super.buildMessage(rgbw + ";" + cmdString));
         if (sendBright) {
-            messages.add(super.decodeMessageAsString(rgbw + ";BRIGHT"));
+            messages.add(super.buildMessage(rgbw + ";BRIGHT"));
         }
         return messages;
     }

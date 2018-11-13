@@ -85,7 +85,7 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public String getCommandSuffix(String baseSuffix) {
+    public String getCommandSuffix() {
         return this.command.toString();
     }
 

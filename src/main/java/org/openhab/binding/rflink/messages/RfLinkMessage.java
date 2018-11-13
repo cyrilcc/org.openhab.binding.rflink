@@ -37,11 +37,9 @@ public interface RfLinkMessage {
     /**
      * Procedure generate message[s] to send to the bridge
      *
-     *
-     * @param additional data to be appended to the message.
      * @return Collection of String messages to be send over serial. Several elements in case of composite command
      */
-    public Collection<String> decodeMessagesAsString(String suffix);
+    public Collection<String> buildMessages();
 
     /**
      * Procedure to get device id.
