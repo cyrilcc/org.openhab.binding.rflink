@@ -9,6 +9,7 @@
 package org.openhab.binding.rflink.messages;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -142,11 +143,18 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
     }
 
     @Override
-    public byte[] decodeMessage(String suffix) {
-        return (decodeMessageAsString(suffix) + NEW_LINE).getBytes();
+    public Collection<byte[]> decodeByteMessages(String suffix) {
+        // delegate message generation to decodeMessage function
+        String action = getCommandSuffix(suffix);
+        byte[] byteMessage = (decodeMessageAsString(action) + NEW_LINE).getBytes();
+        return Collections.singleton(byteMessage);
     }
 
-    @Override
+    // to override in subClasses if needed
+    public String getCommandSuffix(String baseSuffix) {
+        return baseSuffix;
+    }
+
     public String decodeMessageAsString(String suffix) {
         // prepare data
         String[] deviceIdParts = this.deviceId.split(ID_DELIMITER, 2);

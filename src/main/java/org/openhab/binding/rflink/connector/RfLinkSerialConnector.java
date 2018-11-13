@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -144,28 +145,30 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
     }
 
     @Override
-    public void sendMessage(byte[] data) throws IOException {
+    public void sendMessages(Collection<byte[]> messagesData) throws IOException {
         if (output == null) {
             throw new IOException("Not connected, sending messages is not possible");
         }
 
         synchronized (this) {
-            long towait = SEND_DELAY - (System.currentTimeMillis() - lastSend);
-            towait = Math.min(Math.max(towait, 0), SEND_DELAY);
 
-            logger.debug("Send data (after {}ms, len={}): {}", towait, data.length,
-                    DatatypeConverter.printHexBinary(data));
-            if (towait > 0) {
-                try {
-                    Thread.sleep(towait);
-                } catch (InterruptedException ignore) {
+            for (byte[] messageData : messagesData) {
+                long towait = SEND_DELAY - (System.currentTimeMillis() - lastSend);
+                towait = Math.min(Math.max(towait, 0), SEND_DELAY);
+
+                logger.debug("Send data (after {}ms, len={}): {}", towait, messageData.length,
+                        DatatypeConverter.printHexBinary(messageData));
+                if (towait > 0) {
+                    try {
+                        Thread.sleep(towait);
+                    } catch (InterruptedException ignore) {
+                    }
                 }
+
+                output.write(messageData);
+                output.flush();
+                lastSend = System.currentTimeMillis();
             }
-
-            output.write(data);
-            output.flush();
-            lastSend = System.currentTimeMillis();
-
         }
     }
 

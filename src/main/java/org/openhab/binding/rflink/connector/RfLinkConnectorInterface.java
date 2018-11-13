@@ -9,6 +9,7 @@
 package org.openhab.binding.rflink.connector;
 
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * This interface defines interface to communicate RFLink controller.
@@ -21,8 +22,8 @@ public interface RfLinkConnectorInterface {
      * Procedure for connecting to RFLink controller.
      *
      * @param device
-     *            Controller connection parameters (e.g. serial port name or IP
-     *            address).
+     *                   Controller connection parameters (e.g. serial port name or IP
+     *                   address).
      */
     public void connect(String device, int baudRate) throws Exception;
 
@@ -34,17 +35,18 @@ public interface RfLinkConnectorInterface {
 
     /**
      * Procedure for send raw data to RFLink controller.
+     * Can handle multiple messages at a time (for composite commands)
      *
      * @param data
-     *            raw bytes.
+     *                 raw bytes.
      */
-    public void sendMessage(byte[] data) throws IOException;
+    public void sendMessages(Collection<byte[]> messagesData) throws IOException;
 
     /**
      * Procedure for register event listener.
      *
      * @param listener
-     *            Event listener instance to handle events.
+     *                     Event listener instance to handle events.
      */
     public void addEventListener(RfLinkEventListener listener);
 
@@ -52,7 +54,7 @@ public interface RfLinkConnectorInterface {
      * Procedure for remove event listener.
      *
      * @param listener
-     *            Event listener instance to remove.
+     *                     Event listener instance to remove.
      */
     public void removeEventListener(RfLinkEventListener listener);
 

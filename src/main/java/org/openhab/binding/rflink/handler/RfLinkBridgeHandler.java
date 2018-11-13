@@ -73,7 +73,7 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
             while (!queue.isEmpty()) {
                 RfLinkMessage msg = queue.poll();
                 logger.debug("Transmitting message '{}'", msg);
-                connector.sendMessage(msg.decodeMessage(""));
+                connector.sendMessages(msg.decodeByteMessages(""));
             }
         }
     }
