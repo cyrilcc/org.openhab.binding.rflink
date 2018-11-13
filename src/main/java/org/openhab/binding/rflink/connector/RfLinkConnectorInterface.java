@@ -34,13 +34,13 @@ public interface RfLinkConnectorInterface {
     public void disconnect();
 
     /**
-     * Procedure for send raw data to RFLink controller.
+     * Procedure for sending messages data to RFLink controller.
      * Can handle multiple messages at a time (for composite commands)
      *
      * @param data
      *                 raw bytes.
      */
-    public void sendMessages(Collection<byte[]> messagesData) throws IOException;
+    public void sendMessages(Collection<String> messagesData) throws IOException;
 
     /**
      * Procedure for register event listener.

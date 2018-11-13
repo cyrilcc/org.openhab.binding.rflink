@@ -21,6 +21,7 @@ import java.util.List;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.io.IOUtils;
+import org.openhab.binding.rflink.RfLinkBindingConstants;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,17 +146,18 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
     }
 
     @Override
-    public void sendMessages(Collection<byte[]> messagesData) throws IOException {
+    public void sendMessages(Collection<String> messages) throws IOException {
         if (output == null) {
             throw new IOException("Not connected, sending messages is not possible");
         }
 
         synchronized (this) {
 
-            for (byte[] messageData : messagesData) {
+            for (String message : messages) {
                 long towait = SEND_DELAY - (System.currentTimeMillis() - lastSend);
                 towait = Math.min(Math.max(towait, 0), SEND_DELAY);
 
+                byte[] messageData = (message + RfLinkBindingConstants.NEW_LINE).getBytes();
                 logger.debug("Send data (after {}ms, len={}): {}", towait, messageData.length,
                         DatatypeConverter.printHexBinary(messageData));
                 if (towait > 0) {
