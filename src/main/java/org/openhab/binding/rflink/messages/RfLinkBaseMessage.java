@@ -142,16 +142,16 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
     }
 
     @Override
-    public Collection<String> decodeMessagesAsString(String suffix) {
-        return Collections.singleton(decodeMessageAsString(getCommandSuffix(suffix)));
+    public Collection<String> buildMessages() {
+        return Collections.singleton(buildMessage(getCommandSuffix()));
     }
 
     // to override in subClasses if needed
-    public String getCommandSuffix(String baseSuffix) {
-        return baseSuffix;
+    public String getCommandSuffix() {
+        return null;
     }
 
-    public String decodeMessageAsString(String suffix) {
+    public String buildMessage(String suffix) {
         // prepare data
         String[] deviceIdParts = this.deviceId.split(ID_DELIMITER, 2);
         String channel = deviceIdParts[0];

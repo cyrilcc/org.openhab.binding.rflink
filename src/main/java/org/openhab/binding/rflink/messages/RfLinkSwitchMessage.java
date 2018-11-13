@@ -112,7 +112,7 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public String getCommandSuffix(String suffix) {
+    public String getCommandSuffix() {
         return this.command.toFullString();
     }
 
