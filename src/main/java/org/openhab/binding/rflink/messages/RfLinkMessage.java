@@ -35,21 +35,13 @@ public interface RfLinkMessage {
     void encodeMessage(String data);
 
     /**
-     * Procedure to decode back into serial message
+     * Procedure to decode back into serial message[s]
+     *
      *
      * @param additional data to be appended to the message.
-     * @return bytes to be send over serial.
+     * @return Collection of byte[] to be send over serial. Several elements in case of composite command
      */
-    byte[] decodeMessage(String suffix);
-
-    /**
-     * procedure to 'decode' a RfLinkMessage into a String for
-     * streaming through the gateway.
-     *
-     * @param suffix
-     * @return
-     */
-    public String decodeMessageAsString(String suffix);
+    public Collection<byte[]> decodeByteMessages(String suffix);
 
     /**
      * Procedure to get device id.

@@ -85,11 +85,7 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public String decodeMessageAsString(String suffix) {
-        return super.decodeMessageAsString(this.command.toString());
-    }
-
-    public String getEffectiveCommand() {
+    public String getCommandSuffix(String baseSuffix) {
         return this.command.toString();
     }
 
