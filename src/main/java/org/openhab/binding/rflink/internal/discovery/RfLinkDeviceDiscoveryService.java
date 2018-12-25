@@ -72,16 +72,14 @@ public class RfLinkDeviceDiscoveryService extends AbstractDiscoveryService imple
 
             ThingTypeUID uid = msg.getThingType();
             ThingUID thingUID = new ThingUID(uid, bridge, id.replace(RfLinkBaseMessage.ID_DELIMITER, "_"));
-            if (thingUID != null) {
-                if (!bridgeHandler.getConfiguration().disableDiscovery) {
-                    logger.trace("Adding new RfLink {} with id '{}' to smarthome inbox", thingUID, id);
-                    String deviceType = msg.getDeviceName();
-                    DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(deviceType)
-                            .withProperty(RfLinkBindingConstants.DEVICE_ID, msg.getDeviceId()).withBridge(bridge).build();
-                    thingDiscovered(discoveryResult);
-                } else {
-                    logger.trace("Ignoring RfLink {} with id '{}' - discovery disabled", thingUID, id);
-                }
+            if (!bridgeHandler.getConfiguration().disableDiscovery) {
+                logger.trace("Adding new RfLink {} with id '{}' to smarthome inbox", thingUID, id);
+                String deviceType = msg.getDeviceName();
+                DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(thingUID).withLabel(deviceType)
+                        .withProperty(RfLinkBindingConstants.DEVICE_ID, msg.getDeviceId()).withBridge(bridge).build();
+                thingDiscovered(discoveryResult);
+            } else {
+                logger.trace("Ignoring RfLink {} with id '{}' - discovery disabled", thingUID, id);
             }
         } catch (Exception e) {
             logger.debug("Error occured during device discovery", e);

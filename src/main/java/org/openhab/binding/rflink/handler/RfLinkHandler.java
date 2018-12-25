@@ -11,6 +11,7 @@ package org.openhab.binding.rflink.handler;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -88,14 +89,23 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
     public void initialize() {
         config = getConfigAs(RfLinkDeviceConfiguration.class);
         logger.debug("Initializing thing {}, deviceId={}", getThing().getUID(), config.deviceId);
-        initializeBridge((getBridge() == null) ? null : getBridge().getHandler(),
-                (getBridge() == null) ? null : getBridge().getStatus());
+        Bridge currentBridge = getBridge();
+        if (currentBridge == null) {
+            initializeBridge(null, null);
+        } else {
+            initializeBridge(currentBridge.getHandler(), currentBridge.getStatus());
+        }
     }
 
     @Override
     public void bridgeStatusChanged(ThingStatusInfo bridgeStatusInfo) {
         logger.debug("bridgeStatusChanged {} for thing {}", bridgeStatusInfo, getThing().getUID());
-        initializeBridge((getBridge() == null) ? null : getBridge().getHandler(), bridgeStatusInfo.getStatus());
+        Bridge currentBridge = getBridge();
+        if (currentBridge == null) {
+            initializeBridge(null, bridgeStatusInfo.getStatus());
+        } else {
+            initializeBridge(currentBridge.getHandler(), bridgeStatusInfo.getStatus());
+        }
     }
 
     private void initializeBridge(ThingHandler thingHandler, ThingStatus bridgeStatus) {
