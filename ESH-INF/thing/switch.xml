@@ -18,6 +18,7 @@
 		<channels>
 			<channel id="command" typeId="command" />
 			<channel id="contact" typeId="contact" />
+			<channel id="dimminglevel" typeId="dimminglevel" />
 		</channels>
 
 		<config-description>

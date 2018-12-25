@@ -102,7 +102,7 @@ public class RfLinkTypeUtils {
                 return type;
             }
         }
-        return UnDefType.NULL;
+        return UnDefType.UNDEF;
     }
 
     /**
@@ -151,6 +151,10 @@ public class RfLinkTypeUtils {
             }
         }
         return false;
+    }
+
+    public static boolean isNullOrUndef(Type type) {
+        return type == null || UnDefType.UNDEF.equals(type) || UnDefType.NULL.equals(type);
     }
 
 }

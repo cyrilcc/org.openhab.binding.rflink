@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.OpenClosedType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -38,12 +39,14 @@ import org.slf4j.LoggerFactory;
 public class RfLinkSwitchMessage extends RfLinkBaseMessage {
     private static final String KEY_SWITCH = "SWITCH";
     private static final String KEY_CMD = "CMD";
+    private static final String VALUE_DIMMING_PREFIX = "SET_LEVEL";
 
     private static final Collection<String> KEYS = Arrays.asList(KEY_SWITCH, KEY_CMD);
     private static Logger logger = LoggerFactory.getLogger(RfLinkSwitchMessage.class);
 
     public Type command = OnOffType.OFF;
     public Type contact = OpenClosedType.CLOSED;
+    public Integer dimming = null;
 
     public RfLinkSwitchMessage() {
     }
@@ -70,25 +73,34 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
         super.encodeMessage(data);
 
         if (values.containsKey(KEY_CMD)) {
-            try {
-                command = RfLinkTypeUtils.getTypeFromStringValue(values.get(KEY_CMD));
-            } catch (Exception e) {
-                logger.error("Can't convert " + values.get(KEY_CMD) + " to Switch Command", e);
-            }
-            try {
-                contact = RfLinkTypeUtils.getSynonym(command, OpenClosedType.class);
-                if (contact == null) {
-                    logger.error("Can't convert " + values.get(KEY_CMD) + " to Contact state");
-                }
-            } catch (Exception e) {
-                contact = null;
-            }
+            command = RfLinkTypeUtils.getTypeFromStringValue(values.get(KEY_CMD));
+            contact = RfLinkTypeUtils.getSynonym(command, OpenClosedType.class);
 
+            if (RfLinkTypeUtils.isNullOrUndef(command)) {
+                dimming = getDimmingValue(values.get(KEY_CMD));
+            }
         }
 
         if (values.containsKey(KEY_SWITCH)) {
             this.deviceId += ID_DELIMITER + values.get(KEY_SWITCH);
         }
+    }
+
+    private Integer getDimmingValue(String value) {
+        if (isDimmingValue(value)) {
+            String[] valueElements = value.trim().split("=");
+            if (valueElements.length > 1) {
+                return Integer.valueOf(valueElements[1]);
+            }
+        }
+        return null;
+    }
+
+    private boolean isDimmingValue(String value) {
+        if (value != null && value.contains(VALUE_DIMMING_PREFIX + RfLinkBaseMessage.VALUE_DELIMITER)) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -101,6 +113,9 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
         Map<String, State> map = new HashMap<>();
         map.put(RfLinkBindingConstants.CHANNEL_COMMAND, (State) command);
         map.put(RfLinkBindingConstants.CHANNEL_CONTACT, (State) contact);
+        if (dimming != null) {
+            map.put(RfLinkBindingConstants.CHANNEL_DIMMING_LEVEL, new DecimalType(dimming));
+        }
         return map;
     }
 
