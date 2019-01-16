@@ -22,7 +22,7 @@
 		<config-description>
 			<parameter name="deviceId" type="text" required="true">
 				<label>Device Id</label>
-				<description>Must contain the Protocol + Address + EPROM index (using '-' as separator). For instance : RTS-123ABC-1</description>
+				<description>Must contain the Protocol + Address + Index (using '-' as separator). For instance : RTS-123ABC-0 (According to the RFLink protocol, Index is not used for now and '0' should be used)</description>
 			</parameter>
 
 			<parameter name="isCommandReversed" type="boolean" required="false">
