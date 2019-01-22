@@ -65,6 +65,9 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
         String str = super.toString();
         str += ", Command = " + command;
         str += ", Contact = " + contact;
+        if (dimming != null) {
+            str += ", Dimming=" + dimming;
+        }
         return str;
     }
 
@@ -123,7 +126,16 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
     public void initializeFromChannel(RfLinkDeviceConfiguration config, ChannelUID channelUID, Command triggeredCommand)
             throws RfLinkNotImpException, RfLinkException {
         super.initializeFromChannel(config, channelUID, triggeredCommand);
-        command = OnOffType.valueOf(triggeredCommand.toFullString());
+        initializeCommandFromTriggeredCommand(triggeredCommand);
+    }
+
+    private void initializeCommandFromTriggeredCommand(Command triggeredCommand) {
+        if (triggeredCommand instanceof DecimalType) {
+            command = triggeredCommand;
+            dimming = ((DecimalType) triggeredCommand).intValue();
+        } else {
+            command = RfLinkTypeUtils.getSynonym(triggeredCommand, OnOffType.class);
+        }
     }
 
     @Override
