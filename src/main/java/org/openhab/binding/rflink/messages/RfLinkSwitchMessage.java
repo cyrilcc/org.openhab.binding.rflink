@@ -46,7 +46,7 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
     public Type command = OnOffType.OFF;
     public Type contact = OpenClosedType.CLOSED;
-    public Integer dimming = null;
+    public Type dimming = null;
 
     public RfLinkSwitchMessage() {
     }
@@ -80,7 +80,7 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
             contact = RfLinkTypeUtils.getSynonym(command, OpenClosedType.class);
 
             if (RfLinkTypeUtils.isNullOrUndef(command)) {
-                dimming = getDimmingValue(values.get(KEY_CMD));
+                dimming = new DecimalType(getDimmingValue(values.get(KEY_CMD)));
             }
         }
 
@@ -117,7 +117,7 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
         map.put(RfLinkBindingConstants.CHANNEL_COMMAND, (State) command);
         map.put(RfLinkBindingConstants.CHANNEL_CONTACT, (State) contact);
         if (dimming != null) {
-            map.put(RfLinkBindingConstants.CHANNEL_DIMMING_LEVEL, new DecimalType(dimming));
+            map.put(RfLinkBindingConstants.CHANNEL_DIMMING_LEVEL, (State) dimming);
         }
         return map;
     }
@@ -131,16 +131,26 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
     private void initializeCommandFromTriggeredCommand(Command triggeredCommand) {
         if (triggeredCommand instanceof DecimalType) {
-            command = triggeredCommand;
-            dimming = ((DecimalType) triggeredCommand).intValue();
+            DecimalType decimalCommand = RfLinkTypeUtils.boundDecimal((DecimalType) triggeredCommand, 0, 15);
+            dimming = decimalCommand;
+            if (decimalCommand.intValue() > 0) {
+                command = OnOffType.ON;
+            } else {
+                command = OnOffType.OFF;
+            }
+
         } else {
             command = RfLinkTypeUtils.getSynonym(triggeredCommand, OnOffType.class);
         }
+        contact = RfLinkTypeUtils.getSynonym(command, OpenClosedType.class);
     }
 
     @Override
     public String getCommandSuffix() {
-        return this.command.toFullString();
+        if (dimming != null && ((DecimalType) dimming).intValue() > 0) {
+            return dimming.toFullString();
+        }
+        return command.toFullString();
     }
 
 }

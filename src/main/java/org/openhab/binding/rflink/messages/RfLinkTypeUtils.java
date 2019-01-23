@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.IncreaseDecreaseType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.OpenClosedType;
@@ -155,6 +156,20 @@ public class RfLinkTypeUtils {
 
     public static boolean isNullOrUndef(Type type) {
         return type == null || UnDefType.UNDEF.equals(type) || UnDefType.NULL.equals(type);
+    }
+
+    public static DecimalType boundDecimal(DecimalType inputType, int minValue, int maxValue) {
+        DecimalType outputType = null;
+        if (inputType != null) {
+            if (inputType.intValue() < minValue) {
+                outputType = new DecimalType(minValue);
+            } else if (inputType.intValue() > maxValue) {
+                outputType = new DecimalType(maxValue);
+            } else {
+                outputType = inputType;
+            }
+        }
+        return outputType;
     }
 
 }
