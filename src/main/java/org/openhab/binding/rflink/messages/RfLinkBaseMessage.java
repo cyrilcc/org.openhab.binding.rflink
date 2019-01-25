@@ -20,6 +20,7 @@ import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
+import org.openhab.binding.rflink.type.RfLinkTypeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

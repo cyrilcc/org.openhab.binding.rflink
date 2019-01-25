@@ -24,6 +24,7 @@ import org.openhab.binding.rflink.RfLinkBindingConstants;
 import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
+import org.openhab.binding.rflink.type.RfLinkTypeUtils;
 
 /**
  * RfLink data class for Somfy/RTS message.

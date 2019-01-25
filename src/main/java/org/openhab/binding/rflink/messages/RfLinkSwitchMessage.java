@@ -25,6 +25,7 @@ import org.openhab.binding.rflink.RfLinkBindingConstants;
 import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
+import org.openhab.binding.rflink.type.RfLinkTypeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,11 +78,15 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
 
         if (values.containsKey(KEY_CMD)) {
             command = RfLinkTypeUtils.getTypeFromStringValue(values.get(KEY_CMD));
-            contact = RfLinkTypeUtils.getSynonym(command, OpenClosedType.class);
-
             if (RfLinkTypeUtils.isNullOrUndef(command)) {
-                dimming = new DecimalType(getDimmingValue(values.get(KEY_CMD)));
+                // no explicit command set, try to parse Dimming
+                Integer dimmingValue = getDimmingValue(values.get(KEY_CMD));
+                if (dimmingValue != null) {
+                    dimming = new DecimalType(dimmingValue);
+                    command = RfLinkTypeUtils.getOnOffCommandFromDimming((DecimalType) dimming);
+                }
             }
+            contact = RfLinkTypeUtils.getSynonym(command, OpenClosedType.class);
         }
 
         if (values.containsKey(KEY_SWITCH)) {
@@ -93,7 +98,11 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
         if (isDimmingValue(value)) {
             String[] valueElements = value.trim().split("=");
             if (valueElements.length > 1) {
-                return Integer.valueOf(valueElements[1]);
+                try {
+                    return Integer.valueOf(valueElements[1]);
+                } catch (NumberFormatException ex) {
+                    logger.error("Could not parse DimmingValue for : " + value, ex);
+                }
             }
         }
         return null;
@@ -133,12 +142,7 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
         if (triggeredCommand instanceof DecimalType) {
             DecimalType decimalCommand = RfLinkTypeUtils.boundDecimal((DecimalType) triggeredCommand, 0, 15);
             dimming = decimalCommand;
-            if (decimalCommand.intValue() > 0) {
-                command = OnOffType.ON;
-            } else {
-                command = OnOffType.OFF;
-            }
-
+            command = RfLinkTypeUtils.getOnOffCommandFromDimming(decimalCommand);
         } else {
             command = RfLinkTypeUtils.getSynonym(triggeredCommand, OnOffType.class);
         }

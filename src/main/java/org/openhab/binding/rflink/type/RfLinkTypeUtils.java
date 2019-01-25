@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.openhab.binding.rflink.messages;
+package org.openhab.binding.rflink.type;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,6 +21,7 @@ import org.eclipse.smarthome.core.library.types.OpenClosedType;
 import org.eclipse.smarthome.core.library.types.PercentType;
 import org.eclipse.smarthome.core.library.types.StopMoveType;
 import org.eclipse.smarthome.core.library.types.UpDownType;
+import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.Type;
 import org.eclipse.smarthome.core.types.UnDefType;
 import org.slf4j.Logger;
@@ -39,11 +40,14 @@ public class RfLinkTypeUtils {
     private static Collection<Type> TYPE_ALL = new HashSet<>();
     static {
         // declare synonyms (all Types having the same "meaning")
-        declareSynonyms(UpDownType.UP, OnOffType.ON, OpenClosedType.OPEN, IncreaseDecreaseType.INCREASE);
-        declareSynonyms(UpDownType.DOWN, OnOffType.OFF, OpenClosedType.CLOSED, IncreaseDecreaseType.DECREASE);
+        declareSynonyms(UpDownType.UP, OnOffType.ON, AllOnOffType.ALLON, OpenClosedType.OPEN,
+                IncreaseDecreaseType.INCREASE);
+        declareSynonyms(UpDownType.DOWN, OnOffType.OFF, AllOnOffType.ALLOFF, OpenClosedType.CLOSED,
+                IncreaseDecreaseType.DECREASE);
         // declare antonyms (opposite operation)
         declareAntonyms(UpDownType.UP, UpDownType.DOWN);
         declareAntonyms(OnOffType.ON, OnOffType.OFF);
+        declareAntonyms(AllOnOffType.ALLON, AllOnOffType.ALLOFF);
         declareAntonyms(OpenClosedType.OPEN, OpenClosedType.CLOSED);
         declareAntonyms(IncreaseDecreaseType.INCREASE, IncreaseDecreaseType.DECREASE);
         // declare other supported types (Actions RfLink should be able to handle)
@@ -170,6 +174,16 @@ public class RfLinkTypeUtils {
             }
         }
         return outputType;
+    }
+
+    public static Command getOnOffCommandFromDimming(DecimalType decimalCommand) {
+        Command outputCommand = null;
+        if (decimalCommand.intValue() > 0) {
+            outputCommand = OnOffType.ON;
+        } else {
+            outputCommand = OnOffType.OFF;
+        }
+        return outputCommand;
     }
 
 }
