@@ -16,6 +16,7 @@ import java.util.Map;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.OpenClosedType;
+import org.eclipse.smarthome.core.library.types.PercentType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.types.Command;
@@ -139,12 +140,16 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
     }
 
     private void initializeCommandFromTriggeredCommand(Command triggeredCommand) {
-        if (triggeredCommand instanceof DecimalType) {
-            DecimalType decimalCommand = RfLinkTypeUtils.boundDecimal((DecimalType) triggeredCommand, 0, 15);
+        Command convertedCommand = triggeredCommand;
+        if (triggeredCommand instanceof PercentType) {
+            convertedCommand = RfLinkTypeUtils.toDecimalType((PercentType) triggeredCommand, 0, 15);
+        }
+        if (convertedCommand instanceof DecimalType) {
+            DecimalType decimalCommand = RfLinkTypeUtils.boundDecimal((DecimalType) convertedCommand, 0, 15);
             dimming = decimalCommand;
             command = RfLinkTypeUtils.getOnOffCommandFromDimming(decimalCommand);
         } else {
-            command = RfLinkTypeUtils.getSynonym(triggeredCommand, OnOffType.class);
+            command = RfLinkTypeUtils.getSynonym(convertedCommand, OnOffType.class);
         }
         contact = RfLinkTypeUtils.getSynonym(command, OpenClosedType.class);
     }

@@ -176,6 +176,29 @@ public class RfLinkTypeUtils {
         return outputType;
     }
 
+    /**
+     * Convert an input PercentType (0-100%) to a DecimalType within the provided bounds
+     *
+     * @param inputType a decimalType, if null, return null
+     * @param minValue  the min outputValue (i.e. 0%)
+     * @param maxValue  the max outputValue (i.e. 100%)
+     * @return a DecimalType, result of the conversion of the input PercentType within the bounds
+     */
+    public static DecimalType toDecimalType(PercentType inputType, int minValue, int maxValue) {
+        DecimalType outputType = null;
+        if (inputType != null) {
+            if (minValue < maxValue) {
+                int inputPercentValue = inputType.intValue();
+                int inputDecimalValue = ((maxValue - minValue) * inputPercentValue / 100) + minValue;
+                outputType = new DecimalType(inputDecimalValue);
+            } else {
+                throw new IllegalArgumentException(
+                        "minValue (" + minValue + ") is not < to maxValue (" + maxValue + ")");
+            }
+        }
+        return outputType;
+    }
+
     public static Command getOnOffCommandFromDimming(DecimalType decimalCommand) {
         Command outputCommand = null;
         if (decimalCommand.intValue() > 0) {
