@@ -124,7 +124,7 @@ public class RfLinkSwitchMessage extends RfLinkBaseMessage {
     @Override
     public Map<String, State> getStates() {
         Map<String, State> map = new HashMap<>();
-        map.put(RfLinkBindingConstants.CHANNEL_COMMAND, (State) command);
+        map.put(RfLinkBindingConstants.CHANNEL_COMMAND, ((State) RfLinkTypeUtils.getSynonym(command, OnOffType.class)));
         map.put(RfLinkBindingConstants.CHANNEL_CONTACT, (State) contact);
         if (dimming != null) {
             map.put(RfLinkBindingConstants.CHANNEL_DIMMING_LEVEL, (State) dimming);
