@@ -99,6 +99,8 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
 
         // set port parameters
         serialPort.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+        serialPort.disableReceiveTimeout();
+        serialPort.enableReceiveThreshold(1);
 
         // open the streams
         input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
