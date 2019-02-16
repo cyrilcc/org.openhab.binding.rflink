@@ -51,7 +51,8 @@ Bridge config:
 | Thing Config | Type    | Description  | Example |
 |------------|--------------|--------------|--------------|
 | serialPort | String | Path to Device | "/dev/tty.wchusbserial1410" |
-| baudRate | Integer | baudRate of the Gateway | 57600 |
+| baudRate | Integer | baudRate of the Gateway. Default=57600 | 57600 |
+| keepAlivePeriod | Integer | Send "PING" command to the bridge at the specified period. Only enabled if > 0. default=0 | 55 |
 | disableDiscovery | Boolean | Enable or disable device Discovery | true |
 
 Thing config:

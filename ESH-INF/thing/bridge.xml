@@ -18,6 +18,11 @@
 				<label>Baud Rate</label>
 				<description>Serial port baud rate (default is 57600).</description>
 			</parameter>
+			
+			<parameter name="keepAlivePeriod" type="integer" required="false">
+                <label>Keep Alive Ping Period</label>
+                <description>Keep Alive : period in seconds to ping the bridge (default is 0 = disabled).</description>
+            </parameter>
 
 			<parameter name="disableDiscovery" type="boolean" required="true">
 				<label>Disable Discovery</label>

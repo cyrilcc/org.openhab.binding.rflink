@@ -31,6 +31,7 @@ import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
 import org.openhab.binding.rflink.internal.DeviceMessageListener;
 import org.openhab.binding.rflink.messages.RfLinkMessage;
 import org.openhab.binding.rflink.messages.RfLinkMessageFactory;
+import org.openhab.binding.rflink.messages.RfLinkRawMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +54,8 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
     private List<DeviceMessageListener> deviceStatusListeners = new CopyOnWriteArrayList<>();
 
     private RfLinkBridgeConfiguration configuration = null;
-    private ScheduledFuture<?> connectorTask;
+    private ScheduledFuture<?> connectorTask = null;
+    private ScheduledFuture<?> keepAliveTask = null;
 
     private class TransmitQueue {
         private Queue<RfLinkMessage> queue = new LinkedBlockingQueue<RfLinkMessage>();
@@ -103,6 +105,11 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
             connectorTask = null;
         }
 
+        if (keepAliveTask != null && !keepAliveTask.isCancelled()) {
+            keepAliveTask.cancel(true);
+            keepAliveTask = null;
+        }
+
         super.dispose();
     }
 
@@ -125,6 +132,20 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
                 }
             }, 0, 60, TimeUnit.SECONDS);
         }
+
+        if (configuration.keepAlivePeriod > 0 && (keepAliveTask == null || keepAliveTask.isCancelled())) {
+            keepAliveTask = scheduler.scheduleWithFixedDelay(() -> {
+                if (thing.getStatus() == ThingStatus.ONLINE) {
+                    try {
+                        sendMessage(RfLinkRawMessage.PING);
+                    } catch (RfLinkException ex) {
+                        logger.error("PING call failed on Bridge", ex);
+                    }
+                }
+
+            }, configuration.keepAlivePeriod, configuration.keepAlivePeriod, TimeUnit.SECONDS);
+        }
+
     }
 
     private void connect() {

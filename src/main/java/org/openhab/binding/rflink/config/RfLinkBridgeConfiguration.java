@@ -27,6 +27,9 @@ public class RfLinkBridgeConfiguration {
     // Serial port baud rate
     public int baudRate = RfLinkBindingConstants.BAUD_RATE_DEFAULT;
 
+    // keepAlive ping period
+    public int keepAlivePeriod = 0;
+
     // Prevent unknown devices from being added to the inbox
     public boolean disableDiscovery;
 }
