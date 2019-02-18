@@ -60,8 +60,8 @@ Thing config:
 | Thing Config | Type    | Description  | Example |
 |------------|--------------|--------------|--------------|
 | deviceId | String | Device Id including protocol and switch number | "X10-01001a-2" |
-| repeats | Integer | number of times to transmit RF messages | 1 |
-
+| isCommandReversed | Boolean | transmit 'opposite' command to the Thing if enabled | true |
+| repeats | Integer | number of times to transmit RF messages. default=1 | 1 |
 
 
 A manual configuration looks like
