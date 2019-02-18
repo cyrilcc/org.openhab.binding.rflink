@@ -38,6 +38,13 @@
 		<state min="1" max="5" step="1" readOnly="false"></state>
 	</channel-type>
 
+    <channel-type id="rawdata">
+        <item-type>String</item-type>
+        <label>Raw Command transmission</label>
+        <description>Raw data channel</description>
+        <state readOnly="false"></state>
+    </channel-type>
+    
 	<channel-type id="status">
 		<item-type>String</item-type>
 		<label>Status</label>

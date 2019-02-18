@@ -16,12 +16,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
+import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.rflink.config.RfLinkBridgeConfiguration;
 import org.openhab.binding.rflink.connector.RfLinkConnectorInterface;
 import org.openhab.binding.rflink.connector.RfLinkEventListener;
@@ -88,7 +90,18 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        logger.debug("Bridge commands not supported.");
+        if (command instanceof RefreshType) {
+            // do nothing
+        } else if (command instanceof StringType) {
+            try {
+                RfLinkRawMessage message = new RfLinkRawMessage(((StringType) command).toString());
+                sendMessage(message);
+            } catch (RfLinkException e) {
+                logger.error("Unable to send command : " + command, e);
+            }
+        } else {
+            logger.debug("Bridge command type not supported : " + command);
+        }
     }
 
     @Override
