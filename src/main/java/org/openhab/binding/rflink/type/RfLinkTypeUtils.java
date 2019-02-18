@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 /**
  * provides various services to manipulate & transcode Type objects and their subtypes (Command, State)
  *
- * @author cartemere
+ * @author cartemere - Initial contribution
  */
 public class RfLinkTypeUtils {
 

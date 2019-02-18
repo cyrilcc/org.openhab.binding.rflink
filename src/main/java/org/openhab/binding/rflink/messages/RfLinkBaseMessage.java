@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
  * Base class for RFLink data classes. All other data classes should extend this class.
  *
  * @author Cyril Cauchois - Initial contribution
+ * @author cartemere - review Message management. add Reverse support for Switch/RTS
  */
 public abstract class RfLinkBaseMessage implements RfLinkMessage {
 

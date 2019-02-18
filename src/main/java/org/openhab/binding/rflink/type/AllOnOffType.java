@@ -15,8 +15,8 @@ import org.eclipse.smarthome.core.types.State;
 
 /**
  * Provides Type for NewKaku Switch : ALLON, ALLOFF
- * 
- * @author cartemere
+ *
+ * @author cartemere - Initial contribution
  */
 @NonNullByDefault
 public enum AllOnOffType implements PrimitiveType, State, Command {

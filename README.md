@@ -293,9 +293,10 @@ or execute the following command in your Karaf Shell for temporary debug log
  ```
  
 From OH2.3 the file format has changed and the following two lines must be added:
+
  ```
-log4j2.logger.org_openhab_binding_rflink.name = org.openhab.binding.rflink
-log4j2.logger.org_openhab_binding_rflink.level = DEBUG
+ log4j2.logger.org_openhab_binding_rflink.name = org.openhab.binding.rflink
+ log4j2.logger.org_openhab_binding_rflink.level = DEBUG
  ```
 
 

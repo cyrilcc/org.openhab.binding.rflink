@@ -31,6 +31,7 @@ import org.openhab.binding.rflink.type.RfLinkTypeUtils;
  *
  * @author John Jore - Initial contribution
  * @author Arjan Mels - Added reception and debugged sending
+ * @author cartemere - support RollerShutter
  */
 public class RfLinkRtsMessage extends RfLinkBaseMessage {
     private static final String KEY_RTS = "RTS";
