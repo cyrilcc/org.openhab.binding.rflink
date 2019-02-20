@@ -8,21 +8,30 @@
 		<label>RFLink USB Transceiver</label>
 		<description>This is universal RFLink transceiver bridge for manual configuration purposes.</description>
 
+        <channels>
+            <channel id="rawdata" typeId="rawdata" />
+        </channels>
+            
 		<config-description>
 			<parameter name="serialPort" type="text" required="true">
 				<label>Serial Port</label>
 				<description>Serial port where RFLink transceiver is connected.</description>
 			</parameter>
-			
+
 			<parameter name="baudRate" type="integer" required="false">
 				<label>Baud Rate</label>
 				<description>Serial port baud rate (default is 57600).</description>
-		   	 </parameter>
+			</parameter>
+			
+			<parameter name="keepAlivePeriod" type="integer" required="false">
+                <label>Keep Alive Ping Period</label>
+                <description>Keep Alive : period in seconds to ping the bridge (default is 0 = disabled).</description>
+            </parameter>
 
-		  	<parameter name="disableDiscovery" type="boolean" required="true">
+			<parameter name="disableDiscovery" type="boolean" required="true">
 				<label>Disable Discovery</label>
 				<description>Set true if it should not discover to Inbox.</description>
-		   	</parameter>
+			</parameter>
 		</config-description>
 	</bridge-type>
 

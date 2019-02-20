@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.io.IOUtils;
+import org.openhab.binding.rflink.RfLinkBindingConstants;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,6 +99,8 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
 
         // set port parameters
         serialPort.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+        serialPort.disableReceiveTimeout();
+        serialPort.enableReceiveThreshold(1);
 
         // open the streams
         input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
@@ -144,28 +148,31 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
     }
 
     @Override
-    public void sendMessage(byte[] data) throws IOException {
+    public void sendMessages(Collection<String> messages) throws IOException {
         if (output == null) {
             throw new IOException("Not connected, sending messages is not possible");
         }
 
         synchronized (this) {
-            long towait = SEND_DELAY - (System.currentTimeMillis() - lastSend);
-            towait = Math.min(Math.max(towait, 0), SEND_DELAY);
 
-            logger.debug("Send data (after {}ms, len={}): {}", towait, data.length,
-                    DatatypeConverter.printHexBinary(data));
-            if (towait > 0) {
-                try {
-                    Thread.sleep(towait);
-                } catch (InterruptedException ignore) {
+            for (String message : messages) {
+                long towait = SEND_DELAY - (System.currentTimeMillis() - lastSend);
+                towait = Math.min(Math.max(towait, 0), SEND_DELAY);
+
+                byte[] messageData = (message + RfLinkBindingConstants.NEW_LINE).getBytes();
+                logger.debug("Send data (after {}ms, len={}): {}", towait, messageData.length,
+                        DatatypeConverter.printHexBinary(messageData));
+                if (towait > 0) {
+                    try {
+                        Thread.sleep(towait);
+                    } catch (InterruptedException ignore) {
+                    }
                 }
+
+                output.write(messageData);
+                output.flush();
+                lastSend = System.currentTimeMillis();
             }
-
-            output.write(data);
-            output.flush();
-            lastSend = System.currentTimeMillis();
-
         }
     }
 

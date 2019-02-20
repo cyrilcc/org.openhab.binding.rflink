@@ -51,7 +51,8 @@ Bridge config:
 | Thing Config | Type    | Description  | Example |
 |------------|--------------|--------------|--------------|
 | serialPort | String | Path to Device | "/dev/tty.wchusbserial1410" |
-| baudRate | Integer | baudRate of the Gateway | 57600 |
+| baudRate | Integer | baudRate of the Gateway. Default=57600 | 57600 |
+| keepAlivePeriod | Integer | Send "PING" command to the bridge at the specified period. Only enabled if > 0. default=0 | 55 |
 | disableDiscovery | Boolean | Enable or disable device Discovery | true |
 
 Thing config:
@@ -59,8 +60,8 @@ Thing config:
 | Thing Config | Type    | Description  | Example |
 |------------|--------------|--------------|--------------|
 | deviceId | String | Device Id including protocol and switch number | "X10-01001a-2" |
-| repeats | Integer | number of times to transmit RF messages | 1 |
-
+| isCommandReversed | Boolean | transmit 'opposite' command to the Thing if enabled | true |
+| repeats | Integer | number of times to transmit RF messages. default=1 | 1 |
 
 
 A manual configuration looks like
@@ -292,9 +293,10 @@ or execute the following command in your Karaf Shell for temporary debug log
  ```
  
 From OH2.3 the file format has changed and the following two lines must be added:
+
  ```
-log4j2.logger.org_openhab_binding_rflink.name = org.openhab.binding.rflink
-log4j2.logger.org_openhab_binding_rflink.level = DEBUG
+ log4j2.logger.org_openhab_binding_rflink.name = org.openhab.binding.rflink
+ log4j2.logger.org_openhab_binding_rflink.level = DEBUG
  ```
 
 

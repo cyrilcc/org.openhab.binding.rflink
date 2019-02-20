@@ -9,6 +9,7 @@
 package org.openhab.binding.rflink.messages;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
+import org.openhab.binding.rflink.type.RfLinkTypeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +28,7 @@ import org.slf4j.LoggerFactory;
  * Base class for RFLink data classes. All other data classes should extend this class.
  *
  * @author Cyril Cauchois - Initial contribution
+ * @author cartemere - review Message management. add Reverse support for Switch/RTS
  */
 public abstract class RfLinkBaseMessage implements RfLinkMessage {
 
@@ -34,7 +37,6 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
     public final static String FIELDS_DELIMITER = ";";
     public final static String VALUE_DELIMITER = "=";
     public final static String ID_DELIMITER = "-";
-    public final static String NEW_LINE = "\n";
 
     private final static String NODE_NUMBER_FROM_GATEWAY = "20";
     private final static String NODE_NUMBER_TO_GATEWAY = "10";
@@ -142,12 +144,16 @@ public abstract class RfLinkBaseMessage implements RfLinkMessage {
     }
 
     @Override
-    public byte[] decodeMessage(String suffix) {
-        return (decodeMessageAsString(suffix) + NEW_LINE).getBytes();
+    public Collection<String> buildMessages() {
+        return Collections.singleton(buildMessage(getCommandSuffix()));
     }
 
-    @Override
-    public String decodeMessageAsString(String suffix) {
+    // to override in subClasses if needed
+    public String getCommandSuffix() {
+        return null;
+    }
+
+    public String buildMessage(String suffix) {
         // prepare data
         String[] deviceIdParts = this.deviceId.split(ID_DELIMITER, 2);
         String channel = deviceIdParts[0];

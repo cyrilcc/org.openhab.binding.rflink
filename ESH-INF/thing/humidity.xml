@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<thing:thing-descriptions bindingId="rflink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<thing:thing-descriptions bindingId="rflink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
 	<thing-type id="humidity">
-		
-        <supported-bridge-type-refs>
-            <bridge-type-ref id="bridge" />
-        </supported-bridge-type-refs>
-        
+
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge" />
+		</supported-bridge-type-refs>
+
 		<label>RFLink Humidity Sensor</label>
 		<description>A Humidity device.</description>
 
 		<!-- Sample: 2018-03-05 21:15:33 - 20;25;Auriol V3;ID=A901;TEMP=00cf;HUM=38; -->
 		<channels>
 			<channel id="humidity" typeId="humidity" />
-			<channel id="lowBattery" typeId="system.low-battery" />
 		</channels>
 
 		<config-description>

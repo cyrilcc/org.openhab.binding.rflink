@@ -8,6 +8,7 @@
  */
 package org.openhab.binding.rflink.messages;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -187,7 +188,7 @@ public class RfLinkColorMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public byte[] decodeMessage(String suffix) {
+    public Collection<String> buildMessages() {
         logger.debug("Color decodeMessage: command={}, stateColor={}, stateOnOff={}", command, stateColor, stateOnOff);
 
         if (command == null) {
@@ -225,15 +226,11 @@ public class RfLinkColorMessage extends RfLinkBaseMessage {
             cmdString = "ON";
         }
 
-        byte[] res = super.decodeMessage(rgbw + ";" + cmdString + ";\r");
+        Collection<String> messages = new ArrayList<String>();
+        messages.add(super.buildMessage(rgbw + ";" + cmdString));
         if (sendBright) {
-            byte[] res2 = super.decodeMessage(rgbw + ";BRIGHT;");
-            byte[] res3 = new byte[res.length + res2.length];
-            System.arraycopy(res, 0, res3, 0, res.length);
-            System.arraycopy(res2, 0, res3, res.length, res2.length);
-            res = res3;
+            messages.add(super.buildMessage(rgbw + ";BRIGHT"));
         }
-        return res;
-
+        return messages;
     }
 }

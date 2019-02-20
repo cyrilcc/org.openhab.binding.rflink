@@ -24,12 +24,14 @@ import org.openhab.binding.rflink.RfLinkBindingConstants;
 import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
+import org.openhab.binding.rflink.type.RfLinkTypeUtils;
 
 /**
  * RfLink data class for Somfy/RTS message.
  *
  * @author John Jore - Initial contribution
  * @author Arjan Mels - Added reception and debugged sending
+ * @author cartemere - support RollerShutter
  */
 public class RfLinkRtsMessage extends RfLinkBaseMessage {
     private static final String KEY_RTS = "RTS";
@@ -85,11 +87,7 @@ public class RfLinkRtsMessage extends RfLinkBaseMessage {
     }
 
     @Override
-    public String decodeMessageAsString(String suffix) {
-        return super.decodeMessageAsString(this.command.toString());
-    }
-
-    public String getEffectiveCommand() {
+    public String getCommandSuffix() {
         return this.command.toString();
     }
 

@@ -16,12 +16,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
+import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.rflink.config.RfLinkBridgeConfiguration;
 import org.openhab.binding.rflink.connector.RfLinkConnectorInterface;
 import org.openhab.binding.rflink.connector.RfLinkEventListener;
@@ -31,6 +33,7 @@ import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
 import org.openhab.binding.rflink.internal.DeviceMessageListener;
 import org.openhab.binding.rflink.messages.RfLinkMessage;
 import org.openhab.binding.rflink.messages.RfLinkMessageFactory;
+import org.openhab.binding.rflink.messages.RfLinkRawMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +56,8 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
     private List<DeviceMessageListener> deviceStatusListeners = new CopyOnWriteArrayList<>();
 
     private RfLinkBridgeConfiguration configuration = null;
-    private ScheduledFuture<?> connectorTask;
+    private ScheduledFuture<?> connectorTask = null;
+    private ScheduledFuture<?> keepAliveTask = null;
 
     private class TransmitQueue {
         private Queue<RfLinkMessage> queue = new LinkedBlockingQueue<RfLinkMessage>();
@@ -73,7 +77,7 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
             while (!queue.isEmpty()) {
                 RfLinkMessage msg = queue.poll();
                 logger.debug("Transmitting message '{}'", msg);
-                connector.sendMessage(msg.decodeMessage(""));
+                connector.sendMessages(msg.buildMessages());
             }
         }
     }
@@ -86,7 +90,18 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        logger.debug("Bridge commands not supported.");
+        if (command instanceof RefreshType) {
+            // do nothing
+        } else if (command instanceof StringType) {
+            try {
+                RfLinkRawMessage message = new RfLinkRawMessage(((StringType) command).toString());
+                sendMessage(message);
+            } catch (RfLinkException e) {
+                logger.error("Unable to send command : " + command, e);
+            }
+        } else {
+            logger.debug("Bridge command type not supported : " + command);
+        }
     }
 
     @Override
@@ -101,6 +116,11 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
         if (connectorTask != null && !connectorTask.isCancelled()) {
             connectorTask.cancel(true);
             connectorTask = null;
+        }
+
+        if (keepAliveTask != null && !keepAliveTask.isCancelled()) {
+            keepAliveTask.cancel(true);
+            keepAliveTask = null;
         }
 
         super.dispose();
@@ -125,6 +145,20 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
                 }
             }, 0, 60, TimeUnit.SECONDS);
         }
+
+        if (configuration.keepAlivePeriod > 0 && (keepAliveTask == null || keepAliveTask.isCancelled())) {
+            keepAliveTask = scheduler.scheduleWithFixedDelay(() -> {
+                if (thing.getStatus() == ThingStatus.ONLINE) {
+                    try {
+                        sendMessage(RfLinkRawMessage.PING);
+                    } catch (RfLinkException ex) {
+                        logger.error("PING call failed on Bridge", ex);
+                    }
+                }
+
+            }, configuration.keepAlivePeriod, configuration.keepAlivePeriod, TimeUnit.SECONDS);
+        }
+
     }
 
     private void connect() {

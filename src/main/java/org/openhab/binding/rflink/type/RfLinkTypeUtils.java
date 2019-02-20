@@ -6,7 +6,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.openhab.binding.rflink.messages;
+package org.openhab.binding.rflink.type;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,12 +14,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.IncreaseDecreaseType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.OpenClosedType;
 import org.eclipse.smarthome.core.library.types.PercentType;
 import org.eclipse.smarthome.core.library.types.StopMoveType;
 import org.eclipse.smarthome.core.library.types.UpDownType;
+import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.Type;
 import org.eclipse.smarthome.core.types.UnDefType;
 import org.slf4j.Logger;
@@ -28,7 +30,7 @@ import org.slf4j.LoggerFactory;
 /**
  * provides various services to manipulate & transcode Type objects and their subtypes (Command, State)
  *
- * @author cartemere
+ * @author cartemere - Initial contribution
  */
 public class RfLinkTypeUtils {
 
@@ -38,11 +40,14 @@ public class RfLinkTypeUtils {
     private static Collection<Type> TYPE_ALL = new HashSet<>();
     static {
         // declare synonyms (all Types having the same "meaning")
-        declareSynonyms(UpDownType.UP, OnOffType.ON, OpenClosedType.OPEN, IncreaseDecreaseType.INCREASE);
-        declareSynonyms(UpDownType.DOWN, OnOffType.OFF, OpenClosedType.CLOSED, IncreaseDecreaseType.DECREASE);
+        declareSynonyms(UpDownType.UP, OnOffType.ON, AllOnOffType.ALLON, OpenClosedType.OPEN,
+                IncreaseDecreaseType.INCREASE);
+        declareSynonyms(UpDownType.DOWN, OnOffType.OFF, AllOnOffType.ALLOFF, OpenClosedType.CLOSED,
+                IncreaseDecreaseType.DECREASE);
         // declare antonyms (opposite operation)
         declareAntonyms(UpDownType.UP, UpDownType.DOWN);
         declareAntonyms(OnOffType.ON, OnOffType.OFF);
+        declareAntonyms(AllOnOffType.ALLON, AllOnOffType.ALLOFF);
         declareAntonyms(OpenClosedType.OPEN, OpenClosedType.CLOSED);
         declareAntonyms(IncreaseDecreaseType.INCREASE, IncreaseDecreaseType.DECREASE);
         // declare other supported types (Actions RfLink should be able to handle)
@@ -102,7 +107,7 @@ public class RfLinkTypeUtils {
                 return type;
             }
         }
-        return UnDefType.NULL;
+        return UnDefType.UNDEF;
     }
 
     /**
@@ -151,6 +156,57 @@ public class RfLinkTypeUtils {
             }
         }
         return false;
+    }
+
+    public static boolean isNullOrUndef(Type type) {
+        return type == null || UnDefType.UNDEF.equals(type) || UnDefType.NULL.equals(type);
+    }
+
+    public static DecimalType boundDecimal(DecimalType inputType, int minValue, int maxValue) {
+        DecimalType outputType = null;
+        if (inputType != null) {
+            if (inputType.intValue() < minValue) {
+                outputType = new DecimalType(minValue);
+            } else if (inputType.intValue() > maxValue) {
+                outputType = new DecimalType(maxValue);
+            } else {
+                outputType = inputType;
+            }
+        }
+        return outputType;
+    }
+
+    /**
+     * Convert an input PercentType (0-100%) to a DecimalType within the provided bounds
+     *
+     * @param inputType a decimalType, if null, return null
+     * @param minValue  the min outputValue (i.e. 0%)
+     * @param maxValue  the max outputValue (i.e. 100%)
+     * @return a DecimalType, result of the conversion of the input PercentType within the bounds
+     */
+    public static DecimalType toDecimalType(PercentType inputType, int minValue, int maxValue) {
+        DecimalType outputType = null;
+        if (inputType != null) {
+            if (minValue < maxValue) {
+                int inputPercentValue = inputType.intValue();
+                int inputDecimalValue = ((maxValue - minValue) * inputPercentValue / 100) + minValue;
+                outputType = new DecimalType(inputDecimalValue);
+            } else {
+                throw new IllegalArgumentException(
+                        "minValue (" + minValue + ") is not < to maxValue (" + maxValue + ")");
+            }
+        }
+        return outputType;
+    }
+
+    public static Command getOnOffCommandFromDimming(DecimalType decimalCommand) {
+        Command outputCommand = null;
+        if (decimalCommand.intValue() > 0) {
+            outputCommand = OnOffType.ON;
+        } else {
+            outputCommand = OnOffType.OFF;
+        }
+        return outputCommand;
     }
 
 }

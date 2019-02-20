@@ -27,14 +27,6 @@ import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
 public interface RfLinkMessage {
 
     /**
-     * Procedure for present class information in string format. Used for
-     * logging purposes.
-     *
-     */
-    @Override
-    String toString();
-
-    /**
      * Procedure for encode raw data.
      *
      * @param data
@@ -43,21 +35,11 @@ public interface RfLinkMessage {
     void encodeMessage(String data);
 
     /**
-     * Procedure to decode back into serial message
+     * Procedure generate message[s] to send to the bridge
      *
-     * @param additional data to be appended to the message.
-     * @return bytes to be send over serial.
+     * @return Collection of String messages to be send over serial. Several elements in case of composite command
      */
-    byte[] decodeMessage(String suffix);
-
-    /**
-     * procedure to 'decode' a RfLinkMessage into a String for
-     * streaming through the gateway.
-     *
-     * @param suffix
-     * @return
-     */
-    public String decodeMessageAsString(String suffix);
+    public Collection<String> buildMessages();
 
     /**
      * Procedure to get device id.

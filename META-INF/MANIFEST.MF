@@ -39,4 +39,5 @@ Export-Package:
  org.openhab.binding.rflink.config;x-internal:=true,
  org.openhab.binding.rflink.connector;x-internal:=true,
  org.openhab.binding.rflink.exceptions;x-internal:=true,
- org.openhab.binding.rflink.messages;x-internal:=true
+ org.openhab.binding.rflink.messages;x-internal:=true,
+ org.openhab.binding.rflink.type;x-internal:=true

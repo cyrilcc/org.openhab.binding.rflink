@@ -12,11 +12,11 @@
 		<description>Command channel</description>
 	</channel-type>
 
-    <channel-type id="color">
-        <item-type>Color</item-type>
-        <label>Color</label>
-        <description>Color channel</description>
-    </channel-type>
+	<channel-type id="color">
+		<item-type>Color</item-type>
+		<label>Color</label>
+		<description>Color channel</description>
+	</channel-type>
 
 	<channel-type id="contact">
 		<item-type>Contact</item-type>
@@ -38,6 +38,13 @@
 		<state min="1" max="5" step="1" readOnly="false"></state>
 	</channel-type>
 
+    <channel-type id="rawdata">
+        <item-type>String</item-type>
+        <label>Raw Command transmission</label>
+        <description>Raw data channel</description>
+        <state readOnly="false"></state>
+    </channel-type>
+    
 	<channel-type id="status">
 		<item-type>String</item-type>
 		<label>Status</label>
@@ -111,7 +118,7 @@
 		<item-type>Number</item-type>
 		<label>Temperature</label>
 		<description>Current temperature in degree Celsius</description>
-		<state pattern="%d °C" readOnly="true"></state>
+		<state pattern="%.1f °C" readOnly="true"></state>
 	</channel-type>
 
 	<channel-type id="humidity">
@@ -128,7 +135,7 @@
 		<state readOnly="true"></state>
 	</channel-type>
 
-        <channel-type id="humiditystatus" advanced="true">
+	<channel-type id="humiditystatus" advanced="true">
 		<item-type>String</item-type>
 		<label>Humidity Status</label>
 		<description>Current humidity status</description>
@@ -160,7 +167,7 @@
 		<item-type>Number</item-type>
 		<label>Wind Speed</label>
 		<description>Wind speed in km per hour</description>
-		<state pattern="%d km/h" readOnly="true"></state>
+		<state pattern="%.1f km/h" readOnly="true"></state>
 	</channel-type>
 
 	<channel-type id="winddirection">
