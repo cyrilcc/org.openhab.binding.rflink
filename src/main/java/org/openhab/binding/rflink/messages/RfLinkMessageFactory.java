@@ -70,6 +70,16 @@ public class RfLinkMessageFactory {
 
     public static RfLinkMessage createMessage(RfLinkBaseMessage message) throws RfLinkException, RfLinkNotImpException {
         String packet = message.rawMessage;
+        if((message.getDeviceName() != null)&&(message.getDeviceName().equals("DKW2012"))){
+            try {
+                Class<?> cl = RfLinkWH1080WeatherStationMessage.class;
+                Constructor<?> c = cl.getConstructor(String.class);
+                return (RfLinkMessage) c.newInstance(packet);
+            } catch (Exception e) {
+                logger.error("Exception: ", e);
+                throw new RfLinkException("unable to instanciate message object", e);
+            }
+        }
         for (String key : KEY_TO_CLASS.keySet()) {
             if (message.values.containsKey(key)) {
                 try {

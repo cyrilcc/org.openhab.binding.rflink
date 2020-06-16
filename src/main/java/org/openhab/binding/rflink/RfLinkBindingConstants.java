@@ -94,10 +94,11 @@ public class RfLinkBindingConstants {
     public final static ThingTypeUID THING_TYPE_RTS = new ThingTypeUID(BINDING_ID, "rts");
     public final static ThingTypeUID THING_TYPE_OREGONTEMPHYGRO = new ThingTypeUID(BINDING_ID, "OregonTempHygro");
     public final static ThingTypeUID THING_TYPE_COLOR = new ThingTypeUID(BINDING_ID, "color");
+    public final static ThingTypeUID THING_TYPE_WH1080WEATHERSTATION = new ThingTypeUID(BINDING_ID, "WH1080WeatherStation");
 
     // Presents all supported Thing types by RFLink binding.
     public final static Set<ThingTypeUID> SUPPORTED_DEVICE_THING_TYPES_UIDS = Collections
             .unmodifiableSet(Stream.of(THING_TYPE_ENERGY,
             THING_TYPE_WIND, THING_TYPE_SWITCH, THING_TYPE_RAIN, THING_TYPE_TEMPERATURE, THING_TYPE_RTS,
-            THING_TYPE_HUMIDITY, THING_TYPE_OREGONTEMPHYGRO, THING_TYPE_COLOR).collect(Collectors.toSet()));
+            THING_TYPE_HUMIDITY, THING_TYPE_OREGONTEMPHYGRO, THING_TYPE_COLOR, THING_TYPE_WH1080WEATHERSTATION).collect(Collectors.toSet()));
 }
