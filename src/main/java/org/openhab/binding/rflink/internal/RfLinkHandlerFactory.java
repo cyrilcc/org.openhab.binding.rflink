@@ -1,17 +1,16 @@
 /**
- * Copyright (c) 2010-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.rflink.internal;
-
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.smarthome.config.discovery.DiscoveryService;
 import org.eclipse.smarthome.core.thing.Bridge;
@@ -28,7 +27,12 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Sets;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The {@link RfLinkHandlerFactory} is responsible for creating things and thing
@@ -44,9 +48,9 @@ public class RfLinkHandlerFactory extends BaseThingHandlerFactory {
      */
     private Map<ThingUID, ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
 
-    public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES = Sets.union(
-            RfLinkBindingConstants.SUPPORTED_DEVICE_THING_TYPES_UIDS,
-            RfLinkBindingConstants.SUPPORTED_BRIDGE_THING_TYPES_UIDS);
+    public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES = Stream.concat(
+            RfLinkBindingConstants.SUPPORTED_DEVICE_THING_TYPES_UIDS.stream(),
+            RfLinkBindingConstants.SUPPORTED_BRIDGE_THING_TYPES_UIDS.stream()).collect(Collectors.toSet());
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
