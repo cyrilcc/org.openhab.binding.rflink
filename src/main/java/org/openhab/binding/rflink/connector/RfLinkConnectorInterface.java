@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -26,8 +26,8 @@ public interface RfLinkConnectorInterface {
      * Procedure for connecting to RFLink controller.
      *
      * @param device
-     *                   Controller connection parameters (e.g. serial port name or IP
-     *                   address).
+     *            Controller connection parameters (e.g. serial port name or IP
+     *            address).
      */
     public void connect(String device, int baudRate) throws Exception;
 
@@ -42,7 +42,7 @@ public interface RfLinkConnectorInterface {
      * Can handle multiple messages at a time (for composite commands)
      *
      * @param data
-     *                 raw bytes.
+     *            raw bytes.
      */
     public void sendMessages(Collection<String> messagesData) throws IOException;
 
@@ -50,7 +50,7 @@ public interface RfLinkConnectorInterface {
      * Procedure for register event listener.
      *
      * @param listener
-     *                     Event listener instance to handle events.
+     *            Event listener instance to handle events.
      */
     public void addEventListener(RfLinkEventListener listener);
 
@@ -58,8 +58,7 @@ public interface RfLinkConnectorInterface {
      * Procedure for remove event listener.
      *
      * @param listener
-     *                     Event listener instance to remove.
+     *            Event listener instance to remove.
      */
     public void removeEventListener(RfLinkEventListener listener);
-
 }

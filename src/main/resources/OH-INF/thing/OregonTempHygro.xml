@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <thing:thing-descriptions bindingId="rflink"
-						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-						xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
-						xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
 	<thing-type id="OregonTempHygro">
 
 		<supported-bridge-type-refs>
-			<bridge-type-ref id="bridge" />
+			<bridge-type-ref id="bridge"/>
 		</supported-bridge-type-refs>
 
 		<label>RFLink Oregon TempHygro Sensor</label>
@@ -15,11 +15,11 @@
 
 		<!-- Sample: 2017-09-25 14:49:55 - 20;51;Oregon Temp;ID=0123;TEMP=00b5;BAT=LOW; -->
 		<channels>
-			<channel id="temperature" typeId="temperature" />
-			<channel id="humidity" typeId="humidity" />
-			<channel id="humidityStatus" typeId="humiditystatus" />
-			<channel id="lowBattery" typeId="system.low-battery" />
-			<channel id="observationTime" typeId="observationTime" />
+			<channel id="temperature" typeId="temperature"/>
+			<channel id="humidity" typeId="humidity"/>
+			<channel id="humidityStatus" typeId="humiditystatus"/>
+			<channel id="lowBattery" typeId="system.low-battery"/>
+			<channel id="observationTime" typeId="observationTime"/>
 		</channels>
 
 		<config-description>

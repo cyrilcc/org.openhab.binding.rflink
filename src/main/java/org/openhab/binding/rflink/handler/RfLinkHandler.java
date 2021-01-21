@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -15,24 +15,25 @@ package org.openhab.binding.rflink.handler;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import org.eclipse.smarthome.core.thing.Bridge;
-import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingStatus;
-import org.eclipse.smarthome.core.thing.ThingStatusDetail;
-import org.eclipse.smarthome.core.thing.ThingStatusInfo;
-import org.eclipse.smarthome.core.thing.ThingUID;
-import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
-import org.eclipse.smarthome.core.thing.binding.ThingHandler;
-import org.eclipse.smarthome.core.types.Command;
-import org.eclipse.smarthome.core.types.RefreshType;
-import org.eclipse.smarthome.core.types.State;
+import org.eclipse.jdt.annotation.NonNull;
 import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
 import org.openhab.binding.rflink.internal.DeviceMessageListener;
 import org.openhab.binding.rflink.messages.RfLinkMessage;
 import org.openhab.binding.rflink.messages.RfLinkMessageFactory;
+import org.openhab.core.thing.Bridge;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.Thing;
+import org.openhab.core.thing.ThingStatus;
+import org.openhab.core.thing.ThingStatusDetail;
+import org.openhab.core.thing.ThingStatusInfo;
+import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.binding.BaseThingHandler;
+import org.openhab.core.thing.binding.ThingHandler;
+import org.openhab.core.types.Command;
+import org.openhab.core.types.RefreshType;
+import org.openhab.core.types.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -165,10 +166,15 @@ public class RfLinkHandler extends BaseThingHandler implements DeviceMessageList
     }
 
     private void updateThingStates(RfLinkMessage message) {
-        Map<String, State> map = message.getStates();
+        @NonNull
+        Map<@NonNull String, @NonNull State> map = message.getStates();
         for (String channel : map.keySet()) {
             logger.debug("Update channel: {}, state: {}", channel, map.get(channel));
-            updateState(new ChannelUID(getThing().getUID(), channel), map.get(channel));
+
+            State stt = map.get(channel);
+            if (stt != null) {
+                updateState(new ChannelUID(getThing().getUID(), channel), stt);
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -18,16 +18,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.smarthome.core.library.types.DecimalType;
-import org.eclipse.smarthome.core.library.types.IncreaseDecreaseType;
-import org.eclipse.smarthome.core.library.types.OnOffType;
-import org.eclipse.smarthome.core.library.types.OpenClosedType;
-import org.eclipse.smarthome.core.library.types.PercentType;
-import org.eclipse.smarthome.core.library.types.StopMoveType;
-import org.eclipse.smarthome.core.library.types.UpDownType;
-import org.eclipse.smarthome.core.types.Command;
-import org.eclipse.smarthome.core.types.Type;
-import org.eclipse.smarthome.core.types.UnDefType;
+import org.openhab.core.library.types.DecimalType;
+import org.openhab.core.library.types.IncreaseDecreaseType;
+import org.openhab.core.library.types.OnOffType;
+import org.openhab.core.library.types.OpenClosedType;
+import org.openhab.core.library.types.PercentType;
+import org.openhab.core.library.types.StopMoveType;
+import org.openhab.core.library.types.UpDownType;
+import org.openhab.core.types.Command;
+import org.openhab.core.types.Type;
+import org.openhab.core.types.UnDefType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -184,8 +184,8 @@ public class RfLinkTypeUtils {
      * Convert an input PercentType (0-100%) to a DecimalType within the provided bounds
      *
      * @param inputType a decimalType, if null, return null
-     * @param minValue  the min outputValue (i.e. 0%)
-     * @param maxValue  the max outputValue (i.e. 100%)
+     * @param minValue the min outputValue (i.e. 0%)
+     * @param maxValue the max outputValue (i.e. 100%)
      * @return a DecimalType, result of the conversion of the input PercentType within the bounds
      */
     public static DecimalType toDecimalType(PercentType inputType, int minValue, int maxValue) {
@@ -212,5 +212,4 @@ public class RfLinkTypeUtils {
         }
         return outputCommand;
     }
-
 }

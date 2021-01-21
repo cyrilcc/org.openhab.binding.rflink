@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -16,9 +16,9 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
+import org.openhab.core.thing.ThingTypeUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,12 +65,11 @@ public class RfLinkMessageFactory {
         } catch (InstantiationException | IllegalAccessException e) {
 
         }
-
     }
 
     public static RfLinkMessage createMessage(RfLinkBaseMessage message) throws RfLinkException, RfLinkNotImpException {
         String packet = message.rawMessage;
-        if((message.getDeviceName() != null)&&(message.getDeviceName().equals("DKW2012"))){
+        if ((message.getDeviceName() != null) && (message.getDeviceName().equals("DKW2012"))) {
             try {
                 Class<?> cl = RfLinkWH1080WeatherStationMessage.class;
                 Constructor<?> c = cl.getConstructor(String.class);

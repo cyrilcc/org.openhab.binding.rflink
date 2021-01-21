@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <thing:thing-descriptions bindingId="rflink"
-						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-						xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
-						xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
 	<bridge-type id="bridge">
 		<label>RFLink USB Transceiver</label>
 		<description>This is universal RFLink transceiver bridge for manual configuration purposes.</description>
 
 		<channels>
-			<channel id="rawdata" typeId="rawdata" />
+			<channel id="rawdata" typeId="rawdata"/>
 		</channels>
 		<config-description>
 			<parameter name="serialPort" type="text" required="true">
@@ -21,7 +21,7 @@
 				<label>Baud Rate</label>
 				<description>Serial port baud rate (default is 57600).</description>
 			</parameter>
-			
+
 			<parameter name="keepAlivePeriod" type="integer" required="false">
 				<label>Keep Alive Ping Period</label>
 				<description>Keep Alive : period in seconds to ping the bridge (default is 0 = disabled).</description>

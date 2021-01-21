@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,12 +12,12 @@
  */
 package org.openhab.binding.rflink;
 
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
-
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.openhab.core.thing.ThingTypeUID;
 
 /**
  * The {@link RfLinkBindingConstants} class defines common constants, which are
@@ -45,11 +45,13 @@ public class RfLinkBindingConstants {
     /**
      * Presents all supported Bridge types by RFLink binding.
      */
-    public final static Set<ThingTypeUID> SUPPORTED_BRIDGE_THING_TYPES_UIDS = Collections.unmodifiableSet(Stream.of(BRIDGE_MANUAL).collect(Collectors.toSet()));
+    public final static Set<ThingTypeUID> SUPPORTED_BRIDGE_THING_TYPES_UIDS = Collections
+            .unmodifiableSet(Stream.of(BRIDGE_MANUAL).collect(Collectors.toSet()));
     /**
      * Presents all discoverable Bridge types by RFLink binding.
      */
-    public final static Set<ThingTypeUID> DISCOVERABLE_BRIDGE_THING_TYPES_UIDS = Collections.unmodifiableSet(Stream.of(BRIDGE_MANUAL).collect(Collectors.toSet()));
+    public final static Set<ThingTypeUID> DISCOVERABLE_BRIDGE_THING_TYPES_UIDS = Collections
+            .unmodifiableSet(Stream.of(BRIDGE_MANUAL).collect(Collectors.toSet()));
 
     // List of all Channel ids
     public final static String CHANNEL_SHUTTER = "shutter";
@@ -94,11 +96,12 @@ public class RfLinkBindingConstants {
     public final static ThingTypeUID THING_TYPE_RTS = new ThingTypeUID(BINDING_ID, "rts");
     public final static ThingTypeUID THING_TYPE_OREGONTEMPHYGRO = new ThingTypeUID(BINDING_ID, "OregonTempHygro");
     public final static ThingTypeUID THING_TYPE_COLOR = new ThingTypeUID(BINDING_ID, "color");
-    public final static ThingTypeUID THING_TYPE_WH1080WEATHERSTATION = new ThingTypeUID(BINDING_ID, "WH1080WeatherStation");
+    public final static ThingTypeUID THING_TYPE_WH1080WEATHERSTATION = new ThingTypeUID(BINDING_ID,
+            "WH1080WeatherStation");
 
     // Presents all supported Thing types by RFLink binding.
     public final static Set<ThingTypeUID> SUPPORTED_DEVICE_THING_TYPES_UIDS = Collections
-            .unmodifiableSet(Stream.of(THING_TYPE_ENERGY,
-            THING_TYPE_WIND, THING_TYPE_SWITCH, THING_TYPE_RAIN, THING_TYPE_TEMPERATURE, THING_TYPE_RTS,
-            THING_TYPE_HUMIDITY, THING_TYPE_OREGONTEMPHYGRO, THING_TYPE_COLOR, THING_TYPE_WH1080WEATHERSTATION).collect(Collectors.toSet()));
+            .unmodifiableSet(Stream.of(THING_TYPE_ENERGY, THING_TYPE_WIND, THING_TYPE_SWITCH, THING_TYPE_RAIN,
+                    THING_TYPE_TEMPERATURE, THING_TYPE_RTS, THING_TYPE_HUMIDITY, THING_TYPE_OREGONTEMPHYGRO,
+                    THING_TYPE_COLOR, THING_TYPE_WH1080WEATHERSTATION).collect(Collectors.toSet()));
 }

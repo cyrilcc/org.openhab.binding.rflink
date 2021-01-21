@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,31 +12,34 @@
  */
 package org.openhab.binding.rflink.internal;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.config.discovery.DiscoveryService;
-import org.eclipse.smarthome.core.thing.Bridge;
-import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
-import org.eclipse.smarthome.core.thing.ThingUID;
-import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
-import org.eclipse.smarthome.core.thing.binding.ThingHandler;
-import org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory;
-import org.openhab.binding.rflink.RfLinkBindingConstants;
-import org.openhab.binding.rflink.handler.RfLinkBridgeHandler;
-import org.openhab.binding.rflink.handler.RfLinkHandler;
-import org.openhab.binding.rflink.internal.discovery.RfLinkDeviceDiscoveryService;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.component.annotations.Component;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.binding.rflink.RfLinkBindingConstants;
+import org.openhab.binding.rflink.handler.RfLinkBridgeHandler;
+import org.openhab.binding.rflink.handler.RfLinkHandler;
+import org.openhab.binding.rflink.internal.discovery.RfLinkDeviceDiscoveryService;
+import org.openhab.core.config.discovery.DiscoveryService;
+import org.openhab.core.io.transport.serial.SerialPortManager;
+import org.openhab.core.thing.Bridge;
+import org.openhab.core.thing.Thing;
+import org.openhab.core.thing.ThingTypeUID;
+import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.binding.BaseThingHandlerFactory;
+import org.openhab.core.thing.binding.ThingHandler;
+import org.openhab.core.thing.binding.ThingHandlerFactory;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The {@link RfLinkHandlerFactory} is responsible for creating things and thing
@@ -48,15 +51,24 @@ import java.util.stream.Stream;
 @Component(configurationPid = "binding.rflink", service = ThingHandlerFactory.class)
 public class RfLinkHandlerFactory extends BaseThingHandlerFactory {
     private Logger logger = LoggerFactory.getLogger(RfLinkHandlerFactory.class);
+    private final SerialPortManager serialPortManager;
 
     /**
      * Service registration map
      */
     private Map<ThingUID, ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
 
-    public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES = Stream.concat(
-            RfLinkBindingConstants.SUPPORTED_DEVICE_THING_TYPES_UIDS.stream(),
-            RfLinkBindingConstants.SUPPORTED_BRIDGE_THING_TYPES_UIDS.stream()).collect(Collectors.toSet());
+    public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES = Stream
+            .concat(RfLinkBindingConstants.SUPPORTED_DEVICE_THING_TYPES_UIDS.stream(),
+                    RfLinkBindingConstants.SUPPORTED_BRIDGE_THING_TYPES_UIDS.stream())
+            .collect(Collectors.toSet());
+
+    @Activate
+    public RfLinkHandlerFactory(final @Reference SerialPortManager serialPortManager) {
+
+        logger.debug("RfLinkRxTxConnector()");
+        this.serialPortManager = serialPortManager;
+    }
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
@@ -70,7 +82,7 @@ public class RfLinkHandlerFactory extends BaseThingHandlerFactory {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
         if (RfLinkBindingConstants.SUPPORTED_BRIDGE_THING_TYPES_UIDS.contains(thingTypeUID)) {
-            RfLinkBridgeHandler handler = new RfLinkBridgeHandler((Bridge) thing);
+            RfLinkBridgeHandler handler = new RfLinkBridgeHandler((Bridge) thing, serialPortManager);
             registerDeviceDiscoveryService(handler);
             return handler;
         } else if (supportsThingType(thingTypeUID)) {

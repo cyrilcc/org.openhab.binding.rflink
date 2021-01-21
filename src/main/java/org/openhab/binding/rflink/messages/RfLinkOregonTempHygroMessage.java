@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -18,28 +18,29 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.smarthome.core.library.types.DateTimeType;
-import org.eclipse.smarthome.core.library.types.DecimalType;
-import org.eclipse.smarthome.core.library.types.OnOffType;
-import org.eclipse.smarthome.core.library.types.StringType;
-import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
-import org.eclipse.smarthome.core.types.Command;
-import org.eclipse.smarthome.core.types.State;
+import org.eclipse.jdt.annotation.NonNull;
 import org.openhab.binding.rflink.RfLinkBindingConstants;
 import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
+import org.openhab.core.library.types.DateTimeType;
+import org.openhab.core.library.types.DecimalType;
+import org.openhab.core.library.types.OnOffType;
+import org.openhab.core.library.types.StringType;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.ThingTypeUID;
+import org.openhab.core.types.Command;
+import org.openhab.core.types.State;
 
 /**
  * RfLink data class for temperature message.
  *
  * @author Marek Majchrowski - Initial contribution
  */
-
 public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
     private static final String KEY_TEMPERATURE = "TEMP";
     private static final String KEY_HUMIDITY = "HUM";
+    @NonNull
     private static final String KEY_HUMIDITY_STATUS = "HSTATUS";
     private static final String KEY_BATTERY = "BAT";
     private static final Collection<String> KEYS = Arrays.asList(KEY_TEMPERATURE, KEY_HUMIDITY, KEY_HUMIDITY_STATUS,
@@ -120,22 +121,25 @@ public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
         }
 
         if (values.containsKey(KEY_HUMIDITY_STATUS)) {
-            switch (Integer.parseInt(values.get(KEY_HUMIDITY_STATUS), 10)) {
-                case 0:
-                    humidity_status = "NORMAL";
-                    break;
-                case 1:
-                    humidity_status = "COMFORT";
-                    break;
-                case 2:
-                    humidity_status = "DRY";
-                    break;
-                case 3:
-                    humidity_status = "WET";
-                    break;
-                default:
-                    humidity_status = "UNKNOWN";
-                    break;
+            String vll = values.get(KEY_HUMIDITY_STATUS);
+            if (vll != null) {
+                switch (Integer.parseInt(vll, 10)) {
+                    case 0:
+                        humidity_status = "NORMAL";
+                        break;
+                    case 1:
+                        humidity_status = "COMFORT";
+                        break;
+                    case 2:
+                        humidity_status = "DRY";
+                        break;
+                    case 3:
+                        humidity_status = "WET";
+                        break;
+                    default:
+                        humidity_status = "UNKNOWN";
+                        break;
+                }
             }
         }
 
@@ -159,7 +163,8 @@ public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
     @Override
     public Map<String, State> getStates() {
         Map<String, State> map = new HashMap<>();
-        map.put(RfLinkBindingConstants.CHANNEL_OBSERVATION_TIME, new DateTimeType(Calendar.getInstance()));
+        map.put(RfLinkBindingConstants.CHANNEL_OBSERVATION_TIME,
+                new DateTimeType(String.valueOf(Calendar.getInstance())));
         map.put(RfLinkBindingConstants.CHANNEL_TEMPERATURE, new DecimalType(this.temperature));
         map.put(RfLinkBindingConstants.CHANNEL_HUMIDITY, new DecimalType(this.humidity));
         map.put(RfLinkBindingConstants.CHANNEL_HUMIDITY_STATUS, new StringType(this.humidity_status));

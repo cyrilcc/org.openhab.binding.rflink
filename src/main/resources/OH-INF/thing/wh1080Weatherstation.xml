@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="rflink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="WH1080WeatherStation">
+
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="bridge"/>
+		</supported-bridge-type-refs>
+
+		<label>RFLink WH1080WeatherStation</label>
+		<description>A WH1080WeatherStation device.</description>
+
+		<channels>
+			<channel id="temperature" typeId="temperature"/>
+			<channel id="humidity" typeId="humidity"/>
+			<channel id="rainTotal" typeId="raintotal"/>
+			<channel id="windSpeed" typeId="windspeed"/>
+			<channel id="windDirection" typeId="winddirection"/>
+			<channel id="windGust" typeId="windspeed"/>
+			<channel id="lowBattery" typeId="system.low-battery"/>
+		</channels>
+		<config-description>
+			<parameter name="deviceId" type="text" required="true">
+				<label>Device Id</label>
+				<description>Sensor Id. Example "OregonTemp-0123"</description>
+			</parameter>
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>

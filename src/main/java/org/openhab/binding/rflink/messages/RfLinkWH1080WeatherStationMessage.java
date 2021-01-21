@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,21 +12,21 @@
  */
 package org.openhab.binding.rflink.messages;
 
-import org.eclipse.smarthome.core.library.types.DecimalType;
-import org.eclipse.smarthome.core.library.types.OnOffType;
-import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
-import org.eclipse.smarthome.core.types.Command;
-import org.eclipse.smarthome.core.types.State;
-import org.openhab.binding.rflink.RfLinkBindingConstants;
-import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
-import org.openhab.binding.rflink.exceptions.RfLinkException;
-import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.openhab.binding.rflink.RfLinkBindingConstants;
+import org.openhab.binding.rflink.config.RfLinkDeviceConfiguration;
+import org.openhab.binding.rflink.exceptions.RfLinkException;
+import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
+import org.openhab.core.library.types.DecimalType;
+import org.openhab.core.library.types.OnOffType;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.ThingTypeUID;
+import org.openhab.core.types.Command;
+import org.openhab.core.types.State;
 
 /**
  * RfLink data class for WH1080 weather station message.
@@ -42,9 +42,8 @@ public class RfLinkWH1080WeatherStationMessage extends RfLinkBaseMessage {
     private static final String KEY_WIND_DIRECTION = "WINDIR";
     private static final String KEY_WIND_GUST = "WINGS";
 
-
-    private static final Collection<String> KEYS = Arrays.asList(KEY_TEMPERATURE, KEY_HUMIDITY, KEY_RAIN,
-            KEY_BATTERY, KEY_WIND_SPEED, KEY_WIND_DIRECTION, KEY_WIND_GUST);
+    private static final Collection<String> KEYS = Arrays.asList(KEY_TEMPERATURE, KEY_HUMIDITY, KEY_RAIN, KEY_BATTERY,
+            KEY_WIND_SPEED, KEY_WIND_DIRECTION, KEY_WIND_GUST);
 
     public double temperature = 0;
     public int humidity = 0;
@@ -78,7 +77,8 @@ public class RfLinkWH1080WeatherStationMessage extends RfLinkBaseMessage {
 
         public static RfLinkWH1080WeatherStationMessage.Commands fromString(String text) {
             if (text != null) {
-                for (RfLinkWH1080WeatherStationMessage.Commands c : RfLinkWH1080WeatherStationMessage.Commands.values()) {
+                for (RfLinkWH1080WeatherStationMessage.Commands c : RfLinkWH1080WeatherStationMessage.Commands
+                        .values()) {
                     if (text.equalsIgnoreCase(c.command)) {
                         return c;
                     }
@@ -89,7 +89,8 @@ public class RfLinkWH1080WeatherStationMessage extends RfLinkBaseMessage {
 
         public static RfLinkWH1080WeatherStationMessage.Commands fromCommand(Command command) {
             if (command != null) {
-                for (RfLinkWH1080WeatherStationMessage.Commands c : RfLinkWH1080WeatherStationMessage.Commands.values()) {
+                for (RfLinkWH1080WeatherStationMessage.Commands c : RfLinkWH1080WeatherStationMessage.Commands
+                        .values()) {
                     if (command == c.onOffType) {
                         return c;
                     }
@@ -187,5 +188,4 @@ public class RfLinkWH1080WeatherStationMessage extends RfLinkBaseMessage {
             throws RfLinkNotImpException {
         throw new RfLinkNotImpException("Message handler for " + channelUID + " does not support message transmission");
     }
-
 }
