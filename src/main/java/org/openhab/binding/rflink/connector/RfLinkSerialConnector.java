@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.rflink.connector;
 
@@ -14,22 +18,19 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.rflink.RfLinkBindingConstants;
-import org.openhab.binding.rflink.exceptions.RfLinkException;
+import org.openhab.core.io.transport.serial.*;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import gnu.io.CommPortIdentifier;
-import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
 
 /**
  * RFLink connector for serial port communication.
@@ -44,6 +45,8 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
     private static List<RfLinkEventListener> _listeners = new ArrayList<RfLinkEventListener>();
 
     SerialPort serialPort;
+    private @NonNullByDefault({}) SerialPortIdentifier portIdentifier;
+    private final SerialPortManager serialPortManager;
 
     /*
      * A BufferedReader which will be fed by a InputStreamReader
@@ -59,9 +62,11 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
 
     private static long lastSend = 0;
 
-    public RfLinkSerialConnector() {
+    @Activate
+    public RfLinkSerialConnector(final @Reference SerialPortManager serialPortManager) {
 
         logger.debug("RfLinkRxTxConnector()");
+        this.serialPortManager = serialPortManager;
     }
 
     @Override
@@ -69,34 +74,12 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
 
         logger.debug("connect({})", comPort);
 
-        // the next line is for Raspberry Pi and
-        // gets us into the while loop and was suggested here was suggested
-        // http://www.raspberrypi.org/phpBB3/viewtopic.php?f=81&t=32186
-        // System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM0");
-
-        CommPortIdentifier portId = null;
-        Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
-
-        // First, Find an instance of serial port as set in PORT_NAMES.
-        while (portEnum.hasMoreElements()) {
-            CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
-            logger.debug("Found port : {}", currPortId.getName());
-
-            if (currPortId.getName().equals(comPort)) {
-                portId = currPortId;
-                break;
-            }
+        portIdentifier = serialPortManager.getIdentifier(comPort);
+        if (portIdentifier == null) {
+            logger.debug("Serial Error: Port {} does not exist.", comPort);
+            return;
         }
-
-        if (portId == null) {
-            logger.error("Could not find COM port {}", comPort);
-            sendErrorToListeners("Could not find COM port " + comPort);
-            throw new RfLinkException("Could not find COM port " + comPort);
-        }
-
-        // open serial port, and use class name for the appName.
-        serialPort = portId.open(this.getClass().getName(), TIME_OUT);
-
+        serialPort = portIdentifier.open("org.openhab.binding.rflink", 100);
         // set port parameters
         serialPort.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
         serialPort.disableReceiveTimeout();

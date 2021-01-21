@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.rflink.messages;
 
@@ -12,9 +16,9 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.openhab.binding.rflink.exceptions.RfLinkException;
 import org.openhab.binding.rflink.exceptions.RfLinkNotImpException;
+import org.openhab.core.thing.ThingTypeUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,11 +65,20 @@ public class RfLinkMessageFactory {
         } catch (InstantiationException | IllegalAccessException e) {
 
         }
-
     }
 
     public static RfLinkMessage createMessage(RfLinkBaseMessage message) throws RfLinkException, RfLinkNotImpException {
         String packet = message.rawMessage;
+        if ((message.getDeviceName() != null) && (message.getDeviceName().equals("DKW2012"))) {
+            try {
+                Class<?> cl = RfLinkWH1080WeatherStationMessage.class;
+                Constructor<?> c = cl.getConstructor(String.class);
+                return (RfLinkMessage) c.newInstance(packet);
+            } catch (Exception e) {
+                logger.error("Exception: ", e);
+                throw new RfLinkException("unable to instanciate message object", e);
+            }
+        }
         for (String key : KEY_TO_CLASS.keySet()) {
             if (message.values.containsKey(key)) {
                 try {
@@ -73,7 +86,7 @@ public class RfLinkMessageFactory {
                     Constructor<?> c = cl.getConstructor(String.class);
                     return (RfLinkMessage) c.newInstance(packet);
                 } catch (Exception e) {
-                    logger.error("Exception: {}", e);
+                    logger.error("Exception: ", e);
                     throw new RfLinkException("unable to instanciate message object", e);
                 }
             }

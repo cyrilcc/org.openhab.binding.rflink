@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.rflink.handler;
 
@@ -16,14 +20,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.smarthome.core.library.types.StringType;
-import org.eclipse.smarthome.core.thing.Bridge;
-import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.thing.ThingStatus;
-import org.eclipse.smarthome.core.thing.ThingStatusDetail;
-import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
-import org.eclipse.smarthome.core.types.Command;
-import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.rflink.config.RfLinkBridgeConfiguration;
 import org.openhab.binding.rflink.connector.RfLinkConnectorInterface;
 import org.openhab.binding.rflink.connector.RfLinkEventListener;
@@ -34,6 +30,15 @@ import org.openhab.binding.rflink.internal.DeviceMessageListener;
 import org.openhab.binding.rflink.messages.RfLinkMessage;
 import org.openhab.binding.rflink.messages.RfLinkMessageFactory;
 import org.openhab.binding.rflink.messages.RfLinkRawMessage;
+import org.openhab.core.io.transport.serial.SerialPortManager;
+import org.openhab.core.library.types.StringType;
+import org.openhab.core.thing.Bridge;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.ThingStatus;
+import org.openhab.core.thing.ThingStatusDetail;
+import org.openhab.core.thing.binding.BaseBridgeHandler;
+import org.openhab.core.types.Command;
+import org.openhab.core.types.RefreshType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +63,7 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
     private RfLinkBridgeConfiguration configuration = null;
     private ScheduledFuture<?> connectorTask = null;
     private ScheduledFuture<?> keepAliveTask = null;
+    private final SerialPortManager serialPortManager;
 
     private class TransmitQueue {
         private Queue<RfLinkMessage> queue = new LinkedBlockingQueue<RfLinkMessage>();
@@ -84,8 +90,9 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
 
     private TransmitQueue transmitQueue = new TransmitQueue();
 
-    public RfLinkBridgeHandler(Bridge br) {
+    public RfLinkBridgeHandler(Bridge br, SerialPortManager serialPortManager) {
         super(br);
+        this.serialPortManager = serialPortManager;
     }
 
     @Override
@@ -97,10 +104,10 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
                 RfLinkRawMessage message = new RfLinkRawMessage(((StringType) command).toString());
                 sendMessage(message);
             } catch (RfLinkException e) {
-                logger.error("Unable to send command : " + command, e);
+                logger.error("Unable to send command : {}", command, e);
             }
         } else {
-            logger.debug("Bridge command type not supported : " + command);
+            logger.debug("Bridge command type not supported : {}", command);
         }
     }
 
@@ -158,7 +165,6 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
 
             }, configuration.keepAlivePeriod, configuration.keepAlivePeriod, TimeUnit.SECONDS);
         }
-
     }
 
     private void connect() {
@@ -167,7 +173,7 @@ public class RfLinkBridgeHandler extends BaseBridgeHandler {
         try {
 
             if (connector == null) {
-                connector = new RfLinkSerialConnector();
+                connector = new RfLinkSerialConnector(serialPortManager);
             }
 
             if (connector != null) {

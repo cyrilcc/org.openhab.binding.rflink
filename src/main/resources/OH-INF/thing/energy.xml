@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <thing:thing-descriptions bindingId="rflink"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
-	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
 	<thing-type id="energy">
 
 		<supported-bridge-type-refs>
-			<bridge-type-ref id="bridge" />
+			<bridge-type-ref id="bridge"/>
 		</supported-bridge-type-refs>
 
 		<label>RFLink Energy Sensor</label>
 		<description>An Energy device.</description>
 
 		<channels>
-			<channel id="command" typeId="command" />
-			<channel id="instanPower" typeId="instantpower" />
-			<channel id="totalUsage" typeId="totalusage" />
-			<channel id="instantAmp" typeId="instantamp" />
-			<channel id="totalAmpHours" typeId="totalamphours" />
+			<channel id="command" typeId="command"/>
+			<channel id="instanPower" typeId="instantpower"/>
+			<channel id="totalUsage" typeId="totalusage"/>
+			<channel id="instantAmp" typeId="instantamp"/>
+			<channel id="totalAmpHours" typeId="totalamphours"/>
 		</channels>
 
 		<config-description>

@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.rflink.type;
 
@@ -14,16 +18,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.eclipse.smarthome.core.library.types.DecimalType;
-import org.eclipse.smarthome.core.library.types.IncreaseDecreaseType;
-import org.eclipse.smarthome.core.library.types.OnOffType;
-import org.eclipse.smarthome.core.library.types.OpenClosedType;
-import org.eclipse.smarthome.core.library.types.PercentType;
-import org.eclipse.smarthome.core.library.types.StopMoveType;
-import org.eclipse.smarthome.core.library.types.UpDownType;
-import org.eclipse.smarthome.core.types.Command;
-import org.eclipse.smarthome.core.types.Type;
-import org.eclipse.smarthome.core.types.UnDefType;
+import org.openhab.core.library.types.DecimalType;
+import org.openhab.core.library.types.IncreaseDecreaseType;
+import org.openhab.core.library.types.OnOffType;
+import org.openhab.core.library.types.OpenClosedType;
+import org.openhab.core.library.types.PercentType;
+import org.openhab.core.library.types.StopMoveType;
+import org.openhab.core.library.types.UpDownType;
+import org.openhab.core.types.Command;
+import org.openhab.core.types.Type;
+import org.openhab.core.types.UnDefType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -121,7 +125,7 @@ public class RfLinkTypeUtils {
         } else if (isSynonym(UpDownType.UP, command) || isOpenPercent(command)) {
             type = UpDownType.UP;
         } else {
-            logger.info("Unable to define Switch state from type " + command);
+            logger.info("Unable to define Switch state from type {}", command);
         }
         return type;
     }
@@ -133,7 +137,7 @@ public class RfLinkTypeUtils {
         } else if (isSynonym(OnOffType.ON, command) || isOpenPercent(command)) {
             type = OnOffType.ON;
         } else {
-            logger.info("Unable to define Switch state from type " + command);
+            logger.info("Unable to define Switch state from type {}", command);
         }
         return type;
     }
@@ -180,8 +184,8 @@ public class RfLinkTypeUtils {
      * Convert an input PercentType (0-100%) to a DecimalType within the provided bounds
      *
      * @param inputType a decimalType, if null, return null
-     * @param minValue  the min outputValue (i.e. 0%)
-     * @param maxValue  the max outputValue (i.e. 100%)
+     * @param minValue the min outputValue (i.e. 0%)
+     * @param maxValue the max outputValue (i.e. 100%)
      * @return a DecimalType, result of the conversion of the input PercentType within the bounds
      */
     public static DecimalType toDecimalType(PercentType inputType, int minValue, int maxValue) {
@@ -208,5 +212,4 @@ public class RfLinkTypeUtils {
         }
         return outputCommand;
     }
-
 }
