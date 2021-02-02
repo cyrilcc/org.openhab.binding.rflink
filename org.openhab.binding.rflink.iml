@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" version="4">
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -10,132 +10,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.commons:commons-exec:1.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-httpclient:3.1_7" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-logging:commons-logging:1.0.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.servicemix.bundles:org.apache.servicemix.bundles.commons-codec:1.3_2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.eclipsesource.jaxrs:publisher:5.3.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.eclipsesource.jaxrs:jersey-all:2.22.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.9.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.jetty:jetty-client:9.3.25.v20180904" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.jetty:jetty-http:9.3.25.v20180904" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.jetty:jetty-io:9.3.25.v20180904" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.jetty:jetty-proxy:9.3.25.v20180904" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.jetty:jetty-util:9.3.25.v20180904" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.jetty:jetty-server:9.3.25.v20180904" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.jetty:jetty-servlet:9.3.25.v20180904" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.jetty:jetty-security:9.3.25.v20180904" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.jetty.websocket:websocket-client:9.3.25.v20180904" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.jetty.websocket:websocket-common:9.3.25.v20180904" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.eclipse.jetty.websocket:websocket-api:9.3.25.v20180904" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: joda-time:joda-time:2.9.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.quartz-scheduler:quartz:2.2.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: c3p0:c3p0:0.9.1.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.quartz-scheduler:quartz-jobs:2.2.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: io.swagger:swagger-annotations:1.5.5" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.ws.rs:javax.ws.rs-api:2.0.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.servicemix.bundles:org.apache.servicemix.bundles.xstream:1.4.7_1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: de.jollyday:jollyday:0.5.8" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.threeten:threeten-extra:1.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.servicemix.specs:org.apache.servicemix.specs.activation-api-1.1:2.9.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.servicemix.bundles:org.apache.servicemix.bundles.jaxb-impl:2.2.11_1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.servicemix.bundles:org.apache.servicemix.bundles.saaj-impl:1.3.23_2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.xml.soap:javax.xml.soap-api:1.3.5" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jvnet.mimepull:mimepull:1.9" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.test:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.test.magic:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.boot:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.compat1x:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.karaf:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.thing:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.audio:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.ephemeris:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.voice:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.binding.xml:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.extension.sample:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.id:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.persistence:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.scheduler:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.semantics:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.thing.xml:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.transform:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.auth.jaas:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.auth.oauth2client:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.net:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.bin2json:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.console:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.http:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.rest:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.transport.mdns:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.transport.serial:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.console.eclipse:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.console.rfc147:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.console.karaf:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.http.auth:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.http.auth.basic:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.monitor:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.rest.audio:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.rest.auth:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.rest.core:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.rest.log:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.rest.mdns:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.rest.optimize:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.rest.sitemap:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.rest.sse:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.rest.voice:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.transport.dbus:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.transport.mqtt:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.transport.serial.javacomm:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.transport.serial.rxtx:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.transport.serial.rxtx.rfc2217:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.transport.upnp:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.io.jetty.certificate:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.config.core:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.config.discovery:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.config.discovery.mdns:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.config.discovery.usbserial:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.config.discovery.usbserial.linuxsysfs:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.config.discovery.upnp:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.config.dispatch:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.config.serial:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.config.xml:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.automation:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.automation.module.script:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.automation.module.media:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.automation.module.script.rulesupport:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.automation.rest:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.core:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.sitemap:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.item:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.item.ide:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.item.runtime:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.persistence:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.persistence.ide:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.script:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.rule:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.rule.ide:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.script.ide:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.sitemap.ide:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.thing:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.thing.ide:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.lsp:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.persistence.runtime:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.rule.runtime:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.script.runtime:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.sitemap.runtime:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.model.thing.runtime:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.ui:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.ui.icon:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.storage.json:2.5.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.openhab.core.bundles:org.openhab.core.storage.mapdb:2.5.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.osgi:osgi.enroute.hamcrest.wrapper:1.3.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-core:3.1.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy:1.9.10" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy-agent:1.9.10" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:2.6" level="project" />
     <orderEntry type="library" name="Maven: org.lastnpe.eea:eea-all:2.2.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.osgi:osgi.core:6.0.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.osgi:osgi.cmpn:7.0.0" level="project" />
@@ -191,15 +65,14 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.googlecode.efficient-java-matrix-library:equation:0.26" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.googlecode.efficient-java-matrix-library:core:0.26" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: log4j:log4j:1.2.17" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.neuronrobotics:nrjavaserial:3.12.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-net:commons-net:3.3" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.commons:commons-lang3:3.2.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.neuronrobotics:nrjavaserial:3.14.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.felix:org.apache.felix.http.servlet-api:1.1.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.tomcat:tomcat-servlet-api:8.0.9" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.aries.spec:org.apache.aries.javax.jax.rs-api:1.0.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.geronimo.specs:geronimo-osgi-locator:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: io.swagger.core.v3:swagger-annotations:2.1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: io.swagger.core.v3:swagger-core:2.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.commons:commons-lang3:3.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.10.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.core:jackson-core:2.10.1" level="project" />

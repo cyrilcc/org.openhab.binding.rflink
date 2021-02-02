@@ -12,8 +12,8 @@
  */
 package org.openhab.binding.rflink.messages;
 
+import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -163,8 +163,7 @@ public class RfLinkOregonTempHygroMessage extends RfLinkBaseMessage {
     @Override
     public Map<String, State> getStates() {
         Map<String, State> map = new HashMap<>();
-        map.put(RfLinkBindingConstants.CHANNEL_OBSERVATION_TIME,
-                new DateTimeType(String.valueOf(Calendar.getInstance())));
+        map.put(RfLinkBindingConstants.CHANNEL_OBSERVATION_TIME, new DateTimeType(ZonedDateTime.now()));
         map.put(RfLinkBindingConstants.CHANNEL_TEMPERATURE, new DecimalType(this.temperature));
         map.put(RfLinkBindingConstants.CHANNEL_HUMIDITY, new DecimalType(this.humidity));
         map.put(RfLinkBindingConstants.CHANNEL_HUMIDITY_STATUS, new StringType(this.humidity_status));
