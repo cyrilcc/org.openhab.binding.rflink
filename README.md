@@ -1,4 +1,4 @@
-﻿# RFLink binding for OpenHAB 2.0
+﻿# RFLink binding for OpenHAB 3.1
 
 [![Build Status](https://travis-ci.org/cyrilcc/org.openhab.binding.rflink.svg?branch=master)](https://travis-ci.org/cyrilcc/org.openhab.binding.rflink)
 
@@ -223,7 +223,7 @@ This binding depends on the following plugins
 From the openHAB shell, just type 
 
 ```
-feature:install openhab-transport-serial
+feature:install openhab-openhab-core-io-transport-serial-javacomm
 ```
 
 
