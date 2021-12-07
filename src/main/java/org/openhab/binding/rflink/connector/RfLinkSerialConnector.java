@@ -23,7 +23,6 @@ import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.rflink.RfLinkBindingConstants;
 import org.openhab.core.io.transport.serial.*;
@@ -111,11 +110,19 @@ public class RfLinkSerialConnector implements RfLinkConnectorInterface, SerialPo
 
         if (output != null) {
             logger.debug("Close serial out stream");
-            IOUtils.closeQuietly(output);
+            try {
+                output.close();
+            } catch (IOException e) {
+                logger.trace("cannot close output stream");
+            }
         }
         if (input != null) {
             logger.debug("Close serial in stream");
-            IOUtils.closeQuietly(input);
+            try {
+                input.close();
+            } catch (IOException e) {
+                logger.trace("cannot close input stream");
+            }
         }
 
         if (serialPort != null) {
