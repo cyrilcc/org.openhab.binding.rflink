@@ -6,6 +6,5 @@
 	<type>binding</type>
 	<name>RfLink Binding</name>
 	<description>This is the binding for RfLink.</description>
-	<author>Cyril Cauchois</author>
 
 </addon:addon>
